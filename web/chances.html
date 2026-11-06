@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5b45f5">
+  <title>Predict — Admission Setu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body data-page="chances">
+  <header class="topbar">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M5 22 V12 M27 22 V12" stroke="#5b45f5" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M5 22 H27" stroke="#1a1430" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M7 12 C12 5 20 5 25 12" stroke="#5b45f5" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      Admission Setu
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/browse">Colleges</a>
+      <a href="/chances" aria-current="page">Predict</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">Predictor</p>
+      <h1>Check last year's closing ranks.</h1>
+      <p class="lede">A smaller rank is a better rank. Safer means your rank is clearly better than last year's closing rank.</p>
+    </section>
+    <form class="panel form" id="predict">
+      <label class="field wide">
+        <span>Exam</span>
+        <select id="exam" name="exam">
+          <option>JEE Main</option>
+          <option>JEE Advanced</option>
+          <option>NEET</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Rank</span>
+        <input id="rank" name="rank" type="number" min="1" inputmode="numeric" required placeholder="15000">
+      </label>
+      <label class="field">
+        <span>Category</span>
+        <select id="category" name="category">
+          <option value="OPEN">General</option>
+          <option value="EWS">EWS</option>
+          <option value="OBC-NCL">OBC-NCL</option>
+          <option value="SC">SC</option>
+          <option value="ST">ST</option>
+        </select>
+      </label>
+      <fieldset class="field wide">
+        <legend>Gender</legend>
+        <div class="segment">
+          <label><input type="radio" name="gender" value="male" checked> Male</label>
+          <label><input type="radio" name="gender" value="female"> Female</label>
+        </div>
+      </fieldset>
+      <label class="field wide">
+        <span>Home state</span>
+        <select id="home_state" name="home_state"></select>
+      </label>
+      <label class="field wide" id="course-wrap">
+        <span>Course</span>
+        <select id="course" name="course">
+          <option>MBBS</option>
+          <option>BDS</option>
+          <option>B.Sc Nursing</option>
+        </select>
+      </label>
+      <button class="button" type="submit">Show chances</button>
+    </form>
+    <p class="status" id="status"></p>
+    <div class="summary" id="summary"></div>
+    <div class="list" id="results"></div>
+    <button class="ghost full" id="more" type="button" hidden>Show more</button>
+  </main>
+
+  <nav class="tabbar" aria-label="Primary">
+    <a href="/">Home</a>
+    <a href="/browse">Colleges</a>
+    <a href="/chances" aria-current="page">Predict</a>
+  </nav>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

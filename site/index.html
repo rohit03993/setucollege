@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admission Setu — Find your college</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="home">
+  <div class="review-switch">
+    <span>For the team</span>
+    <a href="index.html" aria-current="page">A · Portal</a>
+    <a href="option-b.html">B · Compare</a>
+  </div>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M5 22 V12 M27 22 V12" stroke="#6d4aff" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M5 22 H27" stroke="#1b1430" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M7 12 C12 5 20 5 25 12" stroke="#6d4aff" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">Admission Setu</span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary">
+        <a href="#colleges">All Colleges</a>
+        <a href="#streams">Streams</a>
+        <a href="#colleges">Exams</a>
+      </nav>
+      <form class="header-search" role="search">
+        <label class="sr" for="q-header">Search colleges</label>
+        <input id="q-header" type="search" placeholder="Search colleges, courses..." autocomplete="off">
+      </form>
+    </div>
+    <nav class="sub-nav" aria-label="Sections">
+      <a href="#streams">Streams</a>
+      <a href="#colleges" data-jump="Engineering">Engineering</a>
+      <a href="#colleges" data-jump="Medical">Medical</a>
+      <a href="#colleges" data-jump="Management">Management</a>
+      <a href="#colleges">Admissions</a>
+      <a href="#colleges">Courses</a>
+    </nav>
+  </header>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Admissions 2026 · Compare fee, package, and NIRF on one page</span>
+      <span>NEET, JEE, and MBA colleges in the same list</span>
+      <span>Hostel, exams, and course fees on the college page</span>
+      <span>Admissions 2026 · Compare fee, package, and NIRF on one page</span>
+      <span>NEET, JEE, and MBA colleges in the same list</span>
+      <span>Hostel, exams, and course fees on the college page</span>
+    </div>
+  </div>
+
+  <section class="hero-band">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Admissions 2026</p>
+        <h1>Find your college,<br><span>see the facts first.</span></h1>
+        <p class="lede">Fees, packages, ranks, and exams for every college, with courses and admission one tap away.</p>
+        <div class="chips" role="group" aria-label="Exam">
+          <button class="chip" type="button" data-stream="All" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-stream="JEE" aria-pressed="false">JEE</button>
+          <button class="chip" type="button" data-stream="NEET" aria-pressed="false">NEET</button>
+          <button class="chip" type="button" data-stream="MBA" aria-pressed="false">MBA</button>
+        </div>
+        <form class="search" role="search">
+          <label class="sr" for="q">Search colleges</label>
+          <input id="q" type="search" placeholder="Search colleges, courses..." autocomplete="off">
+          <button type="submit">Search</button>
+        </form>
+        <div class="stats">
+          <div><strong>5</strong><span>Sample colleges</span></div>
+          <div><strong>3</strong><span>Streams</span></div>
+          <div><strong>4</strong><span>Facts up front</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 420 460" fill="none">
+          <rect x="70" y="40" width="280" height="360" rx="28" fill="#ffffff"/>
+          <rect x="98" y="72" width="88" height="88" rx="20" fill="#efeaff"/>
+          <path d="M126 128c8-18 36-18 44 0" stroke="#6d4aff" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="142" cy="108" r="16" fill="#6d4aff"/>
+          <rect x="206" y="84" width="112" height="14" rx="7" fill="#1b1430"/>
+          <rect x="206" y="110" width="84" height="10" rx="5" fill="#d9d2f2"/>
+          <rect x="206" y="130" width="64" height="10" rx="5" fill="#d9d2f2"/>
+          <rect x="98" y="188" width="224" height="72" rx="16" fill="#f6f4ff"/>
+          <rect x="114" y="206" width="70" height="12" rx="6" fill="#6d4aff"/>
+          <rect x="114" y="226" width="120" height="10" rx="5" fill="#cfc6ee"/>
+          <rect x="98" y="276" width="104" height="78" rx="16" fill="#f6f4ff"/>
+          <rect x="218" y="276" width="104" height="78" rx="16" fill="#f6f4ff"/>
+          <rect x="114" y="296" width="56" height="12" rx="6" fill="#1b1430"/>
+          <rect x="234" y="296" width="56" height="12" rx="6" fill="#1b1430"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="streams" class="panel">
+      <p class="eyebrow">Streams</p>
+      <h2>Explore by stream</h2>
+      <p class="lede tight">Pick a path and the list below narrows to those colleges.</p>
+      <div class="stream-grid" id="stream-grid"></div>
+    </section>
+
+    <section id="colleges" class="panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Colleges</p>
+          <h2>Open a college</h2>
+        </div>
+        <p id="count"></p>
+      </div>
+      <div class="grid colleges" id="list"></div>
+      <p class="empty" id="none" hidden>No sample college matches that search.</p>
+    </section>
+    <p class="foot">Sample colleges for the layout. The live list will use the saved College For Me and CollegeDekho records.</p>
+  </main>
+  <script src="data.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>

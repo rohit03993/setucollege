@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admission Setu — Shortlist a college</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="option-b.css?v=3">
+</head>
+<body>
+  <header class="top">
+    <div class="inner top-row">
+      <a class="brand" href="option-b.html">Admission Setu</a>
+      <form class="search" role="search">
+        <label class="sr" for="q">Search</label>
+        <input id="q" type="search" placeholder="College, city, or exam" autocomplete="off">
+      </form>
+    </div>
+  </header>
+
+  <main>
+    <section class="ask">
+      <div class="inner">
+      <h1>Shortlist a college with your family.</h1>
+      <p class="lede">Start with the question you are actually asking. The list puts that answer on the right, in the same place on every college.</p>
+      <div class="choices" role="group" aria-label="What matters most">
+        <button type="button" data-mode="fee" aria-pressed="true">
+          <strong>Can we afford it?</strong>
+          <span>Lower fees first</span>
+        </button>
+        <button type="button" data-mode="package" aria-pressed="false">
+          <strong>Will there be a job?</strong>
+          <span>Higher packages first</span>
+        </button>
+        <button type="button" data-mode="rank" aria-pressed="false">
+          <strong>How good is it?</strong>
+          <span>Better NIRF rank first</span>
+        </button>
+      </div>
+      <p class="result" id="count"></p>
+      <div class="streams" role="group" aria-label="Course">
+        <button type="button" data-stream="All" aria-pressed="true">All</button>
+        <button type="button" data-stream="Engineering" aria-pressed="false">Engineering</button>
+        <button type="button" data-stream="Medical" aria-pressed="false">Medical</button>
+        <button type="button" data-stream="Management" aria-pressed="false">MBA</button>
+      </div>
+      </div>
+    </section>
+
+    <section class="sheet" aria-label="Colleges">
+      <div class="inner">
+      <div class="head" aria-hidden="true">
+        <span>College</span>
+        <span>Yearly fee</span>
+        <span>Avg package</span>
+        <span>NIRF</span>
+      </div>
+      <div id="list"></div>
+      <p class="empty" id="none" hidden>Nothing matches that search. Try a city, or clear the course filter.</p>
+      </div>
+    </section>
+
+    <section class="after">
+      <div class="inner">
+      <h2>When you open a college</h2>
+      <p>You get the courses and their fees, how admission works, placements, hostel, cutoffs, and a few direct answers. Nothing extra is added when we do not have it.</p>
+      <a class="open" href="college.html?college=nit-surathkal">See NIT Surathkal as an example</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="inner">
+    <p>Sample colleges, so the team can judge the layout.</p>
+    <p class="team"><a href="index.html">Other layout</a></p>
+    </div>
+  </footer>
+  <script src="data.js"></script>
+  <script src="option-b.js"></script>
+</body>
+</html>

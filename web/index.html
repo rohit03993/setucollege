@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5b45f5">
+  <title>Admission Setu — Find your college</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body data-page="home">
+  <header class="topbar">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M5 22 V12 M27 22 V12" stroke="#5b45f5" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M5 22 H27" stroke="#1a1430" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M7 12 C12 5 20 5 25 12" stroke="#5b45f5" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      Admission Setu
+    </a>
+    <nav class="desktop-nav" aria-label="Primary">
+      <a href="/" aria-current="page">Home</a>
+      <a href="/browse">Colleges</a>
+      <a href="/chances">Predict</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="home-hero wrap">
+      <div class="home-copy">
+        <p class="eyebrow">Admissions 2026</p>
+        <h1>Find a college that fits your rank.</h1>
+        <p class="lede">Fees, NIRF rank, courses, and last year's JEE and NEET closing ranks.</p>
+        <form class="search" action="/browse" role="search">
+          <label class="sr" for="q">Search colleges</label>
+          <input id="q" name="q" type="search" placeholder="Try IIT Madras, NIT, or a city" autocomplete="off">
+          <button class="button" type="submit">Search</button>
+        </form>
+        <dl class="stats">
+          <div><dt>Colleges</dt><dd id="college-count">—</dd></div>
+          <div><dt>Exams</dt><dd>JEE, NEET</dd></div>
+          <div><dt>Details</dt><dd>Fee, NIRF</dd></div>
+        </dl>
+      </div>
+      <a class="predict-panel" href="/chances">
+        <p>Predictor</p>
+        <strong>Check your chances</strong>
+        <span>Add your rank, category, home state, and gender. Each seat comes back as safer, possible, or unlikely.</span>
+        <em>Open the predictor</em>
+      </a>
+    </section>
+
+    <section class="wrap home-block" aria-labelledby="featured-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Engineering</p>
+          <h2 id="featured-title">Colleges with an NIRF rank</h2>
+        </div>
+        <a class="text-link" href="/browse?sort=nirf">See all</a>
+      </div>
+      <div class="home-grid" id="featured"><p class="muted">Loading colleges…</p></div>
+    </section>
+
+    <section class="wrap home-block" aria-labelledby="steps-title">
+      <h2 id="steps-title">Three steps</h2>
+      <ol class="steps">
+        <li><span>1</span><strong>Search</strong><p>Find a college by name or city.</p></li>
+        <li><span>2</span><strong>Open it</strong><p>Read the fee, courses, admission, and placements.</p></li>
+        <li><span>3</span><strong>Check the rank</strong><p>Compare your rank with last year's closing rank.</p></li>
+      </ol>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Primary">
+    <a href="/" aria-current="page">Home</a>
+    <a href="/browse">Colleges</a>
+    <a href="/chances">Predict</a>
+  </nav>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

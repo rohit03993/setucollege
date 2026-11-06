@@ -1,0 +1,713 @@
+chance,college,college_state,branch,quota,gender,closing_rank
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Electronics and VLSI Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,17649
+safer,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Production Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18366
+safer,National Institute of Technology Raipur,Chhattisgarh,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18583
+safer,National Institute of Technology Calicut,Kerala,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18652
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18799
+safer,National Institute of Technology Patna,Bihar,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18895
+safer,Malaviya National Institute of Technology Jaipur,Rajasthan,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18965
+safer,Malaviya National Institute of Technology Jaipur,Rajasthan,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18979
+safer,"National Institute of Technology, Warangal",Telangana,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,18989
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Industrial Internet of Things (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19006
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19290
+safer,"Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur",Madhya Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,19578
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19619
+safer,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19641
+safer,National Institute of Technology Patna,Bihar,"Computer Science and Engineering with Specialization in Cyber Security (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,19648
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19840
+safer,National Institute of Technology Puducherry,Puducherry,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19869
+safer,"National Institute of Technology, Rourkela",Odisha,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,19887
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Electrical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,19995
+safer,"National Institute of Technology, Silchar",Assam,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,20008
+safer,National Institute of Technology Goa,Goa,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,20060
+safer,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,20111
+safer,National Institute of Technology Patna,Bihar,"Computer Science and Engineering with Specialization in Data Science (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,20201
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,20241
+safer,"International Institute of Information Technology, Naya Raipur",Chhattisgarh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,20333
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,20654
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Engineering and Computational Mechanics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21102
+safer,Indian Institute of Information Technology (IIIT) Pune,Maharashtra,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,21116
+safer,"National Institute of Electronics and Information Technology, Calicut",Kerala,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,21373
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21581
+safer,National Institute of Technology Raipur,Chhattisgarh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21605
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21741
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21759
+safer,National Institute of Technology Patna,Bihar,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21828
+safer,"National Institute of Technology, Warangal",Telangana,"Mathematics (5 Years, Integrated Master of Science)",OS,Gender-Neutral,21881
+safer,"National Institute of Technology, Warangal",Telangana,"Chemistry (5 Years, Integrated Master of Science)",OS,Gender-Neutral,21899
+safer,National Institute of Technology Durgapur,West Bengal,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21927
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Electronics and Communication Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,21979
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Electrical Engineering with E Mobility (4 Years, Bachelor of Technology)",OS,Gender-Neutral,21998
+safer,"National Institute of Technology, Uttarakhand",Uttarakhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22140
+safer,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22168
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22194
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22225
+safer,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22289
+safer,"National Institute of Technology, Rourkela",Odisha,"Chemical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,22467
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22530
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"B. Tech. and M. Tech. in Engineering and Computational Mechanics (Dual Degree) (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,22650
+safer,National Institute of Technology Patna,Bihar,"Mathematics and Computing Technology (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,22754
+safer,"National Institute of Technology, Silchar",Assam,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22883
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Electronics Engineering (VLSI Design and Technology) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,22965
+safer,Indian Institute of Information Technology (IIIT) Pune,Maharashtra,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,23047
+safer,"Indian Institute of Information Technology (IIIT), Sri City, Chittoor",Andhra Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,23052
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Computer Science and Engineering with Major in Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,23095
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,23126
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,23449
+safer,National Institute of Technology Patna,Bihar,"Electronics Engineering (VLSI Design and Technology) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,23540
+safer,"National Institute of Technology, Warangal",Telangana,"Chemical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,23645
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Mechanical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,23765
+safer,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,23975
+safer,National Institute of Technology Patna,Bihar,"Electronics and Communication Engineering with Specialization in Microelectronics and VLSI System Design (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,24120
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,24247
+safer,"International Institute of Information Technology, Naya Raipur",Chhattisgarh,"Data Science and Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,24313
+safer,National Institute of Technology Agartala,Tripura,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,24527
+safer,National Institute of Technology Delhi,Delhi,"Electrical Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,24823
+safer,"Indian Institute of Information Technology (IIIT), Sri City, Chittoor",Andhra Pradesh,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,25035
+safer,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,25089
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,25122
+safer,National Institute of Technology Goa,Goa,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,25142
+safer,National Institute of Technology Calicut,Kerala,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,25183
+safer,Indian Institute of Information Technology Guwahati,Assam,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,25246
+safer,National Institute of Technology Delhi,Delhi,"Aerospace Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,25745
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,25943
+safer,National Institute of Technology Puducherry,Puducherry,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26110
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Electronics and Telecommunication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26196
+safer,Indian Institute of Information Technology (IIIT) Pune,Maharashtra,"Cyber Security (4 Years, Bachelor of Technology)",AI,Gender-Neutral,26227
+safer,"National Institute of Technology, Rourkela",Odisha,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26464
+safer,"National Institute of Technology, Warangal",Telangana,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26626
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26772
+safer,Malaviya National Institute of Technology Jaipur,Rajasthan,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26818
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,26871
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"B.Tech. in Electronics and Communication Engineering and M.Tech. in Microelectronics and VLSI Systems (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,26909
+safer,"National Institute of Technology, Silchar",Assam,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27014
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Instrumentation and Control Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27018
+safer,Indian Institute of Information Technology (IIIT) Pune,Maharashtra,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,27027
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,27102
+safer,"National Institute of Technology, Rourkela",Odisha,"Industrial Design (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27104
+safer,National Institute of Technology Calicut,Kerala,"Energy Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27156
+safer,"National Institute of Technology, Warangal",Telangana,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27258
+safer,National Institute of Technology Patna,Bihar,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27263
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27594
+safer,"National Institute of Technology, Rourkela",Odisha,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,27781
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Computer Science Engineering (Artificial lntelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,27872
+safer,Indian Institute of Information Technology Tiruchirappalli,Tamil Nadu,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,27913
+safer,Indian Institute of Information Technology Surat,Gujarat,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,28141
+safer,National Institute of Technology Raipur,Chhattisgarh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28264
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,28328
+safer,"National Institute of Technology, Uttarakhand",Uttarakhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28521
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Aerospace Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28541
+safer,"National Institute of Technology, Rourkela",Odisha,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28574
+safer,National Institute of Technology Meghalaya,Meghalaya,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28662
+safer,National Institute of Technology Patna,Bihar,"Mechatronics and Automation Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28690
+safer,National Institute of Technology Calicut,Kerala,"Materials Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28850
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Energy and Electrical Vehicle Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28857
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28905
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28909
+safer,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Mining Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,28915
+safer,National Institute of Technology Calicut,Kerala,"Production Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,29366
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,29369
+safer,Indian Institute of Information Technology Tiruchirappalli,Tamil Nadu,"Computer Science and Engineering ( Artificial Intelligence & Data Science) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,29390
+safer,"Indian Institute of Information Technology (IIIT), Sri City, Chittoor",Andhra Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,29473
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,29569
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,29737
+safer,National Institute of Technology Agartala,Tripura,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,30204
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"B.Tech. in Electronics and Communication Engineering and M.Tech. in Communication Systems (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,30449
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Computer Science Engineering (Data Science and Analytics) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,30598
+safer,National Institute of Technology Patna,Bihar,"Electrical Engineering with Specialization In Power System Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,30621
+safer,Indian Institute of Information Technology (IIIT) Pune,Maharashtra,"Microelectronics and VLSI Design (4 Years, Bachelor of Technology)",AI,Gender-Neutral,30683
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,30996
+safer,National Institute of Technology Sikkim,Sikkim,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31060
+safer,National Institute of Technology Sikkim,Sikkim,"Artificial Intelligence and Machine Learning (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31131
+safer,National Institute of Technology Goa,Goa,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31138
+safer,"Indian Institute of Information Technology (IIIT)Kota, Rajasthan",Rajasthan,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,31149
+safer,"National Institute of Technology, Warangal",Telangana,"Metallurgical and Materials Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,31229
+safer,"International Institute of Information Technology, Naya Raipur",Chhattisgarh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,31275
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31283
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31290
+safer,"National Institute of Technology, Rourkela",Odisha,"Mining Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31315
+safer,National Institute of Technology Durgapur,West Bengal,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31451
+safer,Indian Institute of Information Technology Surat,Gujarat,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,31604
+safer,"National Institute of Technology, Rourkela",Odisha,"Ceramic Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31640
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,31686
+safer,"National Institute of Technology, Warangal",Telangana,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31744
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (Artificial Intelligence) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,31763
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,31966
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,32242
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,32291
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Aerospace Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,32885
+safer,National Institute of Technology Delhi,Delhi,"Mechanical Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,33057
+safer,Indian Institute of Information Technology Surat,Gujarat,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,33295
+safer,National Institute of Technology Calicut,Kerala,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,33484
+safer,Indian Institute of Information Technology Surat,Gujarat,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,33559
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,33624
+safer,"Indian Institute of Information Technology (IIIT)Kota, Rajasthan",Rajasthan,"Artificial Intelligence and Data Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,33638
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,33766
+safer,"National Institute of Technology, Rourkela",Odisha,"Metallurgical and Materials Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,33797
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Computer Science Engineering (Human Computer lnteraction and Gaming Technology) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,33918
+safer,Malaviya National Institute of Technology Jaipur,Rajasthan,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34145
+safer,National Institute of Technology Puducherry,Puducherry,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34254
+safer,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34311
+safer,National Institute of Technology Calicut,Kerala,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34315
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (Data Science) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,34343
+safer,"National Institute of Technology, Rourkela",Odisha,"Bio Medical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34516
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,34557
+safer,Indian Institute of Information Technology Guwahati,Assam,"Electronics Communication and Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,34571
+safer,National Institute of Technology Meghalaya,Meghalaya,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,34994
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,35055
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,35134
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,35428
+safer,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,35470
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,35590
+safer,Indian Institute of Information Technology Guwahati,Assam,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,35680
+safer,National Institute of Technology Sikkim,Sikkim,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,35808
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,35830
+safer,"National Institute of Technology, Silchar",Assam,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,35897
+safer,"National Institute of Technology, Uttarakhand",Uttarakhand,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,35964
+safer,"Jawaharlal Nehru University, Delhi",Delhi,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,36117
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36226
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,36314
+safer,University of Hyderabad,Telangana,"Computer Science and Engineering (5 Years, Integrated Master of Technology)",AI,Gender-Neutral,36354
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36362
+safer,"National Institute of Technology, Rourkela",Odisha,"Food Process Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36492
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,36605
+safer,"Indian Institute of Information Technology(IIIT) Una, Himachal Pradesh",Himachal Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,36689
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Production and Industrial Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36697
+safer,Indian Institute of Information Technology(IIIT) Kottayam,Kerala,"Computer Science and Engineering with specialization in Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,36830
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36844
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,36963
+safer,Indian Institute of Information Technology Tiruchirappalli,Tamil Nadu,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37110
+safer,National Institute of Technology Durgapur,West Bengal,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37141
+safer,"Indian Institute of Information Technology(IIIT) Una, Himachal Pradesh",Himachal Pradesh,"Computer Science and Engineering (Data Science) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37251
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37282
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37473
+safer,National Institute of Technology Agartala,Tripura,"Computational Mathematics (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,37541
+safer,"Indian Institute of Information Technology(IIIT) Kilohrad, Sonepat, Haryana",Haryana,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37632
+safer,National Institute of Technology Raipur,Chhattisgarh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37644
+safer,National Institute of Technology Patna,Bihar,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37779
+safer,National Institute of Technology Agartala,Tripura,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37813
+safer,Malaviya National Institute of Technology Jaipur,Rajasthan,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37814
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,37933
+safer,Indian Institute of Information Technology (IIIT) Nagpur,Maharashtra,"Electronics and Communication Engineering (Internet of Things) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,37995
+safer,"National Institute of Technology, Kurukshetra",Haryana,"SUSTAINABLE ENERGY TECHNOLOGIES (4 Years, Bachelor of Technology)",OS,Gender-Neutral,38297
+safer,"Indian Institute of Information Technology(IIIT) Una, Himachal Pradesh",Himachal Pradesh,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,38362
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,38712
+safer,Indian Institute of Information Technology Tiruchirappalli,Tamil Nadu,"Electronics and Communication Engineering (VLSI Design) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,38767
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,38942
+safer,"National Institute of Technology, Rourkela",Odisha,"Chemistry (5 Years, Integrated Master of Science)",OS,Gender-Neutral,39136
+safer,Indian Institute of Information Technology Surat,Gujarat,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,39182
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,39308
+safer,"Indian Institute of Information Technology (IIIT)Kota, Rajasthan",Rajasthan,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,39667
+safer,National Institute of Technology Agartala,Tripura,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,39708
+safer,"National Institute of Technology, Manipur",Manipur,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,39799
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,39900
+safer,National Institute of Technology Puducherry,Puducherry,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,40048
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,40050
+safer,"Indian Institute of Information Technology(IIIT) Kilohrad, Sonepat, Haryana",Haryana,"Computer Science and Engineering (Artificial Intelligence) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40065
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (Cyber Physical System) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40355
+safer,"National Institute of Technology, Rourkela",Odisha,"Mining Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,40360
+safer,"Indian Institute of Information Technology(IIIT) Kalyani, West Bengal",West Bengal,"Computer Science and Engineering ( Artificial Intelligence & Data Science) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40390
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40423
+safer,"National Institute of Technology, Rourkela",Odisha,"Ceramic Engineering and M.Tech Industrial Ceramic (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,40463
+safer,"National Institute of Technology, Kurukshetra",Haryana,"Civil Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,40535
+safer,National Institute of Technology Durgapur,West Bengal,"Chemical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,40589
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40826
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Engineering Physics (4 Years, Bachelor of Technology)",AI,Gender-Neutral,40832
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Chemical Technology (Bioprocess Technology) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,40893
+safer,"National Institute of Technology, Mizoram",Mizoram,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,41038
+safer,National Institute of Technology Agartala,Tripura,"Mathematics & Computing (5 Years, Bachelor of Science and Master of Science (Dual Degree))",OS,Gender-Neutral,41083
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Mathematics and Computing (5 Years, Integrated Master of Science)",AI,Gender-Neutral,41133
+safer,"Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur",Madhya Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,41275
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,41505
+safer,"Indian Institute of Information Technology(IIIT) Kilohrad, Sonepat, Haryana",Haryana,"Computer Science & Engineering (Data Science and Analytics) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,41618
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,41772
+safer,National Institute of Technology Patna,Bihar,"Mechanical Engineering with Specialization in Manufacturing and Industrial Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,41809
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Physics (5 Years, Integrated Bachelor of Science-Master of Science)",OS,Gender-Neutral,42021
+safer,"National Institute of Technology, Mizoram",Mizoram,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42029
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Production and Industrial Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42048
+safer,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42249
+safer,National Institute of Technology Nagaland,Nagaland,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42326
+safer,"National Institute of Technology, Uttarakhand",Uttarakhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42525
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,42699
+safer,National Institute of Technology Durgapur,West Bengal,"Biotechnology (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,42848
+safer,Indian Institute of Information Technology(IIIT) Kottayam,Kerala,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43031
+safer,National Institute of Technology Raipur,Chhattisgarh,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,43044
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Physics (5 Years, Integrated Master of Science)",OS,Gender-Neutral,43066
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"B.Tech in Mechanical Engineering and M.Tech in AI and Robotics (5 Years, B.Tech. + M.Tech./MS (Dual Degree))",AI,Gender-Neutral,43186
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,43238
+safer,"National Institute of Technology, Manipur",Manipur,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,43239
+safer,"International Institute of Information Technology, Bhubaneswar",Odisha,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43248
+safer,"Indian Institute of Information Technology(IIIT) Kilohrad, Sonepat, Haryana",Haryana,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43511
+safer,Indian Institute of Information Technology (IIIT) Ranchi,Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43556
+safer,Indian Institute of Information Technology (IIIT) Ranchi,Jharkhand,"Computer Science and Engineering (with Specialization of Data Science and Artificial Intelligence) (4 Years, B. Tech / B. Tech (Hons.))",AI,Gender-Neutral,43569
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43631
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,43664
+safer,Indian Institute of Information Technology(IIIT) Kottayam,Kerala,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43688
+safer,"Indian institute of information technology, Raichur, Karnataka",Karnataka,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,43701
+safer,National Institute of Technology Durgapur,West Bengal,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,43724
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Mathematics (5 Years, Integrated Bachelor of Science-Master of Science)",OS,Gender-Neutral,43918
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44088
+safer,"Indian Institute of Information Technology(IIIT) Una, Himachal Pradesh",Himachal Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,44154
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,44189
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,44295
+safer,National Institute of Technology Meghalaya,Meghalaya,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44300
+safer,National Institute of Technology Agartala,Tripura,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44427
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44428
+safer,National Institute of Technology Delhi,Delhi,"Civil Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,44487
+safer,National Institute of Technology Sikkim,Sikkim,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44624
+safer,"Jawaharlal Nehru University, Delhi",Delhi,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,44723
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44740
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,44755
+safer,"National Institute of Technology, Jamshedpur",Jharkhand,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,45018
+safer,Indian Institute of Information Technology(IIIT) Kottayam,Kerala,"Computer Science and Engineering with specialization in Cyber Security (4 Years, Bachelor of Technology)",AI,Gender-Neutral,45036
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,45307
+safer,Indian Institute of Information Technology(IIIT) Dharwad,Karnataka,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,45308
+safer,"International Institute of Information Technology, Bhubaneswar",Odisha,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,45329
+safer,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Mining Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,45437
+safer,Indian Institute of Information Technology(IIIT) Kottayam,Kerala,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,45535
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,45717
+safer,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Materials and Metallurgical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,45802
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,45984
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Industrial Chemistry (4 Years, Bachelor of Technology)",OS,Gender-Neutral,46051
+safer,"Indian Institute of Information Technology, Vadodara International Campus Diu (IIITVICD)",Dadra and Nagar Haveli and Daman and Diu,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,46054
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Artificial Intelligence and Data Science (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,46056
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,46085
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Electronics and Telecommunication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,46234
+safer,National Institute of Technology Goa,Goa,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,46260
+safer,"Indian Institute of Information Technology(IIIT) Kalyani, West Bengal",West Bengal,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,46336
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Industrial and Production Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,46485
+safer,National Institute of Technology Durgapur,West Bengal,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,46937
+safer,Indian Institute of Information Technology(IIIT) Dharwad,Karnataka,"Artificial Intelligence and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,46967
+safer,Indian Institute of Information Technology (IIIT) Ranchi,Jharkhand,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,47074
+safer,"National Institute of Technology, Manipur",Manipur,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,47217
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Quantitative Economics & Data Science (5 Years, Integrated Master of Science)",AI,Gender-Neutral,47237
+safer,"Indian institute of information technology, Raichur, Karnataka",Karnataka,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,47443
+safer,Indian Institute of Information Technology(IIIT) Dharwad,Karnataka,"Data Science and Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,47501
+safer,National Institute of Technology Nagaland,Nagaland,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,47733
+safer,"Indian Institute of Information Technology(IIIT) Kalyani, West Bengal",West Bengal,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,47762
+safer,"International Institute of Information Technology, Bhubaneswar",Odisha,"Electronics and Telecommunication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,47859
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,47917
+safer,Indian Institute of Information Technology Bhagalpur,Bihar,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,48416
+safer,"Indian institute of information technology, Raichur, Karnataka",Karnataka,"Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,48538
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,48638
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Electronics and Communication Engineering with specialization in Design and Manufacturing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,48642
+safer,Indian Institute of Information Technology (IIIT) Ranchi,Jharkhand,"Electronics and Communication Engineering (with Specialization of Embedded Systems and Internet of Things) (4 Years, B. Tech / B. Tech (Hons.))",AI,Gender-Neutral,48761
+safer,Indian Institute of Information Technology(IIIT) Dharwad,Karnataka,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,48882
+safer,"Indian Institute of Information Technology, Vadodara International Campus Diu (IIITVICD)",Dadra and Nagar Haveli and Daman and Diu,"Computer Science and Engineering (Cyber Security) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,49085
+safer,Indian Institute of Information Technology (IIIT) Ranchi,Jharkhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,49255
+safer,National Institute of Technology Hamirpur,Himachal Pradesh,"Materials Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,49526
+safer,National Institute of Technology Raipur,Chhattisgarh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,49598
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Production and Industrial Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,49647
+safer,"National Institute of Technology, Mizoram",Mizoram,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,49700
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Electronics and Communication Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,49854
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,49957
+safer,"Indian Institute of Information Technology, Vadodara International Campus Diu (IIITVICD)",Dadra and Nagar Haveli and Daman and Diu,"Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,49989
+safer,"Indian Institute of Information Technology, Agartala",Tripura,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,50027
+safer,"National Institute of Technology, Silchar",Assam,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,50179
+safer,"International Institute of Information Technology, Bhubaneswar",Odisha,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,50414
+safer,National Institute of Technology Patna,Bihar,"Chemical Technology (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,50691
+safer,"Indian Institute of Information Technology(IIIT) Kalyani, West Bengal",West Bengal,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,50809
+safer,"Indian Institute of Information Technology, Vadodara International Campus Diu (IIITVICD)",Dadra and Nagar Haveli and Daman and Diu,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,50829
+safer,National Institute of Technology Patna,Bihar,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,50873
+safer,National Institute of Technology Meghalaya,Meghalaya,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,50947
+safer,"Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur",Madhya Pradesh,"Smart Manufacturing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,51101
+safer,National Institute of Technology Durgapur,West Bengal,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,51177
+safer,Indian Institute of Information Technology Bhagalpur,Bihar,"Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,51316
+safer,"National Institute of Technology, Uttarakhand",Uttarakhand,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,51417
+safer,"Indian Institute of Information Technology(IIIT), Vadodara, Gujrat",Gujarat,"Applied and Computational Physics (4 Years, Bachelor of Technology)",AI,Gender-Neutral,51710
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,51741
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,51847
+safer,National Institute of Technology Patna,Bihar,"Civil Engineering with Specialization in Construction Technology and Management (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,51933
+safer,National Institute of Technology Sikkim,Sikkim,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52017
+safer,Indian Institute of Information Technology Bhopal,Madhya Pradesh,"Physics and Computational Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,52023
+safer,National Institute of Technology Nagaland,Nagaland,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52229
+safer,National Institute of Technology Puducherry,Puducherry,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52613
+safer,Indian Institute of Information Technology Bhagalpur,Bihar,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,52650
+safer,"National Institute of Technology, Manipur",Manipur,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52659
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52693
+safer,"National Institute of Technology, Mizoram",Mizoram,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,52894
+safer,National Institute of Technology Raipur,Chhattisgarh,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,53039
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,53408
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Design Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,53428
+safer,"National Institute of Technology, Manipur",Manipur,"Electronics and Communication Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,53559
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Metallurgy and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,53645
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,53694
+safer,National Institute of Technology Patna,Bihar,"Material Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,53805
+safer,National Institute of Technology Durgapur,West Bengal,"Chemistry (5 Years, Integrated Master of Science)",OS,Gender-Neutral,53926
+safer,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Textile Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,53959
+safer,National Institute of Technology Agartala,Tripura,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54037
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54059
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,54109
+safer,National Institute of Technology Agartala,Tripura,"Engineering Physics (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,54125
+safer,National Institute of Technology Raipur,Chhattisgarh,"Mining Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54246
+safer,"Indian Institute of Information Technology, Design & Manufacturing, Kancheepuram",Tamil Nadu,"Smart Manufacturing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,54364
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54593
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54635
+safer,"National Institute of Technology, Andhra Pradesh",Andhra Pradesh,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54682
+safer,"National Institute of Technology, Manipur",Manipur,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54811
+safer,National Institute of Technology Raipur,Chhattisgarh,"Bio Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,54915
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Mechanical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,55060
+safer,"Institute of Infrastructure, Technology, Research and Management-Ahmedabad",Gujarat,"Computer Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,55074
+safer,"National Institute of Technology, Rourkela",Odisha,"Life Science (5 Years, Integrated Master of Science)",OS,Gender-Neutral,55092
+safer,National Institute of Technology Nagaland,Nagaland,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,55144
+safer,"Indian Institute of Information Technology Design & Manufacturing Kurnool, Andhra Pradesh",Andhra Pradesh,"Mechanical Engineering with specialization in Design and Manufacturing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,55564
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,55918
+safer,"National Institute of Technology, Manipur",Manipur,"Electrical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,57004
+safer,"National Institute of Advanced Manufacturing Technology, Ranchi",Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,57205
+safer,Indian Institute of Information Technology Bhagalpur,Bihar,"Mechatronics and Automation Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,57309
+safer,"National Institute of Technology, Mizoram",Mizoram,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,57367
+safer,National Institute of Technology Raipur,Chhattisgarh,"Bio Medical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,57731
+safer,National Institute of Technology Agartala,Tripura,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,57920
+safer,"National Institute of Technology, Mizoram",Mizoram,"Chemical Science and Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,57927
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,58279
+safer,"Central University of Rajasthan, Rajasthan",Rajasthan,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,58353
+safer,"J.K. Institute of Applied Physics & Technology, Department of Electronics & Communication, University of Allahabad- Allahabad",Uttar Pradesh,"Computer Science and Engineering with Major in Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,58569
+safer,National Institute of Technology Meghalaya,Meghalaya,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,58913
+safer,National Institute of Technology Nagaland,Nagaland,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,59028
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,59039
+safer,"Assam University, Silchar",Assam,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,59095
+safer,"Punjab Engineering College, Chandigarh",Chandigarh,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,59105
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Mining Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,59117
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,59171
+safer,"National Institute of Electronics and Information Technology, Ropar (Punjab)",Punjab,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,59645
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,59813
+safer,National Institute of Technology Agartala,Tripura,"Production Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,60058
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Artificial Intelligence and Machine Learning (4 Years, Bachelor of Technology)",AI,Gender-Neutral,60304
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,60379
+safer,"Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",West Bengal,"Computer Science Engineering (Artificial lntelligence and Machine Learning) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,60668
+safer,"National Institute of Technology, Manipur",Manipur,"Mechanical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,60721
+safer,National Institute of Technology Agartala,Tripura,"Physics (5 Years, Bachelor of Science and Master of Science (Dual Degree))",OS,Gender-Neutral,61159
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Artificial Intelligenece and Data Science (Transportation and Logistics) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,61221
+safer,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Chemistry (5 Years, Integrated Bachelor of Science-Master of Science)",OS,Gender-Neutral,61319
+safer,"Central institute of Technology Kokrajar, Assam",Assam,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,61422
+safer,"National Institute of Technology, Srinagar",Jammu and Kashmir,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,61431
+safer,National Institute of Technology Agartala,Tripura,"Biotechnology and Biochemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,61482
+safer,National Institute of Technology Sikkim,Sikkim,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,61708
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,61716
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Chemical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,61847
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,62405
+safer,"National Institute of Electronics and Information Technology, Aurangabad (Maharashtra)",Maharashtra,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,62469
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Electronics and Communication Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,62535
+safer,"National Institute of Technology, Manipur",Manipur,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,62614
+safer,"National Institute of Technology, Mizoram",Mizoram,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,62780
+safer,University of Hyderabad,Telangana,"Materials Engineering (5 Years, Integrated Master of Technology)",AI,Gender-Neutral,63187
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Applied Geology (5 Years, Integrated Master of Science)",OS,Gender-Neutral,63194
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Computer Science and Engineering with specialization in Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,63321
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,63644
+safer,Central University of Karnataka,Karnataka,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,63803
+safer,"Institute of Chemical Technology, Mumbai: Indian Oil Odisha Campus, Bhubaneswar",Odisha,"Chemical Engineering (5 Years, Integrated Masters in Technology)",AI,Gender-Neutral,63876
+safer,National Institute of Technology Arunachal Pradesh,Arunachal Pradesh,"Biosciences and Bioengineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,64048
+safer,"Rajiv Gandhi National Aviation University, Fursatganj, Amethi (UP)",Uttar Pradesh,"Aerospace Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64150
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64296
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64315
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Chemical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64410
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64597
+safer,National Institute of Technology Nagaland,Nagaland,"Civil Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,64955
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Industrial and Production Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,64976
+safer,"National Institute of Technology, Manipur",Manipur,"Civil Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,64980
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,65006
+safer,"National Institute of Electronics and Information Technology, Ropar (Punjab)",Punjab,"Electronics and Communication Engineering (VLSI Design and Technology) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,65145
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,65606
+safer,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Chemistry (5 Years, Integrated Master of Science)",OS,Gender-Neutral,65680
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Electronics & Communication Engineering (Rail Engineering) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,66086
+safer,"Institute of Infrastructure, Technology, Research and Management-Ahmedabad",Gujarat,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,66311
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Computer Science and Engineering with specialization in Cyber Security (4 Years, Bachelor of Technology)",AI,Gender-Neutral,66567
+safer,"National Institute of Advanced Manufacturing Technology, Ranchi",Jharkhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67448
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67453
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Computer Science and Engineering with specialization in Quantum Technologies (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67545
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67555
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Bio Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67616
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Bio Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67647
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Production and Industrial Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,67784
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Physics (5 Years, Integrated Master of Science)",AI,Gender-Neutral,67822
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,68425
+safer,National Institute of Technology Agartala,Tripura,"Chemistry (5 Years, Bachelor of Science and Master of Science (Dual Degree))",OS,Gender-Neutral,68753
+safer,"National Institute of Electronics and Information Technology, Patna (Bihar)",Bihar,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,68926
+safer,"Assam University, Silchar",Assam,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,69078
+safer,"North Eastern Regional Institute of Science and Technology, Nirjuli-791109 (Itanagar),Arunachal Pradesh",Arunachal Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,69130
+safer,Shri G. S. Institute of Technology and Science Indore,Madhya Pradesh,"Biomedical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,69138
+safer,"Central University of Rajasthan, Rajasthan",Rajasthan,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,69310
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,69578
+safer,"J.K. Institute of Applied Physics & Technology, Department of Electronics & Communication, University of Allahabad- Allahabad",Uttar Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,70233
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,70259
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,70294
+safer,INDIAN INSTITUTE OF INFORMATION TECHNOLOGY SENAPATI MANIPUR,Manipur,"Electronics and Communication Engineering with specialization in VLSI and Embedded Systems (4 Years, Bachelor of Technology)",AI,Gender-Neutral,70610
+safer,Central University of Karnataka,Karnataka,"Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,70672
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Computer Science and Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,70776
+safer,"Rajiv Gandhi National Aviation University, Fursatganj, Amethi (UP)",Uttar Pradesh,"Artificial Intelligence & Data Science - Aviation Systems (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71026
+safer,"Institute of Infrastructure, Technology, Research and Management-Ahmedabad",Gujarat,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71219
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71243
+safer,"National Institute of Electronics and Information Technology, Srinagar",Jammu and Kashmir,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71718
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71810
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,71851
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,72172
+safer,"National Institute of Electronics and Information Technology, Aurangabad (Maharashtra)",Maharashtra,"Electronic Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,72235
+safer,Central University of Haryana,Haryana,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,72391
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Mathematics and Computing (5 Years, Integrated Master of Science)",AI,Gender-Neutral,72605
+safer,"National Institute of Electronics and Information Technology, Ajmer (Rajasthan)",Rajasthan,"Computer Science and Engineering (Internet of Things, Cyber Security including Block Chain Technology ) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,73128
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,73259
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,73682
+safer,"Central University of Punjab, Bathinda",Punjab,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,73747
+safer,Central University of Karnataka,Karnataka,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,73957
+safer,"National Institute of Electronics and Information Technology, Gorakhpur (UP)",Uttar Pradesh,"Computer Science and Engineering with minor in AI and ML (4 Years, Bachelor of Technology)",AI,Gender-Neutral,74399
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Mathematics and Computing (5 Years, Integrated Master of Science)",AI,Gender-Neutral,74534
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,75005
+safer,"North Eastern Regional Institute of Science and Technology, Nirjuli-791109 (Itanagar),Arunachal Pradesh",Arunachal Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,75189
+safer,"National Institute of Electronics and Information Technology, Aizawl",Mizoram,"Computer Science and Engineering (Artificial Intelligence and Machine Learning) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,75595
+safer,"Rajiv Gandhi National Aviation University, Fursatganj, Amethi (UP)",Uttar Pradesh,"Electronics and Communication Engineering (Avionics) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,75670
+safer,"Chhattisgarh Swami Vivekanada Technical University, Bhilai (CSVTU Bhilai)",Chhattisgarh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,75802
+safer,"National Institute of Electronics and Information Technology, Agartala",Tripura,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,76333
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,76457
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"ROBOTICS & AUTOMATION (4 Years, Bachelor of Technology)",AI,Gender-Neutral,76605
+safer,"Birla Institute of Technology, Mesra, Ranchi",Jharkhand,"Food Engineering and Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77123
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Electrical Engineering ( Rail Engineering) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77350
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Aviation Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77488
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Mechatronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77554
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77832
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,77962
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,78405
+safer,"National Institute of Advanced Manufacturing Technology, Ranchi",Jharkhand,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,79097
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Elctrical Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,79984
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,80296
+safer,CU Jharkhand,Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,80383
+safer,"National Institute of Electronics and Information Technology, Gorakhpur (UP)",Uttar Pradesh,"B. Tech in Electronics and Communication Engineering with minor in Wearable Electronics (4 Years, Bachelor of Technology)",AI,Gender-Neutral,81145
+safer,"Birla Institute of Technology, Deoghar Off-Campus",Jharkhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,81513
+safer,"Central institute of Technology Kokrajar, Assam",Assam,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,81560
+safer,"Mizoram University, Aizawl",Mizoram,"Computer Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,81646
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,81882
+safer,"Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",West Bengal,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,82155
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Mechanical Engineering ( Rail Engineering) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,82413
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Robotics and AI (4 Years, Bachelor of Technology)",AI,Gender-Neutral,82556
+safer,"Central University of Punjab, Bathinda",Punjab,"Artificial Intelligence and Machine Learning (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,83738
+safer,"Institute of Infrastructure, Technology, Research and Management-Ahmedabad",Gujarat,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,83872
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,84179
+safer,"Central institute of Technology Kokrajar, Assam",Assam,"Instrumentation Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,84514
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,84683
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,84762
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,84916
+safer,Central University of Jammu,Jammu and Kashmir,"Electronics and Communication Engineering (Avionics) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,85026
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,85053
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,85523
+safer,Central University of Karnataka,Karnataka,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,85529
+safer,"Gurukula Kangri Vishwavidyalaya, Haridwar",Uttarakhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,86028
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Physics (5 Years, Integrated Master of Science)",AI,Gender-Neutral,86054
+safer,"Puducherry Technological University, Puducherry",Puducherry,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,86633
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,86888
+safer,Central University of Jammu,Jammu and Kashmir,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,88211
+safer,"National Institute of Advanced Manufacturing Technology, Ranchi",Jharkhand,"Production and Industrial Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,88846
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,89474
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,89968
+safer,"Central institute of Technology Kokrajar, Assam",Assam,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,90114
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Bachelor of Design (4 Years, Bachelor of Design)",AI,Gender-Neutral,90197
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Aeronautical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,90416
+safer,"Chhattisgarh Swami Vivekanada Technical University, Bhilai (CSVTU Bhilai)",Chhattisgarh,"Computer Science Engineering (Artificial Intelligence) (4 Years, B. Tech / B. Tech (Hons.))",AI,Gender-Neutral,91491
+safer,"Mizoram University, Aizawl",Mizoram,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,91673
+safer,"Chhattisgarh Swami Vivekanada Technical University, Bhilai (CSVTU Bhilai)",Chhattisgarh,"Computer Science Engineering (Data Science) (4 Years, B. Tech / B. Tech (Hons.))",AI,Gender-Neutral,91704
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Chemical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,91843
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,92138
+safer,"Birla Institute of Technology, Patna Off-Campus",Bihar,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,92313
+safer,"National Institute of Electronics and Information Technology, Imphal",Manipur,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,92700
+safer,"Central University of Rajasthan, Rajasthan",Rajasthan,"Bio Medical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,93301
+safer,"National Institute of Electronics and Information Technology, Kohima",Nagaland,"B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,93333
+safer,Central University of Haryana,Haryana,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,93447
+safer,"North-Eastern Hill University, Shillong",Meghalaya,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,94055
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"B.Tech in Civil Engineering (Rail Engineering) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,94237
+safer,"Gurukula Kangri Vishwavidyalaya, Haridwar",Uttarakhand,"ROBOTICS & AUTOMATION (4 Years, Bachelor of Technology)",AI,Gender-Neutral,94900
+safer,"Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",West Bengal,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,95424
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,95623
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,95688
+safer,"Assam University, Silchar",Assam,"Agricultural Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,95769
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Chemical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,96358
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,96629
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Mechanical Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,96677
+safer,Central University of Jammu,Jammu and Kashmir,"Computer Science and Engineering with specialization in Cyber Security (4 Years, Bachelor of Technology)",AI,Gender-Neutral,96878
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,96999
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,97010
+safer,"Gati Shakti Vishwavidyalaya, Vadodara",Gujarat,"Maritime Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,97171
+safer,"North-Eastern Hill University, Shillong",Meghalaya,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,97308
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,97684
+safer,"Gurukula Kangri Vishwavidyalaya, Haridwar",Uttarakhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,98224
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Mathematics (5 Years, Integrated Master of Science)",AI,Gender-Neutral,98547
+safer,"Mizoram University, Aizawl",Mizoram,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,98953
+safer,"National Institute of Food Technology Entrepreneurship and Management, Thanjavur",Tamil Nadu,"Food Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,99004
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Electrical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,99510
+safer,National Institute of Technical Teachers Training and Research Bhopal,Madhya Pradesh,"Digital Manufacturing and IoT (4 Years, Bachelor of Technology)",AI,Gender-Neutral,99652
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Civil Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,100367
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,101968
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102053
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Instrumentation and Control Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102313
+safer,Central University of Jammu,Jammu and Kashmir,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102355
+safer,Central University of Jammu,Jammu and Kashmir,"Mathematics and Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102490
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102616
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102719
+safer,CU Jharkhand,Jharkhand,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,102997
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Chemistry (5 Years, Integrated Master of Science)",AI,Gender-Neutral,103901
+safer,"Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",West Bengal,"Civil and Environmental Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,104191
+safer,"National Institute of Electronics and Information Technology, Aizawl",Mizoram,"Internet of Things (IoT) (4 Years, Bachelor of Technology)",AI,Gender-Neutral,104993
+safer,"Mizoram University, Aizawl",Mizoram,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,106124
+safer,"Gurukula Kangri Vishwavidyalaya, Haridwar",Uttarakhand,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,106140
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Animation and VFX (4 Years, Bachelor of Technology)",AI,Gender-Neutral,106359
+safer,"North Eastern Regional Institute of Science and Technology, Nirjuli-791109 (Itanagar),Arunachal Pradesh",Arunachal Pradesh,"Agricultural Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,109201
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"B.Tech. (Food Engineering and Technology) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,109292
+safer,CU Jharkhand,Jharkhand,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,109538
+safer,"North-Eastern Hill University, Shillong",Meghalaya,"Biomedical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,109683
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Mechanical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,110210
+safer,Central University of Haryana,Haryana,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,110615
+safer,"Mizoram University, Aizawl",Mizoram,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,111490
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,111512
+safer,"North-Eastern Hill University, Shillong",Meghalaya,"Energy Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,111604
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Bachelor of Design (4 Years, Bachelor of Design)",AI,Gender-Neutral,112117
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Chemical Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,112275
+safer,Islamic University of Science and Technology Kashmir,Jammu and Kashmir,"Electrical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,112513
+safer,"Central institute of Technology Kokrajar, Assam",Assam,"Food Engineering and Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,113363
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,113603
+safer,"Gurukula Kangri Vishwavidyalaya, Haridwar",Uttarakhand,"Mechanical Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,115457
+safer,"Chhattisgarh Swami Vivekanada Technical University, Bhilai (CSVTU Bhilai)",Chhattisgarh,"Civil Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,116916
+safer,CU Jharkhand,Jharkhand,"Metallurgical and Materials Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,118969
+safer,Central University of Haryana,Haryana,"Printing and Packaging Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,119857
+safer,"School of Engineering, Tezpur University, Napaam, Tezpur",Assam,"Food Engineering and Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,122933
+safer,"School of Studies of Engineering and Technology, Guru Ghasidas Vishwavidyalaya, Bilaspur",Chhattisgarh,"Industrial and Production Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,124075
+safer,"Ghani Khan Choudhary Institute of Engineering and Technology, Malda, West Bengal",West Bengal,"Food Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,124243
+safer,"Indian Institute of Handloom Technology(IIHT), Varanasi",Uttar Pradesh,"Handloom and Textile Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,125921
+safer,"National Institute of Food Technology Entrepreneurship and Management, Kundli",Haryana,"Food Technology and Management (4 Years, Bachelor of Technology)",AI,Gender-Neutral,125974
+safer,Sant Longowal Institute of Engineering and Technology,Punjab,"Food Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,126729
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Dairy Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,126994
+safer,"Indian Institute of Handloom Technology, Salem",Tamil Nadu,"Handloom and Textile Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,128046
+safer,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Food Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,128936
+safer,"Indian Institute of Carpet Technology, Bhadohi",Uttar Pradesh,"Carpet and Textile Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,129089
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Fashion and Apparel Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,129138
+safer,"Institute of Engineering and Technology, Dr. H. S. Gour University. Sagar (A Central University)",Madhya Pradesh,"Food Engineering and Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,132404
+possible,"Punjab Engineering College, Chandigarh",Chandigarh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,15088
+possible,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,15093
+possible,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Artificial Intelligence (4 Years, Bachelor of Technology)",OS,Gender-Neutral,15141
+possible,"National Institute of Technology, Warangal",Telangana,"Physics (5 Years, Integrated Master of Science)",OS,Gender-Neutral,15243
+possible,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,15284
+possible,"Pt. Dwarka Prasad Mishra Indian Institute of Information Technology, Design & Manufacture Jabalpur",Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,15371
+possible,"Punjab Engineering College, Chandigarh",Chandigarh,"Computer Science Engineering (Artificial Intelligence) (4 Years, B. Tech / B. Tech (Hons.))",OS,Gender-Neutral,15721
+possible,Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior,Madhya Pradesh,"Integrated B. Tech.(IT) and MBA (5 Years, Integrated B. Tech. and MBA)",AI,Gender-Neutral,15965
+possible,National Institute of Technology Hamirpur,Himachal Pradesh,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,16062
+possible,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Electronics and VLSI Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16256
+possible,National Institute of Technology Durgapur,West Bengal,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16370
+possible,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16433
+possible,National Institute of Technology Raipur,Chhattisgarh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16439
+possible,"National Institute of Technology, Kurukshetra",Haryana,"Microelectronics & VLSI Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16501
+possible,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16570
+possible,National Institute of Technology Goa,Goa,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16638
+possible,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Data Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16789
+possible,"Punjab Engineering College, Chandigarh",Chandigarh,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16815
+possible,"National Institute of Technology, Kurukshetra",Haryana,"ROBOTICS & AUTOMATION (4 Years, Bachelor of Technology)",OS,Gender-Neutral,16848
+possible,"Punjab Engineering College, Chandigarh",Chandigarh,"Computer Science Engineering (Data Science) (4 Years, B. Tech / B. Tech (Hons.))",OS,Gender-Neutral,17061
+possible,National Institute of Technology Delhi,Delhi,"VLSI Design and Technology (4 Years, Bachelor of Technology)",HS,Gender-Neutral,17215
+possible,National Institute of Technology Patna,Bihar,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,17282
+possible,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,17389
+possible,National Institute of Technology Hamirpur,Himachal Pradesh,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,17442
+possible,Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior,Madhya Pradesh,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,17551
+unlikely,"School of Planning & Architecture, New Delhi",Delhi,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,153
+unlikely,"School of Planning & Architecture, New Delhi",Delhi,"Planning (4 Years, Bachelor of Planning)",AI,Gender-Neutral,227
+unlikely,National Institute of Technology Calicut,Kerala,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,231
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,235
+unlikely,"School of Planning & Architecture, Bhopal",Madhya Pradesh,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,417
+unlikely,"School of Planning & Architecture, Bhopal",Madhya Pradesh,"Planning (4 Years, Bachelor of Planning)",AI,Gender-Neutral,471
+unlikely,School of Planning & Architecture: Vijayawada,Andhra Pradesh,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,474
+unlikely,School of Planning & Architecture: Vijayawada,Andhra Pradesh,"Planning (4 Years, Bachelor of Planning)",AI,Gender-Neutral,506
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,514
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,566
+unlikely,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Planning (4 Years, Bachelor of Planning)",OS,Gender-Neutral,620
+unlikely,"Indian Institute of Engineering Science and Technology, Shibpur",West Bengal,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,642
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,648
+unlikely,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,777
+unlikely,National Institute of Technology Patna,Bihar,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,892
+unlikely,National Institute of Technology Raipur,Chhattisgarh,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,935
+unlikely,National Institute of Technology Hamirpur,Himachal Pradesh,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,943
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Architecture (5 Years, Bachelor of Architecture)",OS,Gender-Neutral,968
+unlikely,"Shri Mata Vaishno Devi University, Katra, Jammu & Kashmir",Jammu and Kashmir,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,970
+unlikely,"Mizoram University, Aizawl",Mizoram,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,1011
+unlikely,Islamic University of Science and Technology Kashmir,Jammu and Kashmir,"Architecture (5 Years, Bachelor of Architecture)",AI,Gender-Neutral,1224
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,1373
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,1954
+unlikely,"National Institute of Technology, Warangal",Telangana,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,2581
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Artificial Intelligence (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3060
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3088
+unlikely,"National Institute of Technology, Warangal",Telangana,"Computer Science and Engineering ( Artificial Intelligence & Data Science) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3178
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3285
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Computational and Data Science (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3371
+unlikely,"National Institute of Technology, Warangal",Telangana,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3606
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,3947
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,4266
+unlikely,"National Institute of Technology, Warangal",Telangana,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,4623
+unlikely,"National Institute of Technology, Rourkela",Odisha,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,4951
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"Information Technology-Business Informatics (4 Years, Bachelor of Technology)",AI,Gender-Neutral,4969
+unlikely,"National Institute of Technology, Warangal",Telangana,"Electronics and Communication Engineering (VLSI Design and Technology) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5127
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Artificial Intelligence (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5138
+unlikely,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5375
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,5420
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5432
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5456
+unlikely,National Institute of Technology Calicut,Kerala,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5769
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,5868
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"Information Technology (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,6101
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Artificial Intelligence and Data Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,6300
+unlikely,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,6553
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,6798
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,7039
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,7419
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,7804
+unlikely,National Institute of Technology Calicut,Kerala,"B. Tech. (Mathematics & Computing) M. Tech. in (Mathematics & Computing) (5 Years, B.Tech. + M.Tech./MS (Dual Degree))",OS,Gender-Neutral,7870
+unlikely,National Institute of Technology Calicut,Kerala,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8179
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Computer Science and Engineering (Artificial Intelligence and Data Science) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8419
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"Electronics and Communication Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",AI,Gender-Neutral,8540
+unlikely,"National Institute of Technology, Warangal",Telangana,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8545
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8701
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8754
+unlikely,"National Institute of Technology, Warangal",Telangana,"Electrical and Electronics Engineering (Electric Mobility) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8816
+unlikely,"Indian Institute of Information Technology, Allahabad",Uttar Pradesh,"B. Tech. Information Technology-Business Informatics (IT- BIn) - Master of Business Administration (MBA) (5 Years, Bachelor of Technology and MBA (Dual Degree))",AI,Gender-Neutral,8842
+unlikely,Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior,Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",AI,Gender-Neutral,8888
+unlikely,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,8904
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Electronics and Instrumentation Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9139
+unlikely,Indian Institute of Information Technology Lucknow,Uttar Pradesh,"Computer Science (4 Years, Bachelor of Technology)",AI,Gender-Neutral,9175
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Computer Science and Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,9206
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9309
+unlikely,Indian Institute of Information Technology Lucknow,Uttar Pradesh,"Computer Science and Artificial Intelligence (4 Years, Bachelor of Technology)",AI,Gender-Neutral,9386
+unlikely,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9517
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Instrumentation and Control Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9550
+unlikely,"National Institute of Technology, Jamshedpur",Jharkhand,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9574
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,9919
+unlikely,National Institute of Technology Calicut,Kerala,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,10012
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,10108
+unlikely,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,10512
+unlikely,National Institute of Technology Delhi,Delhi,"Computer Science and Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,10936
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11029
+unlikely,Indian Institute of Information Technology Lucknow,Uttar Pradesh,"Information Technology (4 Years, Bachelor of Technology)",AI,Gender-Neutral,11235
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11264
+unlikely,Indian Institute of Information Technology Lucknow,Uttar Pradesh,"Computer Science and Business (4 Years, Bachelor of Technology)",AI,Gender-Neutral,11407
+unlikely,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11626
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Information Technology (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11668
+unlikely,Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior,Madhya Pradesh,"Mathematics and Scientific Computing (4 Years, Bachelor of Technology)",AI,Gender-Neutral,11720
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Artificial Intelligence and Machine Learning (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11824
+unlikely,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,11845
+unlikely,National Institute of Technology Delhi,Delhi,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",HS,Gender-Neutral,12004
+unlikely,National Institute of Technology Calicut,Kerala,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,12016
+unlikely,National Institute of Technology Durgapur,West Bengal,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,12281
+unlikely,"National Institute of Technology Karnataka, Surathkal",Karnataka,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,12307
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,12323
+unlikely,Atal Bihari Vajpayee Indian Institute of Information Technology & Management Gwalior,Madhya Pradesh,"Integrated B. Tech.(IT) and M. Tech (IT) (5 Years, Integrated B. Tech. and M. Tech.)",AI,Gender-Neutral,12435
+unlikely,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Artificial Intelligence (4 Years, Bachelor of Technology)",OS,Gender-Neutral,12657
+unlikely,"National Institute of Technology, Jamshedpur",Jharkhand,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13322
+unlikely,"National Institute of Technology, Tiruchirappalli",Tamil Nadu,"Chemical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13406
+unlikely,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13411
+unlikely,"Visvesvaraya National Institute of Technology, Nagpur",Maharashtra,"Electronics Engineering (VLSI Design and Technology) (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13465
+unlikely,National Institute of Technology Hamirpur,Himachal Pradesh,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13866
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13924
+unlikely,"National Institute of Technology, Silchar",Assam,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,13993
+unlikely,"National Institute of Technology, Warangal",Telangana,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14049
+unlikely,Motilal Nehru National Institute of Technology Allahabad,Uttar Pradesh,"Engineering and Computational Mechanics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14168
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Engineering Physics (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14218
+unlikely,National Institute of Technology Durgapur,West Bengal,"B.Tech in Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14277
+unlikely,National Institute of Technology Delhi,Delhi,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",HS,Gender-Neutral,14303
+unlikely,"National Institute of Technology, Kurukshetra",Haryana,"Electronics and Communication Engineering (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,14420
+unlikely,"National Institute of Technology, Rourkela",Odisha,"Mechanical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14593
+unlikely,Maulana Azad National Institute of Technology Bhopal,Madhya Pradesh,"Mathematics and Data Science (5 Years, Bachelor and Master of Technology (Dual Degree))",OS,Gender-Neutral,14597
+unlikely,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Artificial Intelligence (5 Years, Integrated B. Tech. and M. Tech.)",OS,Gender-Neutral,14785
+unlikely,Malaviya National Institute of Technology Jaipur,Rajasthan,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14833
+unlikely,"Dr. B R Ambedkar National Institute of Technology, Jalandhar",Punjab,"Mathematics and Computing (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14960
+unlikely,"Sardar Vallabhbhai National Institute of Technology, Surat",Gujarat,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,Gender-Neutral,14985

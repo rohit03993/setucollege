@@ -1,0 +1,11 @@
+.env
+db/.env
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+college-dekho/.venv/
+college-dekho/data/
+college-dekho/output/
+college-for-me/data/
+*.xlsx
