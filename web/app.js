@@ -384,7 +384,7 @@ function plainTable(table, limit = 12) {
   const head = columns.length ? `<thead><tr>${columns.map((cell) => `<th>${esc(cell)}</th>`).join("")}</tr></thead>` : "";
   const body = rows
     .slice(0, limit)
-    .map((row) => `<tr>${row.map((cell) => `<td>${esc(cell)}</td>`).join("")}</tr>`)
+    .map((row) => `<tr>${row.map((cell, index) => `<td${columns[index] ? ` data-label="${esc(columns[index])}"` : ""}>${esc(cell)}</td>`).join("")}</tr>`)
     .join("");
   if (!body) return "";
   const more = rows.length > limit ? `<p class="recruiters">Showing ${limit} of ${rows.length} rows.</p>` : "";
@@ -395,7 +395,7 @@ function courseTable(rows) {
   const body = rows
     .map(
       (row, index) =>
-        `<tr ${index >= 8 ? "hidden" : ""}><td>${esc(row.course)}</td><td>${esc(row.degree)}</td><td>${esc(row.fee)}</td></tr>`
+        `<tr ${index >= 8 ? "hidden" : ""}><td data-label="Course">${esc(row.course)}</td><td data-label="Degree">${esc(row.degree)}</td><td data-label="Yearly fee">${esc(row.fee)}</td></tr>`
     )
     .join("");
   const more = rows.length > 8 ? `<button class="ghost" id="show-courses" type="button">Show all ${rows.length} courses</button>` : "";
