@@ -29,28 +29,23 @@ async function api(path, options) {
   return data;
 }
 
-function feeText(college) {
-  const label = (college.fee_label || "").trim();
-  if (!label) return "Not listed";
-  return label.includes("₹") ? label : `₹${label}`;
-}
-
-function nirfText(college) {
-  return college.nirf_rank ? `#${num(college.nirf_rank)}` : "Not listed";
-}
-
 function place(college) {
   return [college.city, college.state].filter(Boolean).join(", ");
 }
 
 function collegeCard(college) {
+  const fee = shownFee(college.fee_label) || "—";
+  const nirf = college.nirf_rank ? `#${num(college.nirf_rank)}` : "—";
+  const where = [place(college), college.ownership].filter(Boolean).join(" · ");
   return `<a class="college" href="/college/${encodeURIComponent(college.slug)}">
-    <h3>${esc(college.name)}</h3>
-    <p class="place">${esc(place(college))}</p>
-    <div class="facts">
-      <div class="fact"><small>Yearly fee</small><strong>${esc(feeText(college))}</strong></div>
-      <div class="fact"><small>NIRF</small><strong>${esc(nirfText(college))}</strong></div>
+    <div class="college-id">
+      <h3>${esc(college.name)}</h3>
+      <p class="place">${esc(where)}</p>
     </div>
+    <dl class="college-metrics">
+      <div><dt>Yearly fee</dt><dd>${esc(fee)}</dd></div>
+      <div><dt>NIRF</dt><dd>${esc(nirf)}</dd></div>
+    </dl>
   </a>`;
 }
 
@@ -341,13 +336,26 @@ function tableStat(tables, needle) {
 }
 
 function degreeList(groups) {
-  return groups
+  return `<div class="degree-list">${groups
     .map((group) => {
-      const meta = [group.fee ? `${group.fee} a year` : "", group.count ? `${group.count} courses` : ""].filter(Boolean).join(" · ");
-      const pills = (group.courses || []).map((name) => `<span>${esc(name)}</span>`).join("");
-      return `<article class="degree"><h3>${esc(group.degree)}</h3>${meta ? `<p>${esc(meta)}</p>` : ""}${pills ? `<div class="pills">${pills}</div>` : ""}</article>`;
+      const count = group.count ? `${group.count} ${Number(group.count) === 1 ? "course" : "courses"}` : "";
+      const fee = group.fee ? shownFee(group.fee) || group.fee : "";
+      const names = group.courses || [];
+      const visible = names.slice(0, 6).map((name) => `<li>${esc(name)}</li>`).join("");
+      const extra = names.slice(6);
+      const more = extra.length
+        ? `<details class="more-courses"><summary>${extra.length} more</summary><ul>${extra.map((name) => `<li>${esc(name)}</li>`).join("")}</ul></details>`
+        : "";
+      return `<article class="degree">
+        <header>
+          <div><h3>${esc(group.degree)}</h3>${count ? `<p>${esc(count)}</p>` : ""}</div>
+          ${fee ? `<strong>${esc(fee)}<span> / year</span></strong>` : ""}
+        </header>
+        ${visible ? `<ul>${visible}</ul>` : ""}
+        ${more}
+      </article>`;
     })
-    .join("");
+    .join("")}</div>`;
 }
 
 function plainTable(table, limit = 12) {
@@ -382,14 +390,28 @@ function courseTable(rows) {
 }
 
 function answerList(items) {
-  const visible = items.slice(0, 4).map((item) => `<article class="qa"><h3>${esc(item.question)}</h3><p>${esc(item.answer)}</p></article>`).join("");
-  const rest = items.slice(4);
-  const more = rest.length
-    ? `<details class="more-answers"><summary>${rest.length} more answers</summary>${rest
-        .map((item) => `<article class="qa"><h3>${esc(item.question)}</h3><p>${esc(item.answer)}</p></article>`)
-        .join("")}</details>`
-    : "";
-  return visible + more;
+  return `<div class="faq-list">${items
+    .slice(0, 8)
+    .map(
+      (item) =>
+        `<details class="faq"><summary>${esc(item.question)}</summary><p>${esc(item.answer)}</p></details>`
+    )
+    .join("")}</div>`;
+}
+
+function rankGap(studentRank, closingRank) {
+  const diff = closingRank - studentRank;
+  if (diff >= 0) return `${num(diff)} ranks inside last year's close`;
+  return `${num(Math.abs(diff))} ranks past last year's close`;
+}
+
+function showSection(root, id) {
+  root.querySelectorAll(".section-nav button").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.section === id));
+  });
+  root.querySelectorAll(".sheet").forEach((panel) => {
+    panel.hidden = panel.id !== id;
+  });
 }
 
 async function initCollege() {
@@ -436,30 +458,36 @@ async function initCollege() {
     if (cutoffTables.length) blocks.push(["cutoff", "Cutoff"]);
     if (average || highest || placed.names || placeTables.length) blocks.push(["placements", "Placements"]);
     if (answers.length) blocks.push(["answers", "Answers"]);
-    const nav = `<nav class="section-nav">${blocks.map(([id, label]) => `<a href="#${id}">${label}</a>`).join("")}</nav>`;
+    const nav = `<nav class="section-nav" aria-label="College sections">${blocks
+      .map(
+        ([id, label]) =>
+          `<button type="button" data-section="${id}" aria-pressed="false">${label}</button>`
+      )
+      .join("")}</nav>`;
     const courses = groups.length
-      ? `<section class="sheet" id="courses"><h2>Courses and fees</h2>${degreeList(groups)}</section>`
+      ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Yearly fee is shown beside each degree. Course names are the branches listed for that degree.</p>${degreeList(groups)}</section>`
       : rows.length
-        ? `<section class="sheet" id="courses"><h2>Courses and fees</h2>${courseTable(rows)}</section>`
+        ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Each row is one course and the yearly fee saved for it.</p>${courseTable(rows)}</section>`
         : "";
-    const admission = `<section class="sheet" id="admission"><h2>Admission</h2>
-      ${stories.length ? stories.map((section) => `<h3>${esc(section.title)}</h3>${sectionBody(section)}`).join("") : `<p>${esc(admissionCopy(college).how)}</p>`}
+    const admission = `<section class="sheet" id="admission" hidden><h2>Admission</h2>
+      <p class="sheet-note">${esc(admissionCopy(college).how)}</p>
+      ${stories.length ? stories.map((section) => `<h3>${esc(section.title)}</h3>${sectionBody(section)}`).join("") : ""}
       <a class="button detail-cta" href="/chances">Check your rank</a></section>`;
     const cutoff = cutoffTables.length
-      ? `<section class="sheet" id="cutoff"><h2>Cutoff</h2>${cutoffTables.slice(0, 6).map((table) => plainTable(table, 20)).join("")}</section>`
+      ? `<section class="sheet" id="cutoff" hidden><h2>Cutoff</h2><p class="sheet-note">A smaller rank is a better rank. These tables are the cutoffs saved for this college.</p>${cutoffTables.slice(0, 4).map((table) => plainTable(table, 12)).join("")}</section>`
       : "";
     const placements =
       average || highest || placed.names || placeTables.length
-        ? `<section class="sheet" id="placements"><h2>Placements</h2>
-            ${average || highest ? `<div class="statline">
-              ${average ? `<div><small>Average package</small><strong>${esc(average)}</strong></div>` : ""}
-              ${highest ? `<div><small>Highest package</small><strong>${esc(highest)}</strong></div>` : ""}
-            </div>` : ""}
+        ? `<section class="sheet" id="placements" hidden><h2>Placements</h2>
+            ${average || highest ? `<dl class="metrics">
+              ${average ? `<div><dt>Average package</dt><dd>${esc(average)}</dd></div>` : ""}
+              ${highest ? `<div><dt>Highest package</dt><dd>${esc(highest)}</dd></div>` : ""}
+            </dl>` : ""}
             ${placeTables.slice(0, 2).map(plainTable).join("")}
             ${placed.names ? `<p class="recruiters">Recruiters include ${esc(placed.names)}</p>` : ""}
           </section>`
         : "";
-    const answerBlock = answers.length ? `<section class="sheet" id="answers"><h2>Answers</h2>${answerList(answers)}</section>` : "";
+    const answerBlock = answers.length ? `<section class="sheet" id="answers" hidden><h2>Answers</h2><p class="sheet-note">Open a question to read the answer.</p>${answerList(answers)}</section>` : "";
     const letters = college.name
       .split(/\s+/)
       .filter((word) => /[A-Za-z]/.test(word))
@@ -470,36 +498,24 @@ async function initCollege() {
     const photo = college.image
       ? `<img class="campus" src="${esc(college.image)}" alt="">`
       : `<div class="initials">${esc(letters || "AS")}</div>`;
-    const nirfRank = college.nirf_overall || nirf.replace(/^#/, "").split("·")[0].trim();
-    const chips = [
-      nirfRank ? ["tl", "NIRF rank", `#${String(nirfRank).replace(/^#/, "")}`] : null,
-      college.established_year ? ["tr", "Year of establishment", String(college.established_year)] : null,
-      highest ? ["bl", "Highest package", highest] : null,
-      college.ownership ? ["br", "Type", college.ownership] : null
-    ].filter(Boolean);
     const video = videoId
       ? `<div class="video"><iframe src="https://www.youtube.com/embed/${esc(videoId)}" title="Campus video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
       : "";
     const rating = college.rating && /^\d/.test(String(college.rating))
       ? `<p class="rating-line"><span class="rating-pill">${esc(String(college.rating))}</span>${college.reviews ? `<span>${esc(String(college.reviews))} reviews</span>` : ""}</p>`
       : "";
-    root.innerHTML = `<article class="profile panel hero">
-      <div>
+    const year = college.established_year ? `Established ${college.established_year}` : "";
+    root.innerHTML = `<article class="profile">
+      <div class="banner">${photo}</div>
+      <div class="identity">
         ${college.logo ? `<img class="college-logo" src="${esc(college.logo)}" alt="">` : ""}
-        <p class="kicker">${esc(place(college))}</p>
+        <p class="kicker">${esc([place(college), college.ownership, year].filter(Boolean).join(" · "))}</p>
         <h1>${esc(college.name)}</h1>
         ${rating}
         ${college.overview ? `<p class="overview">${esc(college.overview)}</p>` : ""}
-        <div class="tags">
-          ${(college.streams || []).map((stream) => `<span class="tag">${esc(stream)}</span>`).join("")}
-          ${college.ownership ? `<span class="tag">${esc(college.ownership)}</span>` : ""}
-        </div>
-        ${facts.length ? `<div class="statline">${facts.map(([label, value]) => `<div><small>${esc(label)}</small><strong>${esc(value)}</strong></div>`).join("")}</div>` : ""}
+        <div class="tags">${(college.streams || []).map((stream) => `<span class="tag">${esc(stream)}</span>`).join("")}</div>
+        ${facts.length ? `<dl class="metrics">${facts.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl>` : ""}
         <a class="button detail-cta" href="/chances">Check your rank</a>
-      </div>
-      <div class="hero-photo">
-        ${photo}
-        ${chips.map(([place, label, value]) => `<div class="fact-chip ${place}"><small>${esc(label)}</small><strong>${esc(value)}</strong></div>`).join("")}
       </div>
     </article>
     ${video}
@@ -511,6 +527,12 @@ async function initCollege() {
         showCourses.remove();
       });
     }
+    const firstSection = root.querySelector(".section-nav button");
+    if (firstSection) showSection(root, firstSection.dataset.section);
+    root.querySelector(".section-nav")?.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (button) showSection(root, button.dataset.section);
+    });
   } catch (error) {
     root.innerHTML = `<p class="status" role="alert">${esc(error.message)}</p>`;
   }
@@ -570,10 +592,17 @@ async function initChances() {
         <span class="pill possible">${num(data.counts.possible)} possible</span>
         <span class="pill unlikely">${num(data.counts.unlikely)} unlikely</span>`;
       const cards = data.results.map((row) => `<article class="result">
-        <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
+        <div class="result-head">
+          <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
+          <span class="gap">${esc(rankGap(data.rank, row.closing_rank))}</span>
+        </div>
         <h3>${esc(row.college)}</h3>
-        <p>${esc(row.branch)}</p>
-        <p class="muted">Closing rank ${num(row.closing_rank)} · ${esc(quotaText(row.quota))} · ${esc(row.gender)}</p>
+        <p class="branch">${esc(row.branch)}</p>
+        <dl class="compare">
+          <div><dt>Your rank</dt><dd>${num(data.rank)}</dd></div>
+          <div><dt>Closed at</dt><dd>${num(row.closing_rank)}</dd></div>
+          <div><dt>Seat</dt><dd>${esc(quotaText(row.quota))} · ${esc(row.gender)}</dd></div>
+        </dl>
       </article>`).join("");
       results.innerHTML = append ? results.innerHTML + cards : cards;
       if (!data.total) {
