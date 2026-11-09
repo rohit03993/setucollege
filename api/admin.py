@@ -64,7 +64,22 @@ def signed_in(request: Request):
     return valid_cookie(request.cookies.get(COOKIE, ""))
 
 
-def page(title, body):
+def page(title, body, shell=True):
+    if shell:
+        frame = f"""<div class="shell">
+          <aside class="side">
+            <a class="side-brand" href="/admin"><img src="/assets/logo.jpg?v=2" alt="Admission Setu"></a>
+            <p class="side-label">Dashboard</p>
+            <nav>
+              <a href="/admin" aria-current="page">Colleges</a>
+              <a href="/">Public site</a>
+            </nav>
+            <form method="post" action="/admin/logout"><button class="side-logout" type="submit">Log out</button></form>
+          </aside>
+          <main class="workspace">{body}</main>
+        </div>"""
+    else:
+        frame = f'<main class="gate">{body}</main>'
     return HTMLResponse(
         f"""<!DOCTYPE html>
 <html lang="en-IN">
@@ -72,29 +87,10 @@ def page(title, body):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{escape(title)}</title>
-  <link rel="stylesheet" href="/assets/styles.css?v=19">
-  <link rel="stylesheet" href="/assets/admin.css?v=3">
-  <style>
-    .admin {{ width: min(1080px, calc(100% - 32px)); margin: 24px auto 48px; }}
-    .admin-bar h1 {{ font-size: 32px; margin: 0; }}
-    .admin-bar {{ display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }}
-    .admin table {{ width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; }}
-    .admin th, .admin td {{ padding: 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }}
-    .admin th {{ font-size: 12px; color: var(--muted); }}
-    .admin form.stack {{ display: grid; gap: 12px; }}
-    .admin textarea {{ width: 100%; min-height: 140px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); font: inherit; }}
-    .check {{ display: flex; gap: 8px; align-items: center; font-weight: 700; }}
-    .badge {{ display: inline-block; padding: 2px 8px; border-radius: 999px; background: #efeaff; font-size: 12px; font-weight: 800; }}
-    .badge.off {{ background: #fde8ef; color: #9f1239; }}
-  </style>
+  <link rel="stylesheet" href="/assets/styles.css?v=20">
+  <link rel="stylesheet" href="/assets/admin.css?v=4">
 </head>
-<body>
-  <header class="topbar"><div class="topbar-inner">
-    <a class="brand" href="/"><img src="/assets/logo.jpg?v=2" alt="Admission Setu"></a>
-    <nav class="desktop-nav"><a href="/admin">Colleges</a></nav>
-  </div></header>
-  <main class="admin">{body}</main>
-</body>
+<body class="dash">{frame}</body>
 </html>"""
     )
 
@@ -108,8 +104,9 @@ def login_page(message=""):
         ready = "<p class=\"status\" role=\"alert\">The edit table is not in the database yet. Run db/schema.sql, then restart the site.</p>"
     return page(
         "Admin login",
-        f"""<h1>Admin login</h1>
-        <p class="lede">Edit a college here and the public page uses that version.</p>
+        f"""<a class="gate-brand" href="/"><img src="/assets/logo.jpg?v=2" alt="Admission Setu"></a>
+        <h1>Admin</h1>
+        <p class="lede">Sign in to update colleges on the public site.</p>
         {ready}{note}
         <form class="panel form" method="post" action="/admin/login">
           <label class="field wide"><span>Password</span>
@@ -117,6 +114,7 @@ def login_page(message=""):
           </label>
           <button class="button" type="submit">Log in</button>
         </form>""",
+        shell=False,
     )
 
 
@@ -182,48 +180,70 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
                 {"q": query, "like": f"%{query}%", "limit": size, "offset": (page_no - 1) * size},
             )
             rows = cursor.fetchall()
+            cursor.execute(
+                """
+                SELECT count(*) AS colleges,
+                       count(o.source_slug) AS edited,
+                       count(*) FILTER (WHERE COALESCE(o.hidden, false)) AS hidden
+                FROM colleges c
+                LEFT JOIN college_overrides o ON o.source_slug = c.source_slug
+                """
+            )
+            stats = cursor.fetchone()
     total = rows[0]["total"] if rows else 0
     pages = max(1, (total + size - 1) // size)
     body_rows = []
     for row in rows:
         marks = []
-        if row["edited"]:
-            marks.append('<span class="badge">Edited</span>')
-        if row["hidden"]:
-            marks.append('<span class="badge off">Hidden</span>')
         fee = escape(row["fee_label"] or "—")
         nirf = escape(str(row["nirf_rank"])) if row["nirf_rank"] else "—"
         place = escape(", ".join(part for part in (row["city"], row["state"]) if part))
         slug = escape(row["source_slug"])
+        if row["hidden"]:
+            marks.append('<span class="badge off">Hidden</span>')
+        elif row["edited"]:
+            marks.append('<span class="badge">Edited</span>')
+        else:
+            marks.append('<span class="badge quiet">Live</span>')
+        words = [word for word in re.split(r"[^A-Za-z0-9]+", row["name"] or "") if word]
+        letters = escape("".join(word[0] for word in words[:2]).upper() or "AS")
         body_rows.append(
             "<tr>"
-            f"<td><a href=\"/admin/colleges/{slug}\"><strong>{escape(row['name'])}</strong></a>"
-            f"<div class=\"muted\">{place}</div></td>"
-            f"<td>{fee}</td><td>{nirf}</td><td>{' '.join(marks)}</td>"
-            f"<td><a href=\"/admin/colleges/{slug}\">Edit</a></td>"
+            f"<td><a class=\"college-line\" href=\"/admin/colleges/{slug}\">"
+            f"<span class=\"mark\">{letters}</span><span><strong>{escape(row['name'])}</strong>"
+            f"<span class=\"muted\">{place}</span></span></a></td>"
+            f"<td>{fee}</td><td>{nirf}</td><td>{''.join(marks)}</td>"
             "</tr>"
         )
-    empty = '<tr><td colspan="5">No college matches that search.</td></tr>'
+    empty = '<tr><td colspan="4">No college matches that search.</td></tr>'
     table = (
-        "<table><thead><tr><th>College</th><th>Yearly fee</th><th>NIRF</th><th></th><th></th></tr></thead>"
+        "<table><thead><tr><th>College</th><th>Yearly fee</th><th>NIRF</th><th>Status</th></tr></thead>"
         f"<tbody>{''.join(body_rows) or empty}</tbody></table>"
     )
     prev_link = f'<a class="ghost" href="/admin?q={escape(query)}&page_no={page_no - 1}">Previous</a>' if page_no > 1 else ""
     next_link = f'<a class="ghost" href="/admin?q={escape(query)}&page_no={page_no + 1}">Next</a>' if page_no < pages else ""
     return page(
-        "Admin",
-        f"""        <div class="admin-bar"><h1>Colleges</h1>
-          <div class="row-actions">
-            <a class="button" href="/admin/new">Add college</a>
-            <form method="post" action="/admin/logout"><button class="ghost" type="submit">Log out</button></form>
-          </div></div>
-        <p class="lede">{total} colleges. Edited rows are what visitors see for those facts.</p>
-        <form class="search" method="get" action="/admin">
-          <input name="q" value="{escape(query)}" placeholder="College, city, or state">
-          <button class="button" type="submit">Search</button>
-        </form>
-        {table}
-        <div class="pager">{prev_link}<p>Page {page_no} of {pages}</p>{next_link}</div>""",
+        "Colleges",
+        f"""<header class="workspace-head">
+          <div><p class="eyebrow">Catalogue</p><h1>Colleges</h1></div>
+          <a class="button" href="/admin/new">Add college</a>
+        </header>
+        <section class="stats">
+          <article><span>Colleges</span><strong>{stats['colleges']:,}</strong></article>
+          <article><span>Edited</span><strong>{stats['edited']:,}</strong></article>
+          <article><span>Hidden</span><strong>{stats['hidden']:,}</strong></article>
+        </section>
+        <section class="board">
+          <div class="board-head">
+            <form class="search" method="get" action="/admin">
+              <input name="q" value="{escape(query)}" placeholder="Search college, city, or state">
+              <button class="button" type="submit">Search</button>
+            </form>
+            <p>{total:,} shown · page {page_no} of {pages}</p>
+          </div>
+          <div class="table-wrap">{table}</div>
+          <div class="pager">{prev_link}<span></span>{next_link}</div>
+        </section>""",
     )
 
 
@@ -404,21 +424,30 @@ def editor_page(request: Request, doc, creating):
             f'<input type="hidden" name="token" value="{escape(request.cookies.get(COOKIE, ""))}">'
             '<button class="ghost" type="submit">Restore saved data</button></form>'
         )
+    note = (
+        "Fill in each part, then save. The web address becomes the public link."
+        if creating
+        else "Save publishes this version. Restore saved data brings back the imported college."
+    )
     return page(
         title,
-        f"""<div class="editor-top">
+        f"""<header class="workspace-head">
           <div>
-            <a class="back" href="/admin">All colleges</a>
+            <a class="crumb" href="/admin">Colleges</a>
             <h1>{escape(title)}</h1>
           </div>
           <div class="row-actions">{view}{restore}<button class="button" id="save" type="button">Save college</button></div>
+        </header>
+        <div class="editor-layout">
+          <nav id="tabs" class="editor-tabs" aria-label="College sections"></nav>
+          <div class="editor-main">
+            <p id="save-note" class="hint">{note}</p>
+            <div id="panel"></div>
+          </div>
         </div>
-        <p id="save-note" class="hint">{'Fill in each part of the college page, then save. The web address becomes its public link.' if creating else 'Edit each part of the college page, then save. Saving publishes this version. Restore saved data brings back the imported college.'}</p>
-        <nav id="tabs" class="editor-tabs" aria-label="College sections"></nav>
-        <div id="panel"></div>
         <div id="editor" data-mode="{mode}" data-slug="{escape(slug)}" data-token="{escape(request.cookies.get(COOKIE, ""))}"></div>
         <script id="college-doc" type="application/json">{payload}</script>
-        <script src="/assets/admin.js?v=2"></script>""",
+        <script src="/assets/admin.js?v=3"></script>""",
     )
 
 

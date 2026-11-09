@@ -137,7 +137,8 @@ function paint() {
   document.querySelector("#tabs").innerHTML = tabs
     .map(([id, label]) => `<button type="button" data-tab="${id}" aria-pressed="${id === current}">${label}</button>`)
     .join("");
-  document.querySelector("#panel").innerHTML = panels[current]();
+  const label = tabs.find(([id]) => id === current)[1];
+  document.querySelector("#panel").innerHTML = `<h2 class="panel-title">${label}</h2>${panels[current]()}`;
   bind();
   refreshPreviews();
 }
