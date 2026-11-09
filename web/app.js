@@ -650,11 +650,14 @@ async function initChances() {
         }
         groups[seen.get(row.college)].seats.push(row);
       });
-      const cards = groups.map((group) => {
+      const start = append ? results.querySelectorAll(".seat-card").length : 0;
+      const cards = groups.map((group, index) => {
         const href = group.slug
           ? `/college/${encodeURIComponent(group.slug)}`
           : `/browse?q=${encodeURIComponent(group.college)}`;
         const action = group.slug ? "Open college" : "Find in colleges";
+        const countLabel = group.seats.length === 1 ? "1 branch" : `${group.seats.length} branches`;
+        const place = [group.state, countLabel].filter(Boolean).join(" · ");
         const seats = group.seats.map((row) => `<div class="branch-row">
           <div class="result-head">
             <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
@@ -669,7 +672,8 @@ async function initChances() {
         </div>`).join("");
         return `<article class="seat-card">
           <a class="seat-college" href="${href}">
-            <span><strong>${esc(group.college)}</strong><span class="place">${esc(group.state || "")}</span></span>
+            <span class="seat-mark">${start + index + 1}</span>
+            <span class="seat-name"><strong>${esc(group.college)}</strong><span class="place">${esc(place)}</span></span>
             <span class="open-label">${action}</span>
           </a>
           ${seats}

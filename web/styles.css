@@ -814,27 +814,49 @@ fieldset { margin: 0; padding: 0; border: 0; min-inline-size: 0; }
 .pill.possible { background: var(--possible-bg); color: var(--possible); }
 .pill.unlikely { background: var(--unlikely-bg); color: var(--unlikely); }
 .result { padding: 16px 18px; }
+body[data-page="chances"] .list { gap: 18px; }
 .seat-card {
   background: #fff;
-  border: 1px solid var(--line);
+  border: 1px solid #ddd6f5;
   border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 8px 24px rgba(48, 32, 110, 0.07);
 }
 .seat-college {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 12px;
-  padding: 16px 16px 14px;
-  color: inherit;
+  padding: 14px 16px;
+  color: #fff;
   text-decoration: none;
-  background: #faf9fc;
+  background: linear-gradient(135deg, #5b45f5, #4334c9);
 }
-.seat-college strong { display: block; font-size: 18px; letter-spacing: -0.03em; }
-.seat-college .place { display: block; margin-top: 2px; }
-.open-label { flex: 0 0 auto; color: var(--accent-dark); font-size: 13px; font-weight: 800; }
-.branch-row { padding: 14px 16px; border-top: 1px solid var(--line); }
+.seat-mark {
+  flex: 0 0 auto;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 15px;
+  font-weight: 800;
+}
+.seat-name { min-width: 0; flex: 1; }
+.seat-college strong { display: block; font-size: 17px; letter-spacing: -0.03em; line-height: 1.25; }
+.seat-college .place { display: block; margin-top: 2px; color: rgba(255, 255, 255, 0.82); font-size: 13px; font-weight: 600; }
+.open-label {
+  flex: 0 0 auto;
+  color: var(--accent-dark);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 12px;
+  border-radius: 999px;
+}
+.branch-row { padding: 14px 16px 16px; border-top: 1px solid var(--line); background: #fff; }
+.branch-row + .branch-row { background: #fbfaff; }
 .branch-row .branch { margin: 8px 0 0; }
 .result-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .result h3 { margin: 10px 0 2px; font-size: 18px; }
