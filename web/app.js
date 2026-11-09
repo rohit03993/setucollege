@@ -335,24 +335,40 @@ function tableStat(tables, needle) {
   return "";
 }
 
+function degreeKey(value) {
+  return String(value || "").toLowerCase().replace(/[^a-z0-9+]/g, "");
+}
+
+function listedGroups(groups, pages) {
+  const fuller = new Map();
+  for (const section of pages.courses?.sections || []) {
+    for (const group of splitCourses(section.content || "")) {
+      const key = degreeKey(group.level);
+      const current = fuller.get(key);
+      if (!current || group.names.length > current.names.length) fuller.set(key, group);
+    }
+  }
+  return (groups || []).map((group) => {
+    const saved = group.courses || [];
+    const extra = fuller.get(degreeKey(group.degree));
+    const names = extra && extra.names.length > saved.length ? extra.names : saved;
+    return { ...group, courses: names };
+  });
+}
+
 function degreeList(groups) {
   return `<div class="degree-list">${groups
     .map((group) => {
-      const count = group.count ? `${group.count} ${Number(group.count) === 1 ? "course" : "courses"}` : "";
-      const fee = group.fee ? shownFee(group.fee) || group.fee : "";
       const names = group.courses || [];
-      const visible = names.slice(0, 6).map((name) => `<li>${esc(name)}</li>`).join("");
-      const extra = names.slice(6);
-      const more = extra.length
-        ? `<details class="more-courses"><summary>${extra.length} more</summary><ul>${extra.map((name) => `<li>${esc(name)}</li>`).join("")}</ul></details>`
-        : "";
+      const count = names.length === 1 ? "1 course" : names.length ? `${names.length} courses` : "";
+      const fee = group.fee ? shownFee(group.fee) || group.fee : "";
+      const items = names.map((name) => `<li>${esc(name)}</li>`).join("");
       return `<article class="degree">
         <header>
           <div><h3>${esc(group.degree)}</h3>${count ? `<p>${esc(count)}</p>` : ""}</div>
-          ${fee ? `<strong>${esc(fee)}<span> / year</span></strong>` : ""}
+          ${fee ? `<strong>${esc(fee)}<span>/ year</span></strong>` : ""}
         </header>
-        ${visible ? `<ul>${visible}</ul>` : ""}
-        ${more}
+        ${items ? `<ul>${items}</ul>` : ""}
       </article>`;
     })
     .join("")}</div>`;
@@ -448,7 +464,7 @@ async function initCollege() {
         : null
     ].filter(Boolean);
     const managed = Boolean(college.managed);
-    const groups = pages.course_groups || [];
+    const groups = listedGroups(pages.course_groups || [], managed ? {} : pages);
     const rows = groups.length || managed ? [] : courseRows(pages);
     const stories = managed
       ? (pages.admission?.sections || []).filter((section) => section.title || section.content)

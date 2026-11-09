@@ -488,14 +488,21 @@ h2 { margin: 0; font-size: 22px; }
 .degree header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 700; }
 .degree header strong { font-size: 15px; text-align: right; letter-spacing: -0.03em; }
 .degree header strong span { display: block; color: var(--muted); font-size: 12px; font-weight: 700; }
-.degree ul { list-style: none; margin: 0; padding: 0; }
+.degree ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px;
+}
 .degree li {
-  padding: 10px 0;
+  padding: 9px 0;
   border-bottom: 1px solid #f1eef6;
   font-weight: 600;
 }
-.more-courses { margin: 4px 0 10px; }
-.more-courses summary { cursor: pointer; font-weight: 800; color: var(--accent-dark); }
+@media (min-width: 800px) {
+  .degree ul { grid-template-columns: 1fr 1fr; column-gap: 28px; }
+}
 .video {
   margin-top: 16px;
   overflow: hidden;
