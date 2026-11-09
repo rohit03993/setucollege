@@ -53,13 +53,24 @@ function quotaText(quota) {
   return QUOTA[quota] || quota;
 }
 
+function homePick(college) {
+  const fee = shownFee(college.fee_label) || "—";
+  const nirf = college.nirf_rank ? `#${num(college.nirf_rank)}` : "—";
+  const where = [place(college), college.ownership].filter(Boolean).join(" · ");
+  return `<a class="pick" href="/college/${encodeURIComponent(college.slug)}">
+    <span class="pick-rank">${esc(nirf)}</span>
+    <span class="pick-id"><strong>${esc(college.name)}</strong><span>${esc(where)}</span></span>
+    <span class="pick-fee"><small>Yearly fee</small>${esc(fee)}</span>
+  </a>`;
+}
+
 async function initHome() {
   const featured = document.querySelector("#featured");
   const count = document.querySelector("#college-count");
   try {
     const data = await api("/colleges?sort=nirf&page_size=6");
     count.textContent = num(data.total);
-    featured.innerHTML = data.colleges.map(collegeCard).join("");
+    featured.innerHTML = data.colleges.map(homePick).join("");
   } catch (error) {
     featured.innerHTML = `<p class="status" role="alert">${esc(error.message)}</p>`;
   }
