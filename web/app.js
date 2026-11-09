@@ -426,8 +426,12 @@ async function initCollege() {
     const placed = placementFacts(pages);
     const officialAverage = tableStat(pages.placement?.tables, "average package");
     const officialHighest = tableStat(pages.placement?.tables, "highest package");
-    const average = officialAverage || placed.average || college.average_package;
-    const highest = officialHighest || placed.highest || college.highest_package;
+    const average = college.edited
+      ? college.average_package
+      : officialAverage || placed.average || college.average_package;
+    const highest = college.edited
+      ? college.highest_package
+      : officialHighest || placed.highest || college.highest_package;
     const nirf = college.nirf_overall
       ? `#${num(college.nirf_overall)}`
       : college.nirf_rank
@@ -443,15 +447,24 @@ async function initCollege() {
         ? ["Courses", String(college.course_count)]
         : null
     ].filter(Boolean);
-    const highlight = pages.highlight || {};
+    const managed = Boolean(college.managed);
     const groups = pages.course_groups || [];
-    const rows = groups.length ? [] : courseRows(pages);
-    const stories = storySections(pages.admission?.sections);
-    const answers = (pages.faqs && pages.faqs.length ? pages.faqs : collegeAnswers(pages)).filter(
-      (item) => item.question && item.answer && !JUNK.test(item.question)
+    const rows = groups.length || managed ? [] : courseRows(pages);
+    const stories = managed
+      ? (pages.admission?.sections || []).filter((section) => section.title || section.content)
+      : storySections(pages.admission?.sections);
+    const answers = managed
+      ? (pages.faqs || []).filter((item) => item.question && item.answer)
+      : (pages.faqs && pages.faqs.length ? pages.faqs : collegeAnswers(pages)).filter(
+          (item) => item.question && item.answer && !JUNK.test(item.question)
+        );
+    const placeTables = (pages.placement?.tables || []).filter(
+      (table) => table.rows && table.rows.length && (managed || !JUNK.test(table.title || ""))
     );
-    const placeTables = (pages.placement?.tables || []).filter((table) => table.rows && table.rows.length && !JUNK.test(table.title || ""));
-    const cutoffTables = (pages.cutoff?.tables || []).filter((table) => table.rows && table.rows.length && !JUNK.test(table.title || ""));
+    const cutoffTables = (pages.cutoff?.tables || []).filter(
+      (table) => table.rows && table.rows.length && (managed || !JUNK.test(table.title || ""))
+    );
+    const recruiterLine = managed ? college.recruiters || "" : placed.names;
     const blocks = [];
     if (groups.length || rows.length) blocks.push(["courses", "Courses"]);
     blocks.push(["admission", "Admission"]);
@@ -470,24 +483,32 @@ async function initCollege() {
         ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Each row is one course and the yearly fee saved for it.</p>${courseTable(rows)}</section>`
         : "";
     const admission = `<section class="sheet" id="admission" hidden><h2>Admission</h2>
-      <p class="sheet-note">${esc(admissionCopy(college).how)}</p>
+      ${managed ? "" : `<p class="sheet-note">${esc(admissionCopy(college).how)}</p>`}
       ${stories.length ? stories.map((section) => `<h3>${esc(section.title)}</h3>${sectionBody(section)}`).join("") : ""}
       <a class="button detail-cta" href="/chances">Check your rank</a></section>`;
+    const cutoffLimit = managed ? cutoffTables.length : 4;
     const cutoff = cutoffTables.length
-      ? `<section class="sheet" id="cutoff" hidden><h2>Cutoff</h2><p class="sheet-note">A smaller rank is a better rank. These tables are the cutoffs saved for this college.</p>${cutoffTables.slice(0, 4).map((table) => plainTable(table, 12)).join("")}</section>`
+      ? `<section class="sheet" id="cutoff" hidden><h2>Cutoff</h2><p class="sheet-note">A smaller rank is a better rank. These tables are the cutoffs saved for this college.</p>${cutoffTables.slice(0, cutoffLimit).map((table) => plainTable(table, managed ? 40 : 12)).join("")}</section>`
       : "";
     const placements =
-      average || highest || placed.names || placeTables.length
+      average || highest || recruiterLine || placeTables.length
         ? `<section class="sheet" id="placements" hidden><h2>Placements</h2>
             ${average || highest ? `<dl class="metrics">
               ${average ? `<div><dt>Average package</dt><dd>${esc(average)}</dd></div>` : ""}
               ${highest ? `<div><dt>Highest package</dt><dd>${esc(highest)}</dd></div>` : ""}
             </dl>` : ""}
-            ${placeTables.slice(0, 2).map(plainTable).join("")}
-            ${placed.names ? `<p class="recruiters">Recruiters include ${esc(placed.names)}</p>` : ""}
+            ${(managed ? placeTables : placeTables.slice(0, 2)).map((table) => plainTable(table, managed ? 40 : 12)).join("")}
+            ${recruiterLine ? `<p class="recruiters">Recruiters include ${esc(recruiterLine)}</p>` : ""}
           </section>`
         : "";
     const answerBlock = answers.length ? `<section class="sheet" id="answers" hidden><h2>Answers</h2><p class="sheet-note">Open a question to read the answer.</p>${answerList(answers)}</section>` : "";
+    const site = /^https?:\/\//i.test(String(college.website || "").trim()) ? String(college.website).trim() : "";
+    const phoneText = String(college.phone || "").trim();
+    const phoneHref = phoneText.replace(/[^\d+]/g, "");
+    const links = [
+      site ? `<a class="text-link" href="${esc(site)}" target="_blank" rel="noopener">Website</a>` : "",
+      phoneText && phoneHref ? `<a class="text-link" href="tel:${esc(phoneHref)}">${esc(phoneText)}</a>` : ""
+    ].filter(Boolean);
     const letters = college.name
       .split(/\s+/)
       .filter((word) => /[A-Za-z]/.test(word))
@@ -514,6 +535,8 @@ async function initCollege() {
         ${rating}
         ${college.overview ? `<p class="overview">${esc(college.overview)}</p>` : ""}
         <div class="tags">${(college.streams || []).map((stream) => `<span class="tag">${esc(stream)}</span>`).join("")}</div>
+        ${exams.length ? `<p class="exam-line">Exams: ${esc(exams.join(", "))}</p>` : ""}
+        ${links.length ? `<p class="contact-line">${links.join("")}</p>` : ""}
         ${facts.length ? `<dl class="metrics">${facts.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join("")}</dl>` : ""}
         <a class="button detail-cta" href="/chances">Check your rank</a>
       </div>

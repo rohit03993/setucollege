@@ -65,6 +65,93 @@ def number(value):
     return float(value)
 
 
+_overrides_ready = False
+
+
+def overrides_ready():
+    global _overrides_ready
+    if _overrides_ready:
+        return True
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT 1
+                FROM information_schema.tables
+                WHERE table_schema = 'public' AND table_name = 'college_overrides'
+                """
+            )
+            _overrides_ready = cursor.fetchone() is not None
+    return _overrides_ready
+
+
+def fetch_overrides(slugs):
+    if not slugs or not overrides_ready():
+        return {}
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM college_overrides WHERE source_slug = ANY(%(slugs)s)",
+                {"slugs": list(slugs)},
+            )
+            return {row["source_slug"]: row for row in cursor.fetchall()}
+
+
+def page_content(override):
+    content = override.get("content") or {}
+    if isinstance(content, str):
+        import json
+
+        content = json.loads(content or "{}")
+    return content if isinstance(content, dict) else {}
+
+
+def apply_override(college, override, include_page=False):
+    college["edited"] = False
+    college["hidden"] = False
+    college["managed"] = False
+    if not override:
+        return college
+    college["name"] = override["name"] or college["name"]
+    college["city"] = override["city"] or ""
+    college["state"] = override["state"] or ""
+    college["ownership"] = override["ownership"] or ""
+    college["overview"] = override["overview"] or ""
+    college["fee_label"] = override["fee_label"] or ""
+    college["website"] = override["website"] or ""
+    college["phone"] = override["phone"] or ""
+    college["established_year"] = override["established_year"] or ""
+    college["average_package"] = override["average_package"] or ""
+    college["highest_package"] = override["highest_package"] or ""
+    college["rating"] = override["rating"] or ""
+    college["reviews"] = override["reviews"] or ""
+    college["image"] = override["image"] or ""
+    college["logo"] = override["logo"] or ""
+    college["nirf_rank"] = override["nirf_rank"] or ""
+    college["nirf_overall"] = ""
+    college["nirf_year"] = ""
+    college["streams"] = list(override["streams"] or [])
+    college["edited"] = True
+    college["hidden"] = bool(override["hidden"])
+    content = page_content(override)
+    if content.get("managed"):
+        college["managed"] = True
+        college["video_id"] = content.get("video_id") or ""
+        college["recruiters"] = content.get("recruiters") or ""
+        college["exams"] = content.get("exams") or []
+        if content.get("course_count"):
+            college["course_count"] = content["course_count"]
+        if include_page:
+            pages = college.setdefault("pages", {})
+            pages["course_groups"] = content.get("course_groups") or []
+            pages["courses"] = {"sections": []}
+            pages["faqs"] = content.get("answers") or []
+            pages["admission"] = {"sections": content.get("admission") or []}
+            pages["cutoff"] = {"tables": content.get("cutoff") or []}
+            pages["placement"] = {"tables": content.get("placements") or [], "sections": []}
+    return college
+
+
 def college_out(row):
     return {
         "slug": row["source_slug"],
@@ -160,12 +247,29 @@ def list_colleges(
     if order is None:
         raise HTTPException(status_code=400, detail="Sort must be name, nirf, or fee.")
     query = q.strip()
-    where = """
-        WHERE (%(q)s = '' OR name ILIKE %(like)s OR city ILIKE %(like)s OR state ILIKE %(like)s)
+    search = "name ILIKE %(like)s OR city ILIKE %(like)s OR state ILIKE %(like)s"
+    hidden = ""
+    if overrides_ready():
+        search += """
+            OR EXISTS (
+                SELECT 1 FROM college_overrides AS edited
+                WHERE edited.source_slug = colleges.source_slug
+                  AND (edited.name ILIKE %(like)s OR edited.city ILIKE %(like)s OR edited.state ILIKE %(like)s)
+            )
+        """
+        hidden = """
+          AND NOT EXISTS (
+                SELECT 1 FROM college_overrides AS edited
+                WHERE edited.source_slug = colleges.source_slug AND edited.hidden
+              )
+        """
+    where = f"""
+        WHERE (%(q)s = '' OR {search})
           AND (%(stream)s = '' OR EXISTS (
                 SELECT 1 FROM unnest(streams) AS stream_name
                 WHERE lower(stream_name) = lower(%(stream)s)
               ))
+          {hidden}
     """
     params = {
         "q": query,
@@ -197,17 +301,20 @@ def list_colleges(
             )
             stream_counts = {row["stream_name"]: row["total"] for row in cursor.fetchall()}
     total = rows[0]["total"] if rows else 0
+    colleges = [college_out(row) for row in rows]
+    found = fetch_overrides([item["slug"] for item in colleges])
+    for item in colleges:
+        apply_override(item, found.get(item["slug"]))
     return {
         "total": total,
         "page": page,
         "page_size": page_size,
         "stream_counts": stream_counts,
-        "colleges": [college_out(row) for row in rows],
+        "colleges": colleges,
     }
 
 
-@app.get("/colleges/{slug}")
-def college_page(slug: str):
+def load_college(slug, include_hidden=False):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
@@ -222,7 +329,7 @@ def college_page(slug: str):
             )
             row = cursor.fetchone()
             if row is None:
-                raise HTTPException(status_code=404, detail="College not found.")
+                return None
     college = college_out(row)
     profile = row["profile"] if isinstance(row["profile"], dict) else {}
     college["approval"] = profile.get("approval") or ""
@@ -249,6 +356,17 @@ def college_page(slug: str):
         college["nirf_rank"] = highlight.get("nirf_engineering") or media["nirf_rank"] or ""
         college["nirf_year"] = media["nirf_year"]
     college["pages"] = pages
+    override = fetch_overrides([slug]).get(slug)
+    if override and override["hidden"] and not include_hidden:
+        return None
+    return apply_override(college, override, include_page=True)
+
+
+@app.get("/colleges/{slug}")
+def college_page(slug: str):
+    college = load_college(slug)
+    if college is None:
+        raise HTTPException(status_code=404, detail="College not found.")
     return college
 
 
@@ -349,4 +467,7 @@ def predict_colleges(body: PredictIn):
     }
 
 
+from admin import router as admin_router  # noqa: E402
+
+app.include_router(admin_router)
 app.mount("/assets", StaticFiles(directory=WEB), name="assets")

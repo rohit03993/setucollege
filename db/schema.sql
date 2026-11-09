@@ -60,6 +60,33 @@ CREATE TABLE IF NOT EXISTS seats (
     UNIQUE (year, round, exam, institute, program, quota, category, gender)
 );
 
+-- Admin edits. Import does not touch this table, so a later import keeps the changes.
+CREATE TABLE IF NOT EXISTS college_overrides (
+    source_slug       text PRIMARY KEY,
+    name              text NOT NULL DEFAULT '',
+    city              text NOT NULL DEFAULT '',
+    state             text NOT NULL DEFAULT '',
+    ownership         text NOT NULL DEFAULT '',
+    overview          text NOT NULL DEFAULT '',
+    fee_label         text NOT NULL DEFAULT '',
+    nirf_rank         integer,
+    established_year  text NOT NULL DEFAULT '',
+    average_package   text NOT NULL DEFAULT '',
+    highest_package   text NOT NULL DEFAULT '',
+    rating            text NOT NULL DEFAULT '',
+    reviews           text NOT NULL DEFAULT '',
+    image             text NOT NULL DEFAULT '',
+    logo              text NOT NULL DEFAULT '',
+    website           text NOT NULL DEFAULT '',
+    phone             text NOT NULL DEFAULT '',
+    streams           text[] NOT NULL DEFAULT '{}',
+    hidden            boolean NOT NULL DEFAULT false,
+    content           jsonb NOT NULL DEFAULT '{}'::jsonb,
+    updated_at        timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE college_overrides ADD COLUMN IF NOT EXISTS content jsonb NOT NULL DEFAULT '{}'::jsonb;
+
 CREATE INDEX IF NOT EXISTS colleges_name_lower ON colleges (lower(name));
 CREATE INDEX IF NOT EXISTS colleges_state ON colleges (state);
 CREATE INDEX IF NOT EXISTS courses_college ON courses (college_id);
