@@ -33,18 +33,41 @@ function place(college) {
   return [college.city, college.state].filter(Boolean).join(", ");
 }
 
+function lettersOf(name) {
+  return String(name || "")
+    .split(/\s+/)
+    .filter((word) => /[A-Za-z]/.test(word))
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
+}
+
+function packageText(college) {
+  const written = String(college.highest_package || "").trim();
+  if (written) return written;
+  const value = Number(college.highest_package_lpa);
+  if (!value) return "—";
+  if (value >= 100) return `₹${String(value / 100).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "")} Cr`;
+  return `₹${String(value).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, "")} LPA`;
+}
+
 function collegeCard(college) {
   const fee = shownFee(college.fee_label) || "—";
   const nirf = college.nirf_rank ? `#${num(college.nirf_rank)}` : "—";
   const where = [place(college), college.ownership].filter(Boolean).join(" · ");
+  const letters = lettersOf(college.name) || "•";
+  const logo = college.logo ? `<img src="${esc(college.logo)}" alt="" onerror="this.remove()">` : "";
+  const badge = college.nirf_rank ? `<span class="rank-badge">NIRF ${esc(nirf)}</span>` : "";
   return `<a class="college" href="/college/${encodeURIComponent(college.slug)}">
+    <span class="mark">${logo}${esc(letters)}</span>
     <div class="college-id">
-      <h3>${esc(college.name)}</h3>
+      <div class="college-title"><h3>${esc(college.name)}</h3>${badge}</div>
       <p class="place">${esc(where)}</p>
     </div>
     <dl class="college-metrics">
-      <div><dt>Yearly fee</dt><dd>${esc(fee)}</dd></div>
       <div><dt>NIRF</dt><dd>${esc(nirf)}</dd></div>
+      <div><dt>Highest package</dt><dd>${esc(packageText(college))}</dd></div>
+      <div><dt>Yearly fee</dt><dd>${esc(fee)}</dd></div>
     </dl>
   </a>`;
 }

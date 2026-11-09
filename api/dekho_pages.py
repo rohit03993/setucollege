@@ -335,7 +335,7 @@ def youtube_id(url):
 def good_image(url):
     if not isinstance(url, str) or not url.startswith("http"):
         return ""
-    if "placeholder" in url:
+    if "placeholder" in url.lower():
         return ""
     return url
 
@@ -434,6 +434,36 @@ def html_media(slug):
         if image and video:
             break
     return image, video
+
+
+@lru_cache(maxsize=2048)
+def card_facts(slug: str):
+    """Logo, highest package, and NIRF from one saved page. Used by the college list."""
+    if not re.fullmatch(r"[a-z0-9-]+", slug or ""):
+        return "", "", None
+    folder = COLLEGE_DIR / slug
+    path = None
+    for page in ("placement", "courses", "admission"):
+        candidate = folder / f"{page}.html"
+        if candidate.exists() and candidate.stat().st_size:
+            path = candidate
+            break
+    if path is None:
+        return "", "", None
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    logo = ""
+    spot = text.find("logoBlock")
+    if spot >= 0:
+        img = re.search(r"<img\b[^>]*>", text[spot : spot + 700])
+        if img:
+            tag = img.group(0).replace("&amp;", "&")
+            match = re.search(r'\ssrc="(https:[^"]+)"', tag)
+            logo = good_image(match.group(1) if match else "")
+    block = header_block(text)
+    placement = block.get("placement") if isinstance(block.get("placement"), dict) else {}
+    highest = money_label(placement.get("highest_package"))
+    nirf = rank_value(block, "engineering") or rank_value(block, "overall")
+    return logo, highest, nirf
 
 
 @lru_cache(maxsize=512)

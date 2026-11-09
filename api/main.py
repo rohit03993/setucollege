@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 sys.path.insert(0, str(ROOT / "prediction"))
 
-from dekho_pages import college_media, saved_pages  # noqa: E402
+from dekho_pages import card_facts, college_media, saved_pages  # noqa: E402
 from institutes import HOME_STATES  # noqa: E402
 from match import predict  # noqa: E402
 from predict import CATEGORIES  # noqa: E402
@@ -151,6 +151,32 @@ def apply_override(college, override, include_page=False):
             pages["cutoff"] = {"tables": content.get("cutoff") or []}
             pages["placement"] = {"tables": content.get("placements") or [], "sections": []}
     return college
+
+
+def lpa_text(value):
+    if not value:
+        return ""
+    amount = float(value)
+    if amount <= 0:
+        return ""
+    if amount >= 100:
+        crore = f"{amount / 100:.2f}".rstrip("0").rstrip(".")
+        return f"₹{crore} Cr"
+    text = f"{amount:.2f}".rstrip("0").rstrip(".")
+    return f"₹{text} LPA"
+
+
+def attach_card(item):
+    has_package = bool(str(item.get("highest_package") or "").strip())
+    if item.get("logo") and has_package and item.get("nirf_rank"):
+        return
+    logo, highest, nirf = card_facts(item["slug"])
+    if not item.get("logo"):
+        item["logo"] = logo
+    if not has_package:
+        item["highest_package"] = highest or lpa_text(item.get("highest_package_lpa"))
+    if not item.get("nirf_rank") and nirf:
+        item["nirf_rank"] = nirf
 
 
 def college_out(row):
@@ -306,6 +332,7 @@ def list_colleges(
     found = fetch_overrides([item["slug"] for item in colleges])
     for item in colleges:
         apply_override(item, found.get(item["slug"]))
+        attach_card(item)
     return {
         "total": total,
         "page": page,
