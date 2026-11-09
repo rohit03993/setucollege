@@ -197,6 +197,7 @@ def college_out(row):
         "avg_package_lpa": number(row["avg_package_lpa"]),
         "highest_package_lpa": number(row["highest_package_lpa"]),
         "median_package_lpa": number(row["median_package_lpa"]),
+        "rating": str(row.get("card_rating") or "").strip(),
         "nirf_rank": row["nirf_rank"],
         "nirf_year": row["nirf_year"],
         "nirf_category": row["nirf_category"],
@@ -309,7 +310,7 @@ def list_colleges(
         with conn.cursor() as cursor:
             cursor.execute(
                 f"""
-                SELECT {COLLEGE_FIELDS}, count(*) OVER() AS total
+                SELECT {COLLEGE_FIELDS}, profile->>'rating' AS card_rating, count(*) OVER() AS total
                 FROM colleges
                 {where}
                 ORDER BY {order}

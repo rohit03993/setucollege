@@ -52,23 +52,31 @@ function packageText(college) {
 }
 
 function collegeCard(college) {
-  const fee = shownFee(college.fee_label) || "—";
-  const nirf = college.nirf_rank ? `#${num(college.nirf_rank)}` : "—";
-  const where = [place(college), college.ownership].filter(Boolean).join(" · ");
   const letters = lettersOf(college.name) || "•";
   const logo = college.logo ? `<img src="${esc(college.logo)}" alt="" onerror="this.remove()">` : "";
-  const badge = college.nirf_rank ? `<span class="rank-badge">NIRF ${esc(nirf)}</span>` : "";
-  return `<a class="college" href="/college/${encodeURIComponent(college.slug)}">
+  const badge = college.nirf_rank ? `<span class="rank-badge" title="NIRF rank">#${num(college.nirf_rank)}</span>` : "";
+  const rating = /^\d/.test(String(college.rating || "").trim()) ? String(college.rating).trim() : "";
+  const highest = packageText(college);
+  const facts = [
+    rating ? `<span class="card-rating">★ ${esc(rating)}</span>` : "",
+    highest !== "—" ? `<span>Highest ${esc(highest)}</span>` : ""
+  ].filter(Boolean).join("");
+  const streams = (college.streams || []).filter(Boolean);
+  const shown = streams.slice(0, 3);
+  const extra = streams.length - shown.length;
+  const tags = shown.length
+    ? `<div class="card-tags">${shown.map((stream) => `<span>${esc(stream)}</span>`).join("")}${extra ? `<span>+${extra}</span>` : ""}</div>`
+    : "";
+  return `<a class="college${badge ? " has-rank" : ""}" href="/college/${encodeURIComponent(college.slug)}">
+    ${badge}
     <span class="mark">${logo}${esc(letters)}</span>
-    <div class="college-id">
-      <div class="college-title"><h3>${esc(college.name)}</h3>${badge}</div>
-      <p class="place">${esc(where)}</p>
-    </div>
-    <dl class="college-metrics">
-      <div><dt>NIRF</dt><dd>${esc(nirf)}</dd></div>
-      <div><dt>Highest package</dt><dd>${esc(packageText(college))}</dd></div>
-      <div><dt>Yearly fee</dt><dd>${esc(fee)}</dd></div>
-    </dl>
+    <span class="college-id">
+      <h3>${esc(college.name)}</h3>
+      <p class="place">${esc(place(college))}</p>
+    </span>
+    ${facts ? `<p class="card-line">${facts}</p>` : ""}
+    ${tags}
+    <span class="explore">Explore college</span>
   </a>`;
 }
 
