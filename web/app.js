@@ -641,19 +641,40 @@ async function initChances() {
         <span class="pill safer">${num(data.counts.safer)} safer</span>
         <span class="pill possible">${num(data.counts.possible)} possible</span>
         <span class="pill unlikely">${num(data.counts.unlikely)} unlikely</span>`;
-      const cards = data.results.map((row) => `<article class="result">
-        <div class="result-head">
-          <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
-          <span class="gap">${esc(rankGap(data.rank, row.closing_rank))}</span>
-        </div>
-        <h3>${esc(row.college)}</h3>
-        <p class="branch">${esc(row.branch)}</p>
-        <dl class="compare">
-          <div><dt>Your rank</dt><dd>${num(data.rank)}</dd></div>
-          <div><dt>Closed at</dt><dd>${num(row.closing_rank)}</dd></div>
-          <div><dt>Seat</dt><dd>${esc(quotaText(row.quota))} · ${esc(row.gender)}</dd></div>
-        </dl>
-      </article>`).join("");
+      const groups = [];
+      const seen = new Map();
+      data.results.forEach((row) => {
+        if (!seen.has(row.college)) {
+          seen.set(row.college, groups.length);
+          groups.push({ college: row.college, state: row.college_state, slug: row.slug, seats: [] });
+        }
+        groups[seen.get(row.college)].seats.push(row);
+      });
+      const cards = groups.map((group) => {
+        const href = group.slug
+          ? `/college/${encodeURIComponent(group.slug)}`
+          : `/browse?q=${encodeURIComponent(group.college)}`;
+        const action = group.slug ? "Open college" : "Find in colleges";
+        const seats = group.seats.map((row) => `<div class="branch-row">
+          <div class="result-head">
+            <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
+            <span class="gap">${esc(rankGap(data.rank, row.closing_rank))}</span>
+          </div>
+          <p class="branch">${esc(row.branch)}</p>
+          <dl class="compare">
+            <div><dt>Your rank</dt><dd>${num(data.rank)}</dd></div>
+            <div><dt>Closed at</dt><dd>${num(row.closing_rank)}</dd></div>
+            <div><dt>Seat</dt><dd>${esc(quotaText(row.quota))} · ${esc(row.gender)}</dd></div>
+          </dl>
+        </div>`).join("");
+        return `<article class="seat-card">
+          <a class="seat-college" href="${href}">
+            <span><strong>${esc(group.college)}</strong><span class="place">${esc(group.state || "")}</span></span>
+            <span class="open-label">${action}</span>
+          </a>
+          ${seats}
+        </article>`;
+      }).join("");
       results.innerHTML = append ? results.innerHTML + cards : cards;
       if (!data.total) {
         results.innerHTML = `<p class="empty">No seat matches that category, state, and gender.</p>`;

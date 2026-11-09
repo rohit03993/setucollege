@@ -10,6 +10,7 @@ From the project folder:
 """
 
 import os
+import re
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -392,6 +393,78 @@ def predict_options():
     }
 
 
+_college_names = None
+
+
+def college_names():
+    global _college_names
+    if _college_names is not None:
+        return _college_names
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT source_slug, name FROM colleges")
+            rows = cursor.fetchall()
+    _college_names = {re.sub(r"[^a-z0-9]+", " ", row["name"].lower()).strip(): row["source_slug"] for row in rows}
+    return _college_names
+
+
+_PLACES = {"tiruchirappalli": "trichy", "uttarakhand": "garwhal"}
+_SPECIAL = (
+    ("motilal nehru national institute of technology", "mnnit allahabad"),
+    ("maulana azad national institute of technology", "manit bhopal"),
+    ("sardar vallabhbhai national institute of technology", "svnit surat"),
+    ("visvesvaraya national institute of technology", "vnit nagpur"),
+    ("malaviya national institute of technology", "malaviya national institute of technology"),
+    ("atal bihari vajpayee indian institute of information technology", "iiitm gwalior"),
+    ("pt dwarka prasad mishra indian institute of information technology", "iiitdm jabalpur"),
+    ("indian institute of information technology design manufacturing kurnool", "iiitdm kurnool"),
+    ("indian institute of information technology design manufacturing kancheepuram", "iiitdm kancheepuram"),
+    ("indian institute of information technology iiit kilohrad", "iiit sonepat"),
+    ("birla institute of technology mesra", "bit mesra"),
+    ("punjab engineering college", "pec chandigarh"),
+    ("indian institute of engineering science and technology", "iiest shibpur"),
+)
+
+
+def slug_for_institute(institute):
+    text = re.sub(r"[^a-z0-9]+", " ", institute.lower()).strip()
+    keys = [text]
+    for prefix, key in _SPECIAL:
+        if text.startswith(prefix):
+            keys.append(key)
+    for label, short in (
+        (r"indian institute of technology (.+)$", "iit"),
+        (r"national institute of technology (.+)$", "nit"),
+        (r"indian institute of information technology (.+)$", "iiit"),
+    ):
+        found = re.search(label, text)
+        if not found:
+            continue
+        rest = found.group(1).strip()
+        words = rest.split()
+        place = words[1:] if words and words[0] in {"iit", "iiit", "nit"} else words
+        keys.append(f"{short} {rest}")
+        keys.append(f"{short} {words[-1]}")
+        keys.append(f"{short} {words[0]}")
+        if place:
+            keys.append(f"{short} {place[0]}")
+            if len(place) >= 2:
+                keys.append(f"{short} {' '.join(place[:2])}")
+        for word in (words[-1], words[0], place[0] if place else ""):
+            if word in _PLACES:
+                keys.append(f"{short} {_PLACES[word]}")
+    names = college_names()
+    for key in keys:
+        if key in names:
+            return names[key]
+    best = ""
+    best_slug = ""
+    for name, slug in names.items():
+        if len(name) >= 20 and text.startswith(name) and len(name) > len(best):
+            best, best_slug = name, slug
+    return best_slug
+
+
 @app.post("/predict")
 def predict_colleges(body: PredictIn):
     if body.exam not in EXAMS:
@@ -452,6 +525,9 @@ def predict_colleges(body: PredictIn):
     for row in rows:
         counts[row["chance"]] += 1
     start = (body.page - 1) * body.page_size
+    page_rows = rows[start : start + body.page_size]
+    for row in page_rows:
+        row["slug"] = slug_for_institute(row["college"])
     return {
         "exam": body.exam,
         "rank": body.rank,
@@ -463,7 +539,7 @@ def predict_colleges(body: PredictIn):
         "counts": counts,
         "page": body.page,
         "page_size": body.page_size,
-        "results": rows[start : start + body.page_size],
+        "results": page_rows,
     }
 
 
