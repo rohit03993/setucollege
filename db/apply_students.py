@@ -22,6 +22,12 @@ STATEMENTS = (
     )
     """,
     """
+    ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_at timestamptz
+    """,
+    """
+    ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_text text NOT NULL DEFAULT ''
+    """,
+    """
     CREATE TABLE IF NOT EXISTS predictions (
         id          bigserial PRIMARY KEY,
         student_id  bigint NOT NULL REFERENCES students (id) ON DELETE CASCADE,

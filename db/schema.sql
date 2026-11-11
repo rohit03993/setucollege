@@ -89,12 +89,17 @@ ALTER TABLE college_overrides ADD COLUMN IF NOT EXISTS content jsonb NOT NULL DE
 
 -- One student. The same mobile number keeps the same public_id.
 CREATE TABLE IF NOT EXISTS students (
-    id          bigserial PRIMARY KEY,
-    public_id   text NOT NULL UNIQUE,
-    name        text NOT NULL,
-    mobile      text NOT NULL UNIQUE,
-    created_at  timestamptz NOT NULL DEFAULT now()
+    id              bigserial PRIMARY KEY,
+    public_id       text NOT NULL UNIQUE,
+    name            text NOT NULL,
+    mobile          text NOT NULL UNIQUE,
+    consent_at      timestamptz,
+    consent_text    text NOT NULL DEFAULT '',
+    created_at      timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_at timestamptz;
+ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_text text NOT NULL DEFAULT '';
 
 -- One row is one click on Predict colleges.
 CREATE TABLE IF NOT EXISTS predictions (

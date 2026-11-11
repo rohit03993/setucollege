@@ -20,7 +20,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from psycopg.errors import UndefinedTable, UniqueViolation
+from psycopg.errors import UndefinedColumn, UndefinedTable, UniqueViolation
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 from pydantic import BaseModel, Field
@@ -418,6 +418,14 @@ class PredictIn(BaseModel):
 class StudentIn(BaseModel):
     name: str
     mobile: str
+    consent: bool = False
+
+
+CONSENT_TEXT = (
+    "I agree that Admission Setu can save my name and mobile number "
+    "to show this result in my name and keep this prediction. "
+    "I can withdraw this on the result page."
+)
 
 
 def clean_name(value):
@@ -432,7 +440,7 @@ def clean_mobile(value):
     if digits.startswith("91") and len(digits) == 12:
         digits = digits[2:]
     if len(digits) != 10 or digits[0] not in "6789":
-        raise HTTPException(status_code=400, detail="Enter a 10-digit mobile number.")
+        raise HTTPException(status_code=400, detail="Enter a 10-digit Indian mobile number.")
     return digits
 
 
@@ -449,17 +457,25 @@ def upsert_student(name, mobile):
                 with conn.cursor() as cursor:
                     cursor.execute(
                         """
-                        INSERT INTO students (public_id, name, mobile)
-                        VALUES (%(public_id)s, %(name)s, %(mobile)s)
-                        ON CONFLICT (mobile) DO UPDATE SET name = EXCLUDED.name
+                        INSERT INTO students (public_id, name, mobile, consent_at, consent_text)
+                        VALUES (%(public_id)s, %(name)s, %(mobile)s, now(), %(consent_text)s)
+                        ON CONFLICT (mobile) DO UPDATE
+                        SET name = EXCLUDED.name,
+                            consent_at = now(),
+                            consent_text = EXCLUDED.consent_text
                         RETURNING public_id, name, mobile
                         """,
-                        {"public_id": new_public_id(), "name": name, "mobile": mobile},
+                        {
+                            "public_id": new_public_id(),
+                            "name": name,
+                            "mobile": mobile,
+                            "consent_text": CONSENT_TEXT,
+                        },
                     )
                     return cursor.fetchone()
         except UniqueViolation:
             continue
-        except UndefinedTable:
+        except (UndefinedTable, UndefinedColumn):
             raise HTTPException(status_code=503, detail="The student list is not ready yet.")
     raise HTTPException(status_code=503, detail="The student ID could not be created. Try again.")
 
@@ -479,8 +495,28 @@ def find_student(public_id):
 
 @app.post("/students")
 def save_student(body: StudentIn):
+    if not body.consent:
+        raise HTTPException(status_code=400, detail="Tick the box to agree before we save your name and mobile number.")
     row = upsert_student(clean_name(body.name), clean_mobile(body.mobile))
-    return {"id": row["public_id"], "name": row["name"], "mobile": row["mobile"]}
+    return {"id": row["public_id"], "name": row["name"]}
+
+
+@app.delete("/students/{public_id}")
+def withdraw_student(public_id: str):
+    """Delete the name, mobile number, and saved predictions for this ID."""
+    try:
+        with connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "DELETE FROM students WHERE public_id = %(public_id)s RETURNING id",
+                    {"public_id": public_id.strip()},
+                )
+                row = cursor.fetchone()
+    except UndefinedTable:
+        raise HTTPException(status_code=503, detail="The student list is not ready yet.")
+    if row is None:
+        raise HTTPException(status_code=404, detail="This ID is already removed.")
+    return {"deleted": True}
 
 
 @app.get("/predict/options")

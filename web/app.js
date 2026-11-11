@@ -876,7 +876,7 @@ async function initChances() {
         <div class="result-top">
           <div>
             <div class="result-chips">${chips}</div>
-            <p class="result-who"><strong>${esc(data.student_name || "")}</strong><span>${esc(data.student_id || "")}</span><button type="button" data-not-you>Not you?</button></p>
+            <p class="result-who"><strong>${esc(data.student_name || "")}</strong><span>${esc(data.student_id || "")}</span><button type="button" data-not-you>Not you?</button><button type="button" data-withdraw>Withdraw consent</button></p>
             <p class="result-kicker">Your rank</p>
             <h2>${num(data.rank)}</h2>
           </div>
@@ -1005,16 +1005,40 @@ async function initChances() {
     }
     begin();
   });
+  const mobileInput = studentForm.elements.mobile;
+  const consentInput = studentForm.elements.consent;
+  const continueButton = studentForm.querySelector("button[type=submit]");
+  function syncConsent() {
+    continueButton.disabled = !consentInput.checked;
+  }
+  consentInput.addEventListener("change", syncConsent);
+  mobileInput.addEventListener("input", () => {
+    let digits = mobileInput.value.replace(/\D/g, "");
+    if (digits.startsWith("91") && digits.length > 10) digits = digits.slice(2);
+    if (digits.startsWith("0") && digits.length > 10) digits = digits.slice(1);
+    mobileInput.value = digits.slice(0, 10);
+  });
   studentForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     studentError.textContent = "";
     studentError.removeAttribute("role");
+    const mobile = mobileInput.value;
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+      studentError.textContent = "Enter a 10-digit Indian mobile number.";
+      studentError.setAttribute("role", "alert");
+      return;
+    }
+    if (!consentInput.checked) {
+      studentError.textContent = "Tick the box to agree before we save your name and mobile number.";
+      studentError.setAttribute("role", "alert");
+      return;
+    }
     const entered = new FormData(studentForm);
     try {
       student = await api("/students", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: entered.get("name"), mobile: entered.get("mobile") })
+        body: JSON.stringify({ name: entered.get("name"), mobile, consent: true })
       });
       saveStudent(student);
       studentDialog.close();
@@ -1024,14 +1048,35 @@ async function initChances() {
       studentError.setAttribute("role", "alert");
     }
   });
-  results.addEventListener("click", (event) => {
+  results.addEventListener("click", async (event) => {
     if (event.target.closest("[data-not-you]")) {
       localStorage.removeItem(STUDENT_KEY);
       student = null;
       studentForm.reset();
+      syncConsent();
       studentError.textContent = "";
       studentDialog.showModal();
       studentForm.elements.name.focus();
+      return;
+    }
+    if (event.target.closest("[data-withdraw]")) {
+      const id = student && student.id;
+      try {
+        if (id) {
+          await api(`/students/${encodeURIComponent(id)}`, { method: "DELETE" });
+        }
+        localStorage.removeItem(STUDENT_KEY);
+        student = null;
+        studentForm.reset();
+        syncConsent();
+        results.innerHTML = "";
+        summary.innerHTML = "";
+        more.hidden = true;
+        status.textContent = "Your name, mobile number, and saved predictions have been deleted.";
+      } catch (error) {
+        status.textContent = error.message;
+        status.setAttribute("role", "alert");
+      }
       return;
     }
     const add = event.target.closest(".choice-add");
