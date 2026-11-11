@@ -493,6 +493,21 @@ const CATEGORY_LABEL = {
   ST: "ST"
 };
 const CHOICE_KEY = "setu-choices";
+const STUDENT_KEY = "setu-student";
+
+function loadStudent() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STUDENT_KEY) || "null");
+    if (saved && saved.id && saved.name) return saved;
+  } catch (error) {
+    return null;
+  }
+  return null;
+}
+
+function saveStudent(student) {
+  localStorage.setItem(STUDENT_KEY, JSON.stringify(student));
+}
 
 function poolText(gender) {
   return String(gender || "").startsWith("Female-only") ? "Female-only" : gender || "";
@@ -685,9 +700,13 @@ async function initChances() {
   const summary = document.querySelector("#summary");
   const status = document.querySelector("#status");
   const more = document.querySelector("#more");
+  const studentDialog = document.querySelector("#student-dialog");
+  const studentForm = document.querySelector("#student-form");
+  const studentError = document.querySelector("#student-error");
   let page = 1;
   let branch = "";
   let choices = loadChoices();
+  let student = loadStudent();
   const shownSeats = new Map();
 
   function choiceId(row, data) {
@@ -791,7 +810,12 @@ async function initChances() {
   });
   showCourse();
 
-  async function run(nextPage, append) {
+  async function run(nextPage, append, record) {
+    if (!student || !student.id) {
+      studentDialog.showModal();
+      studentForm.elements.name.focus();
+      return;
+    }
     status.textContent = "Checking seats…";
     status.removeAttribute("role");
     const entered = new FormData(form);
@@ -803,6 +827,8 @@ async function initChances() {
       exam: entered.get("exam"),
       course: entered.get("exam") === "NEET" ? entered.get("course") : "",
       branch,
+      student_id: student.id,
+      record: Boolean(record),
       page: nextPage,
       page_size: 20
     };
@@ -850,6 +876,7 @@ async function initChances() {
         <div class="result-top">
           <div>
             <div class="result-chips">${chips}</div>
+            <p class="result-who"><strong>${esc(data.student_name || "")}</strong><span>${esc(data.student_id || "")}</span><button type="button" data-not-you>Not you?</button></p>
             <p class="result-kicker">Your rank</p>
             <h2>${num(data.rank)}</h2>
           </div>
@@ -961,14 +988,52 @@ async function initChances() {
     }
   }
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+  function begin() {
     branch = "";
     results.innerHTML = "";
     summary.innerHTML = "";
-    run(1, false);
+    run(1, false, true);
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!student || !student.id) {
+      studentError.textContent = "";
+      studentDialog.showModal();
+      studentForm.elements.name.focus();
+      return;
+    }
+    begin();
+  });
+  studentForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    studentError.textContent = "";
+    studentError.removeAttribute("role");
+    const entered = new FormData(studentForm);
+    try {
+      student = await api("/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: entered.get("name"), mobile: entered.get("mobile") })
+      });
+      saveStudent(student);
+      studentDialog.close();
+      begin();
+    } catch (error) {
+      studentError.textContent = error.message;
+      studentError.setAttribute("role", "alert");
+    }
   });
   results.addEventListener("click", (event) => {
+    if (event.target.closest("[data-not-you]")) {
+      localStorage.removeItem(STUDENT_KEY);
+      student = null;
+      studentForm.reset();
+      studentError.textContent = "";
+      studentDialog.showModal();
+      studentForm.elements.name.focus();
+      return;
+    }
     const add = event.target.closest(".choice-add");
     if (add) {
       toggleChoice(add.dataset.choice);

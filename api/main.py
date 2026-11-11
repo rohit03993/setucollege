@@ -11,6 +11,7 @@ From the project folder:
 
 import os
 import re
+import secrets
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -19,6 +20,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from psycopg.errors import UndefinedTable, UniqueViolation
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 from pydantic import BaseModel, Field
@@ -407,8 +409,78 @@ class PredictIn(BaseModel):
     exam: str
     course: str = ""
     branch: str = ""
+    student_id: str = ""
+    record: bool = False
     page: int = Field(1, ge=1)
     page_size: int = Field(20, ge=1, le=100)
+
+
+class StudentIn(BaseModel):
+    name: str
+    mobile: str
+
+
+def clean_name(value):
+    name = " ".join(str(value or "").split())
+    if len(name) < 2 or len(name) > 80 or not re.search(r"[A-Za-z]", name):
+        raise HTTPException(status_code=400, detail="Enter your name.")
+    return name
+
+
+def clean_mobile(value):
+    digits = re.sub(r"\D", "", str(value or ""))
+    if digits.startswith("91") and len(digits) == 12:
+        digits = digits[2:]
+    if len(digits) != 10 or digits[0] not in "6789":
+        raise HTTPException(status_code=400, detail="Enter a 10-digit mobile number.")
+    return digits
+
+
+def new_public_id():
+    alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    return "AS-" + "".join(secrets.choice(alphabet) for _ in range(6))
+
+
+def upsert_student(name, mobile):
+    """Create an ID, or keep the ID already stored for this mobile number."""
+    for _ in range(3):
+        try:
+            with connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO students (public_id, name, mobile)
+                        VALUES (%(public_id)s, %(name)s, %(mobile)s)
+                        ON CONFLICT (mobile) DO UPDATE SET name = EXCLUDED.name
+                        RETURNING public_id, name, mobile
+                        """,
+                        {"public_id": new_public_id(), "name": name, "mobile": mobile},
+                    )
+                    return cursor.fetchone()
+        except UniqueViolation:
+            continue
+        except UndefinedTable:
+            raise HTTPException(status_code=503, detail="The student list is not ready yet.")
+    raise HTTPException(status_code=503, detail="The student ID could not be created. Try again.")
+
+
+def find_student(public_id):
+    try:
+        with connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "SELECT id, public_id, name FROM students WHERE public_id = %(public_id)s",
+                    {"public_id": public_id},
+                )
+                return cursor.fetchone()
+    except UndefinedTable:
+        raise HTTPException(status_code=503, detail="The student list is not ready yet.")
+
+
+@app.post("/students")
+def save_student(body: StudentIn):
+    row = upsert_student(clean_name(body.name), clean_mobile(body.mobile))
+    return {"id": row["public_id"], "name": row["name"], "mobile": row["mobile"]}
 
 
 @app.get("/predict/options")
@@ -511,6 +583,31 @@ def predict_colleges(body: PredictIn):
         course = NEET_COURSES.get(body.course.strip().lower())
         if course is None:
             raise HTTPException(status_code=400, detail="NEET needs a course: MBBS, BDS, or B.Sc Nursing.")
+    student = find_student(body.student_id.strip())
+    if student is None:
+        raise HTTPException(status_code=400, detail="Enter your name and mobile number.")
+    if body.record:
+        with connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO predictions (
+                        student_id, exam, rank, category, gender, home_state, course
+                    )
+                    VALUES (
+                        %(student_id)s, %(exam)s, %(rank)s, %(category)s, %(gender)s, %(home_state)s, %(course)s
+                    )
+                    """,
+                    {
+                        "student_id": student["id"],
+                        "exam": body.exam,
+                        "rank": body.rank,
+                        "category": category,
+                        "gender": body.gender,
+                        "home_state": home_state,
+                        "course": course,
+                    },
+                )
 
     with connection() as conn:
         with conn.cursor() as cursor:
@@ -580,6 +677,8 @@ def predict_colleges(body: PredictIn):
         "gender": body.gender,
         "home_state": home_state,
         "course": course,
+        "student_id": student["public_id"],
+        "student_name": student["name"],
         "round_label": round_label,
         "branch": chosen,
         "branches": branches,

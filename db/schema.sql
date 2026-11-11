@@ -87,8 +87,31 @@ CREATE TABLE IF NOT EXISTS college_overrides (
 
 ALTER TABLE college_overrides ADD COLUMN IF NOT EXISTS content jsonb NOT NULL DEFAULT '{}'::jsonb;
 
+-- One student. The same mobile number keeps the same public_id.
+CREATE TABLE IF NOT EXISTS students (
+    id          bigserial PRIMARY KEY,
+    public_id   text NOT NULL UNIQUE,
+    name        text NOT NULL,
+    mobile      text NOT NULL UNIQUE,
+    created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- One row is one click on Predict colleges.
+CREATE TABLE IF NOT EXISTS predictions (
+    id          bigserial PRIMARY KEY,
+    student_id  bigint NOT NULL REFERENCES students (id) ON DELETE CASCADE,
+    exam        text NOT NULL,
+    rank        integer NOT NULL,
+    category    text NOT NULL,
+    gender      text NOT NULL,
+    home_state  text NOT NULL,
+    course      text NOT NULL DEFAULT '',
+    created_at  timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE INDEX IF NOT EXISTS colleges_name_lower ON colleges (lower(name));
 CREATE INDEX IF NOT EXISTS colleges_state ON colleges (state);
 CREATE INDEX IF NOT EXISTS courses_college ON courses (college_id);
 CREATE INDEX IF NOT EXISTS seats_lookup ON seats (exam, category, preparatory, closing_rank);
 CREATE INDEX IF NOT EXISTS seats_institute ON seats (institute);
+CREATE INDEX IF NOT EXISTS predictions_student ON predictions (student_id, created_at DESC);

@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=41">
+  <link rel="stylesheet" href="/assets/styles.css?v=42">
 </head>
 <body data-page="chances">
   <header class="topbar">
@@ -120,6 +120,22 @@
       </label>
       <button class="button" type="submit">Predict colleges</button>
     </form>
+    <dialog class="student-dialog" id="student-dialog">
+      <form id="student-form">
+        <h2>Your result</h2>
+        <p>Enter your name and mobile number. This creates your ID, and the result is shown in your name.</p>
+        <label class="field">
+          <span>Name</span>
+          <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
+        </label>
+        <label class="field">
+          <span>Mobile number</span>
+          <input name="mobile" required inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="10-digit mobile number">
+        </label>
+        <p class="status" id="student-error"></p>
+        <button class="button" type="submit">Continue</button>
+      </form>
+    </dialog>
     <p class="status" id="status"></p>
     <div class="summary" id="summary"></div>
     <div id="choices" hidden></div>
@@ -132,6 +148,6 @@
     <a href="/browse">Colleges</a>
     <a href="/chances" aria-current="page">Predict</a>
   </nav>
-  <script src="/assets/app.js?v=38"></script>
+  <script src="/assets/app.js?v=39"></script>
 </body>
 </html>
