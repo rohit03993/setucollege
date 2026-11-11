@@ -29,7 +29,7 @@ sys.path.insert(0, str(ROOT / "prediction"))
 
 from dekho_pages import card_facts, college_media, saved_pages  # noqa: E402
 from institutes import HOME_STATES  # noqa: E402
-from match import predict  # noqa: E402
+from match import family_counts, predict, shortlist  # noqa: E402
 from predict import CATEGORIES  # noqa: E402
 
 ENV_FILE = ROOT / "db" / ".env"
@@ -406,6 +406,7 @@ class PredictIn(BaseModel):
     home_state: str
     exam: str
     course: str = ""
+    branch: str = ""
     page: int = Field(1, ge=1)
     page_size: int = Field(20, ge=1, le=100)
 
@@ -515,7 +516,8 @@ def predict_colleges(body: PredictIn):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT institute, state, program, quota, category, gender, closing_rank, exam
+                SELECT institute, state, program, quota, category, gender,
+                       opening_rank, closing_rank, exam
                 FROM seats
                 WHERE exam = %(exam)s AND category = %(category)s AND preparatory = false
                 """,
@@ -531,6 +533,7 @@ def predict_colleges(body: PredictIn):
             "quota": row["quota"],
             "category": row["category"],
             "gender": row["gender"],
+            "opening_rank": row["opening_rank"],
             "closing_rank": row["closing_rank"],
             "course": row["program"] if body.exam == "NEET" else "",
             "exam": row["exam"],
@@ -549,13 +552,27 @@ def predict_colleges(body: PredictIn):
         },
         seats,
     )
-    counts = {"safer": 0, "possible": 0, "unlikely": 0}
-    for row in rows:
-        counts[row["chance"]] += 1
+    shown, counts = shortlist(rows, body.rank)
+    branches = family_counts(shown)
+    chosen = body.branch.strip()
+    if chosen and any(item["name"] == chosen for item in branches):
+        shown = [row for row in shown if row["family"] == chosen]
+    else:
+        chosen = ""
     start = (body.page - 1) * body.page_size
-    page_rows = rows[start : start + body.page_size]
+    page_rows = shown[start : start + body.page_size]
+    facts = {}
     for row in page_rows:
         row["slug"] = slug_for_institute(row["college"])
+        slug = row["slug"]
+        if slug not in facts:
+            if slug:
+                logo, highest, nirf = card_facts(slug)
+                facts[slug] = (logo or "", highest or "", nirf)
+            else:
+                facts[slug] = ("", "", None)
+        row["logo"], row["highest_package"], row["nirf_rank"] = facts[slug]
+    round_label = "MCC 2026" if body.exam == "NEET" else "JoSAA 2026, round 5"
     return {
         "exam": body.exam,
         "rank": body.rank,
@@ -563,7 +580,11 @@ def predict_colleges(body: PredictIn):
         "gender": body.gender,
         "home_state": home_state,
         "course": course,
-        "total": len(rows),
+        "round_label": round_label,
+        "branch": chosen,
+        "branches": branches,
+        "total": len(shown),
+        "matched": len(rows),
         "counts": counts,
         "page": body.page,
         "page_size": body.page_size,

@@ -398,17 +398,38 @@ function listedGroups(groups, pages) {
   });
 }
 
+function degreeKind(name) {
+  const key = degreeKey(name);
+  if (/mbbs|bds|nursing|pharm|medical/.test(key)) return "plus";
+  if (/mba|pgdm|bba|management/.test(key)) return "case";
+  if (/btech|mtech|bearch|engineering|barch|diploma/.test(key) || key === "be") return "cap";
+  if (/msc|bsc|phd|science/.test(key)) return "flask";
+  return "book";
+}
+
+function degreeIcon(kind) {
+  const paths = {
+    cap: `<path d="M3 10 12 5l9 5-9 5-9-5Z"/><path d="M7 12.2V17c1.4 1.3 3.2 2 5 2s3.6-.7 5-2v-4.8"/>`,
+    case: `<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12h18"/>`,
+    flask: `<path d="M9 3h6"/><path d="M10 3v5.5L5 19.2A1.8 1.8 0 0 0 6.6 22h10.8A1.8 1.8 0 0 0 19 19.2L14 8.5V3"/>`,
+    plus: `<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>`,
+    book: `<path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H20"/><path d="M7.5 3H20v18H7.5A2.5 2.5 0 0 1 5 18.5v-13A2.5 2.5 0 0 1 7.5 3Z"/>`
+  };
+  return `<span class="degree-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${paths[kind] || paths.book}</svg></span>`;
+}
+
 function degreeList(groups) {
   return `<div class="degree-list">${groups
-    .map((group) => {
+    .map((group, index) => {
       const names = group.courses || [];
       const count = names.length === 1 ? "1 course" : names.length ? `${names.length} courses` : "";
       const fee = group.fee ? shownFee(group.fee) || group.fee : "";
-      const items = names.map((name) => `<li>${esc(name)}</li>`).join("");
-      return `<article class="degree">
+      const items = names.map((name) => `<li><i aria-hidden="true"></i><span>${esc(name)}</span></li>`).join("");
+      return `<article class="degree tone-${index % 6}">
         <header>
-          <div><h3>${esc(group.degree)}</h3>${count ? `<p>${esc(count)}</p>` : ""}</div>
-          ${fee ? `<strong>${esc(fee)}<span>/ year</span></strong>` : ""}
+          ${degreeIcon(degreeKind(group.degree))}
+          <div class="degree-name"><h3>${esc(group.degree)}</h3>${count ? `<p>${esc(count)}</p>` : ""}</div>
+          ${fee ? `<div class="degree-fee"><span>Yearly fee</span><strong>${esc(fee)}</strong></div>` : ""}
         </header>
         ${items ? `<ul>${items}</ul>` : ""}
       </article>`;
@@ -457,10 +478,45 @@ function answerList(items) {
     .join("")}</div>`;
 }
 
-function rankGap(studentRank, closingRank) {
-  const diff = closingRank - studentRank;
-  if (diff >= 0) return `${num(diff)} ranks inside last year's close`;
-  return `${num(Math.abs(diff))} ranks past last year's close`;
+const BAND_LABEL = {
+  "very-high": "Very high",
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+  "very-low": "Very low"
+};
+const CATEGORY_LABEL = {
+  OPEN: "General",
+  EWS: "EWS",
+  "OBC-NCL": "OBC-NCL",
+  SC: "SC",
+  ST: "ST"
+};
+const CHOICE_KEY = "setu-choices";
+
+function poolText(gender) {
+  return String(gender || "").startsWith("Female-only") ? "Female-only" : gender || "";
+}
+
+function loadChoices() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CHOICE_KEY) || "[]");
+    return Array.isArray(saved) ? saved.filter((item) => item && item.id && item.college && item.branch) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveChoices(items) {
+  try {
+    localStorage.setItem(CHOICE_KEY, JSON.stringify(items));
+  } catch (error) {
+    return;
+  }
+}
+
+function bandLabel(band) {
+  return BAND_LABEL[band] || band;
 }
 
 function showSection(root, id) {
@@ -536,7 +592,7 @@ async function initCollege() {
       )
       .join("")}</nav>`;
     const courses = groups.length
-      ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Yearly fee is shown beside each degree. Course names are the branches listed for that degree.</p>${degreeList(groups)}</section>`
+      ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Each card is one degree. The fee is the yearly range for that degree, and the branches are listed under it.</p>${degreeList(groups)}</section>`
       : rows.length
         ? `<section class="sheet" id="courses" hidden><h2>Courses and fees</h2><p class="sheet-note">Each row is one course and the yearly fee saved for it.</p>${courseTable(rows)}</section>`
         : "";
@@ -560,11 +616,12 @@ async function initCollege() {
           </section>`
         : "";
     const answerBlock = answers.length ? `<section class="sheet" id="answers" hidden><h2>Answers</h2><p class="sheet-note">Open a question to read the answer.</p>${answerList(answers)}</section>` : "";
-    const site = /^https?:\/\//i.test(String(college.website || "").trim()) ? String(college.website).trim() : "";
+    const site = String(college.website || "").trim();
+    const publicSite = /^https?:\/\//i.test(site) && !/collegedekho\.com/i.test(site) ? site : "";
     const phoneText = String(college.phone || "").trim();
     const phoneHref = phoneText.replace(/[^\d+]/g, "");
     const links = [
-      site ? `<a class="text-link" href="${esc(site)}" target="_blank" rel="noopener">Website</a>` : "",
+      publicSite ? `<a class="text-link" href="${esc(publicSite)}" target="_blank" rel="noopener">Website</a>` : "",
       phoneText && phoneHref ? `<a class="text-link" href="tel:${esc(phoneHref)}">${esc(phoneText)}</a>` : ""
     ].filter(Boolean);
     const letters = college.name
@@ -624,15 +681,101 @@ async function initChances() {
   const courseWrap = document.querySelector("#course-wrap");
   const stateSelect = document.querySelector("#home_state");
   const results = document.querySelector("#results");
+  const choicesBox = document.querySelector("#choices");
   const summary = document.querySelector("#summary");
   const status = document.querySelector("#status");
   const more = document.querySelector("#more");
   let page = 1;
+  let branch = "";
+  let choices = loadChoices();
+  const shownSeats = new Map();
+
+  function choiceId(row, data) {
+    return [data.exam, row.college, row.branch, row.quota, row.gender, data.category].join("|");
+  }
+
+  function paintChoices() {
+    if (!choices.length) {
+      choicesBox.hidden = true;
+      choicesBox.innerHTML = "";
+      return;
+    }
+    choicesBox.hidden = false;
+    const counselling = choices.some((item) => item.exam === "NEET") ? "Counselling" : "JoSAA";
+    choicesBox.innerHTML = `<section class="choice-board" aria-label="Your choice list">
+      <div class="choice-head">
+        <div>
+          <p class="eyebrow">In your order</p>
+          <h2>Choice list</h2>
+        </div>
+        <button class="choice-clear" type="button" data-choice-clear>Clear</button>
+      </div>
+      <ul class="choice-rules">
+        <li><strong>Put the seat you want most at the top.</strong> A lower chance can sit above a safer seat.</li>
+        <li><strong>${counselling} offers the highest choice your rank clears</strong> for that quota, category, and gender pool.</li>
+        <li><strong>After a round, choose Freeze, Float, or Slide.</strong> Freeze keeps the seat. Float waits for a higher choice in a later round. Slide waits for a better branch in the same college.</li>
+      </ul>
+      <ol class="choice-items">${choices.map((item, index) => {
+        const href = item.slug ? `/college/${encodeURIComponent(item.slug)}` : `/browse?q=${encodeURIComponent(item.college)}`;
+        const category = CATEGORY_LABEL[item.category] || item.category;
+        return `<li class="choice-item">
+          <span class="choice-index">${index + 1}</span>
+          <div>
+            <h3><a href="${href}">${esc(item.college)}</a></h3>
+            <p>${esc(item.branch)}</p>
+            <span class="seat-sub">${esc(quotaText(item.quota))} · ${esc(poolText(item.gender))} · ${esc(category)} · ${esc(item.exam)}</span>
+            <span class="seat-sub">Checked at rank ${num(item.rank)}</span>
+          </div>
+          <div class="rank-pair">
+            <span><small>Opening</small><b>${item.opening_rank ? num(item.opening_rank) : "—"}</b></span>
+            <span><small>Closing</small><b>${num(item.closing_rank)}</b></span>
+          </div>
+          <div class="choice-side">
+            <span class="pill ${esc(item.probability)}">${esc(bandLabel(item.probability))}</span>
+            <div class="choice-moves">
+              <button type="button" data-choice-up="${index}" ${index === 0 ? "disabled" : ""}>Up</button>
+              <button type="button" data-choice-down="${index}" ${index === choices.length - 1 ? "disabled" : ""}>Down</button>
+              <button type="button" data-choice-remove="${index}">Remove</button>
+            </div>
+          </div>
+        </li>`;
+      }).join("")}</ol>
+    </section>`;
+  }
+
+  function markAdded() {
+    results.querySelectorAll(".choice-add").forEach((button) => {
+      const added = choices.some((item) => item.id === button.dataset.choice);
+      button.setAttribute("aria-pressed", added ? "true" : "false");
+      button.textContent = added ? "Added" : "Add";
+    });
+  }
+
+  function toggleChoice(id) {
+    const index = choices.findIndex((item) => item.id === id);
+    if (index >= 0) choices.splice(index, 1);
+    else {
+      const seat = shownSeats.get(id);
+      if (!seat) return;
+      if (choices.length >= 40) {
+        status.textContent = "The choice list holds 40 seats. Remove one to add another.";
+        return;
+      }
+      choices.push(seat);
+    }
+    saveChoices(choices);
+    paintChoices();
+    markAdded();
+  }
+
+  paintChoices();
   let lastBody = null;
 
   try {
     const options = await api("/predict/options");
-    stateSelect.innerHTML = options.states.map((state) => `<option>${esc(state)}</option>`).join("");
+    stateSelect.innerHTML = options.states
+      .map((state) => `<option${state === "Uttar Pradesh" ? " selected" : ""}>${esc(state)}</option>`)
+      .join("");
   } catch (error) {
     status.textContent = error.message;
     status.setAttribute("role", "alert");
@@ -640,9 +783,12 @@ async function initChances() {
   }
 
   function showCourse() {
-    courseWrap.classList.toggle("hidden", form.exam.value !== "NEET");
+    const picked = form.querySelector('input[name="exam"]:checked');
+    courseWrap.classList.toggle("hidden", !picked || picked.value !== "NEET");
   }
-  form.exam.addEventListener("change", showCourse);
+  form.addEventListener("change", (event) => {
+    if (event.target.name === "exam") showCourse();
+  });
   showCourse();
 
   async function run(nextPage, append) {
@@ -656,6 +802,7 @@ async function initChances() {
       home_state: entered.get("home_state"),
       exam: entered.get("exam"),
       course: entered.get("exam") === "NEET" ? entered.get("course") : "",
+      branch,
       page: nextPage,
       page_size: 20
     };
@@ -668,54 +815,145 @@ async function initChances() {
       lastBody = body;
       page = data.page;
       status.textContent = "";
-      summary.innerHTML = `
-        <span class="pill safer">${num(data.counts.safer)} safer</span>
-        <span class="pill possible">${num(data.counts.possible)} possible</span>
-        <span class="pill unlikely">${num(data.counts.unlikely)} unlikely</span>`;
+      const counts = data.counts || {};
+      const reachable = (counts["very-high"] || 0) + (counts.high || 0) + (counts.medium || 0);
+      summary.innerHTML = "";
+      const category = CATEGORY_LABEL[data.category] || data.category;
+      const gender = data.gender === "female" ? "Female" : "Male";
+      const chips = [data.exam, category, gender, data.home_state]
+        .filter(Boolean)
+        .map((item) => `<span>${esc(item)}</span>`)
+        .join("");
+      let statusClass = "ok";
+      let statusTitle = "";
+      let statusBody = "";
+      if (!data.matched) {
+        statusClass = "empty";
+        statusTitle = "No matching seat";
+        statusBody = "Nothing in this round fits that category, state, and gender.";
+      } else if (!reachable && !data.total) {
+        statusClass = "empty";
+        statusTitle = "No seat is close to this rank";
+        statusBody = `The nearest closing rank in ${data.round_label} is more than 15% better than ${num(data.rank)}.`;
+      } else if (!reachable) {
+        statusClass = "empty";
+        statusTitle = "No seat closed at this rank or later";
+        statusBody = `These seats closed within 15% of your rank. ${data.round_label}.`;
+      } else {
+        statusTitle = `${num(reachable)} ${reachable === 1 ? "seat is" : "seats are"} inside your rank`;
+        statusBody = `Only seats your rank would have cleared are listed. ${data.round_label}.`;
+      }
+      if (data.exam === "JEE Advanced") {
+        statusBody = `${statusBody} These are IIT seats. NIT, IIIT, and GFTI seats are under JEE Main.`;
+      }
+      const banner = `<section class="result-hero">
+        <div class="result-top">
+          <div>
+            <div class="result-chips">${chips}</div>
+            <p class="result-kicker">Your rank</p>
+            <h2>${num(data.rank)}</h2>
+          </div>
+          <p class="result-round">${esc(data.round_label || "")}</p>
+        </div>
+        <div class="result-status ${statusClass}">
+          <strong>${esc(statusTitle)}</strong>
+          <span>${esc(statusBody)}</span>
+        </div>
+        <div class="result-stats">
+          <div><b>${num(reachable)}</b><span>Inside your rank</span></div>
+          <div><b>${num(data.total)}</b><span>In this list</span></div>
+          <div><b>${num(data.matched || 0)}</b><span>Seats checked</span></div>
+        </div>
+      </section>`;
       const groups = [];
-      const seen = new Map();
       data.results.forEach((row) => {
-        if (!seen.has(row.college)) {
-          seen.set(row.college, groups.length);
-          groups.push({ college: row.college, state: row.college_state, slug: row.slug, seats: [] });
+        const last = groups[groups.length - 1];
+        if (last && last.college === row.college) last.seats.push(row);
+        else {
+          groups.push({
+            college: row.college,
+            state: row.college_state,
+            slug: row.slug,
+            logo: row.logo,
+            nirf: row.nirf_rank,
+            package: row.highest_package,
+            seats: [row]
+          });
         }
-        groups[seen.get(row.college)].seats.push(row);
       });
-      const start = append ? results.querySelectorAll(".seat-card").length : 0;
+      const start = append ? results.querySelectorAll(".college-result").length : 0;
+      let seenStretch = append && Boolean(results.querySelector(".predict-split"));
       const cards = groups.map((group, index) => {
         const href = group.slug
           ? `/college/${encodeURIComponent(group.slug)}`
           : `/browse?q=${encodeURIComponent(group.college)}`;
-        const action = group.slug ? "Open college" : "Find in colleges";
-        const countLabel = group.seats.length === 1 ? "1 branch" : `${group.seats.length} branches`;
-        const place = [group.state, countLabel].filter(Boolean).join(" · ");
-        const seats = group.seats.map((row) => `<div class="branch-row">
-          <div class="result-head">
-            <span class="pill ${esc(row.chance)}">${esc(row.chance)}</span>
-            <span class="gap">${esc(rankGap(data.rank, row.closing_rank))}</span>
-          </div>
-          <p class="branch">${esc(row.branch)}</p>
-          <dl class="compare">
-            <div><dt>Your rank</dt><dd>${num(data.rank)}</dd></div>
-            <div><dt>Closed at</dt><dd>${num(row.closing_rank)}</dd></div>
-            <div><dt>Seat</dt><dd>${esc(quotaText(row.quota))} · ${esc(row.gender)}</dd></div>
-          </dl>
-        </div>`).join("");
-        return `<article class="seat-card">
-          <a class="seat-college" href="${href}">
-            <span class="seat-mark">${start + index + 1}</span>
-            <span class="seat-name"><strong>${esc(group.college)}</strong><span class="place">${esc(place)}</span></span>
-            <span class="open-label">${action}</span>
+        const meta = [
+          group.state,
+          group.nirf ? `NIRF #${num(group.nirf)}` : "",
+          group.package ? `Highest ${group.package}` : ""
+        ].filter(Boolean).join(" · ");
+        const stretch = group.seats.every((row) => row.probability === "low" || row.probability === "very-low");
+        const split = stretch && !seenStretch && reachable
+          ? `<p class="predict-split">Closest seats past your rank</p>`
+          : "";
+        if (split) seenStretch = true;
+        const logo = group.logo ? `<img src="${esc(group.logo)}" alt="" onerror="this.remove()">` : "";
+        const lines = group.seats.map((row) => {
+          const id = choiceId(row, data);
+          shownSeats.set(id, {
+            id,
+            exam: data.exam,
+            college: row.college,
+            slug: row.slug || "",
+            branch: row.branch,
+            quota: row.quota,
+            gender: row.gender,
+            category: data.category,
+            opening_rank: row.opening_rank,
+            closing_rank: row.closing_rank,
+            probability: row.probability,
+            rank: data.rank
+          });
+          const added = choices.some((item) => item.id === id);
+          return `<div class="branch-line ${esc(row.probability)}">
+            <div class="branch-id">
+              <p class="branch-name">${esc(row.branch)}</p>
+              <span class="seat-sub">${esc(quotaText(row.quota))} · ${esc(poolText(row.gender))}</span>
+            </div>
+            <div class="rank-pair">
+              <span><small>Opening</small><b>${row.opening_rank ? num(row.opening_rank) : "—"}</b></span>
+              <span><small>Closing</small><b>${num(row.closing_rank)}</b></span>
+            </div>
+            <div class="branch-actions">
+              <span class="pill ${esc(row.probability)}">${esc(bandLabel(row.probability))}</span>
+              <button type="button" class="choice-add" data-choice="${esc(id)}" aria-pressed="${added ? "true" : "false"}">${added ? "Added" : "Add"}</button>
+            </div>
+          </div>`;
+        }).join("");
+        return `${split}<article class="college-result tone-${(start + index) % 6}">
+          <a class="college-result-head" href="${href}">
+            <span class="college-mark">${logo}${esc(lettersOf(group.college) || "•")}</span>
+            <span class="college-id"><strong>${esc(group.college)}</strong><span>${esc(meta)}</span></span>
+            <span class="open-chip">Open</span>
           </a>
-          ${seats}
+          <div class="branch-list">${lines}</div>
         </article>`;
       }).join("");
-      results.innerHTML = append ? results.innerHTML + cards : cards;
-      if (!data.total) {
-        results.innerHTML = `<p class="empty">No seat matches that category, state, and gender.</p>`;
-      }
+      if (!append) {
+        const families = data.branches || [];
+        const allCount = families.reduce((sum, item) => sum + item.count, 0);
+        let picks = "";
+        if (families.length > 1) {
+          const selected = data.branch || "";
+          const chips = [`<button type="button" class="branch-chip" data-branch="" aria-pressed="${selected ? "false" : "true"}">All <b>${num(allCount)}</b></button>`]
+            .concat(families.map((item) => `<button type="button" class="branch-chip" data-branch="${esc(item.name)}" aria-pressed="${item.name === selected ? "true" : "false"}">${esc(item.name)} <b>${num(item.count)}</b></button>`))
+            .join("");
+          picks = `<div class="branch-picks">${chips}</div>`;
+        }
+        results.innerHTML = banner.replace("</section>", `${picks}</section>`) + (data.total ? cards : "");
+      } else results.insertAdjacentHTML("beforeend", cards);
       const shown = Math.min(data.total, data.page * data.page_size);
-      more.hidden = shown >= data.total;
+      more.hidden = !data.total || shown >= data.total;
       more.textContent = `Show more · ${num(shown)} of ${num(data.total)}`;
     } catch (error) {
       status.textContent = error.message;
@@ -725,9 +963,40 @@ async function initChances() {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    branch = "";
     results.innerHTML = "";
     summary.innerHTML = "";
     run(1, false);
+  });
+  results.addEventListener("click", (event) => {
+    const add = event.target.closest(".choice-add");
+    if (add) {
+      toggleChoice(add.dataset.choice);
+      return;
+    }
+    const button = event.target.closest(".branch-chip");
+    if (!button) return;
+    branch = button.dataset.branch || "";
+    results.innerHTML = "";
+    run(1, false);
+  });
+  choicesBox.addEventListener("click", (event) => {
+    const clear = event.target.closest("[data-choice-clear]");
+    const up = event.target.closest("[data-choice-up]");
+    const down = event.target.closest("[data-choice-down]");
+    const remove = event.target.closest("[data-choice-remove]");
+    if (clear) choices = [];
+    else if (up) {
+      const index = Number(up.dataset.choiceUp);
+      if (index > 0) [choices[index - 1], choices[index]] = [choices[index], choices[index - 1]];
+    } else if (down) {
+      const index = Number(down.dataset.choiceDown);
+      if (index < choices.length - 1) [choices[index + 1], choices[index]] = [choices[index], choices[index + 1]];
+    } else if (remove) choices.splice(Number(remove.dataset.choiceRemove), 1);
+    else return;
+    saveChoices(choices);
+    paintChoices();
+    markAdded();
   });
   more.addEventListener("click", () => run(page + 1, true));
 }

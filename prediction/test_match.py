@@ -8,7 +8,7 @@ Run from the project folder: python prediction\\test_match.py
 from pathlib import Path
 
 from institutes import INSTITUTE_STATE
-from match import NIT_SRINAGAR, chance, predict
+from match import NIT_SRINAGAR, branch_family, chance, predict, probability, shortlist, tidy_branch
 from predict import MCC_FILE, RANK_FILE, load_seats
 
 
@@ -82,6 +82,69 @@ def test_safer_possible_unlikely():
     assert chance(15000, 20000) == "safer"
     assert chance(18000, 20000) == "possible"
     assert chance(25000, 20000) == "unlikely"
+
+
+def test_probability_bands():
+    # 12000 is inside 70 percent of 20000. 15000 is inside 85 percent.
+    # 18000 is still inside. 22000 is within 15 percent past. 30000 is well past.
+    assert probability(12000, 20000) == "very-high"
+    assert probability(15000, 20000) == "high"
+    assert probability(18000, 20000) == "medium"
+    assert probability(22000, 20000) == "low"
+    assert probability(30000, 20000) == "very-low"
+
+
+def test_shortlist_hides_nearby_when_a_seat_is_inside_the_rank():
+    rows = [
+        {"college": "Far", "branch": "A", "closing_rank": 1000, "chance": "unlikely"},
+        {"college": "Near", "branch": "B", "closing_rank": 14000, "chance": "unlikely"},
+        {"college": "Inside", "branch": "C", "closing_rank": 16000, "chance": "possible"},
+    ]
+    shown, counts = shortlist(rows, 15000, stretch_limit=1)
+    assert [row["college"] for row in shown] == ["Inside"]
+    assert counts["low"] == 1
+    assert counts["very-low"] == 1
+    assert counts["medium"] == 1
+
+
+def test_shortlist_shows_nearby_only_when_nothing_is_inside():
+    rows = [
+        {"college": "Far", "branch": "A", "closing_rank": 1000, "chance": "unlikely"},
+        {"college": "Near", "branch": "B", "closing_rank": 14000, "chance": "unlikely"},
+    ]
+    shown, _counts = shortlist(rows, 15000, stretch_limit=5)
+    assert [row["college"] for row in shown] == ["Near"]
+
+
+def test_branch_families_group_official_names():
+    assert branch_family("Computer Science and Engineering (4 Years, Bachelor of Technology)") == "Computer Science"
+    assert branch_family("Computer Science and Engineering (Artificial Intelligence) (4 Years, Bachelor of Technology)") == "Computer Science"
+    assert branch_family("Mathematics and Computing (4 Years, Bachelor of Technology)") == "Computer Science"
+    assert branch_family("Electrical and Electronics Engineering (Electric Mobility) (4 Years, Bachelor of Technology)") == "Electrical & Electronics"
+    assert branch_family("Electronics and Communication Engineering (4 Years, Bachelor of Technology)") == "Electrical & Electronics"
+    assert branch_family("Mechanical Engineering (4 Years, Bachelor of Technology)") == "Mechanical"
+    assert branch_family("Civil Engineering (4 Years, Bachelor of Technology)") == "Civil"
+    assert branch_family("B.Tech in CSE (AI and ML) (4 Years, Bachelor of Technology)") == "Computer Science"
+    assert branch_family("Electronic Engineering (4 Years, Bachelor of Technology)") == "Electrical & Electronics"
+    assert branch_family("Bachelor of Design (4 Years, Bachelor of Design)") == "Textile & Design"
+    assert branch_family("Printing and Packaging Technology (4 Years, Bachelor of Technology)") == "Textile & Design"
+    assert branch_family("Computer Engineering (4 Years, Bachelor of Technology)") == "Computer Science"
+    assert branch_family("ROBOTICS & AUTOMATION (4 Years, Bachelor of Technology)") == "Mechanical"
+    assert branch_family("B.Tech in Aviation Engineering (4 Years, Bachelor of Technology)") == "Aerospace"
+    assert branch_family("Applied Geology (4 Years, Bachelor of Science)") == "Sciences"
+    assert branch_family("Electrical Engineering (Power and Automation) (4 Years, Bachelor of Technology)") == "Electrical & Electronics"
+    fixed = tidy_branch("B.Tech. (Elctrical Engineering) - MBA (5 Years, Bachelor of Technology and MBA (Dual Degree))")
+    assert "Electrical Engineering" in fixed
+    assert "Elctrical" not in fixed
+    assert branch_family(fixed) == "Electrical & Electronics"
+    assert branch_family("MBBS") == "MBBS"
+
+
+def test_shortlist_is_empty_when_the_nearest_close_is_too_far():
+    rows = [{"college": "Far", "branch": "A", "closing_rank": 132404, "chance": "unlikely"}]
+    shown, counts = shortlist(rows, 180000)
+    assert shown == []
+    assert counts["very-low"] == 1
 
 
 def test_home_state_uses_home_quota():

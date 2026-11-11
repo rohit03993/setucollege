@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=25">
+  <link rel="stylesheet" href="/assets/styles.css?v=41">
 </head>
 <body data-page="chances">
   <header class="topbar">
@@ -42,23 +42,51 @@
   </header>
 
   <main class="wrap">
-    <section class="hero">
+    <section class="predict-intro">
       <p class="eyebrow">Predictor</p>
-      <h1>Check last year's closing ranks.</h1>
-      <p class="lede">A smaller rank is a better rank. Safer means your rank is clearly better than last year's closing rank.</p>
+      <h1>JEE and NEET college predictor</h1>
+      <p class="lede">Enter your rank. The list shows the branches closest to it, with last year's opening rank, closing rank, and a probability.</p>
+      <ul class="predict-points">
+        <li><span class="point-icon tone-a" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/></svg></span><span><strong>Opening rank</strong><small>Where the seat started</small></span></li>
+        <li><span class="point-icon tone-b" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19V5M5 19h14"/><path d="m8 14 3-3 2 2 4-5"/></svg></span><span><strong>Closing rank</strong><small>Last seat that year</small></span></li>
+        <li><span class="point-icon tone-c" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><span><strong>Probability</strong><small>Very high to very low</small></span></li>
+      </ul>
     </section>
-    <form class="panel form" id="predict">
-      <label class="field wide">
-        <span>Exam</span>
-        <select id="exam" name="exam">
-          <option>JEE Main</option>
-          <option>JEE Advanced</option>
-          <option>NEET</option>
-        </select>
-      </label>
+    <form class="panel form predict-form" id="predict">
+      <div class="form-head">
+        <span class="point-icon tone-a" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v6c0 4.2 3.2 7.4 8 8 4.8-.6 8-3.8 8-8V7l-8-4Z"/></svg></span>
+        <div>
+          <strong>Check a rank</strong>
+          <p>JoSAA round 5 for JEE. MCC 2026 for NEET.</p>
+        </div>
+      </div>
+      <fieldset class="field wide">
+        <legend>Exam</legend>
+        <div class="exam-picks">
+          <label class="exam-main">
+            <input type="radio" name="exam" value="JEE Main" checked>
+            <span class="exam-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18V6M4 18h16"/><path d="m8 14 3-4 2 2 5-6"/></svg></span>
+            <strong>JEE Main</strong>
+            <small>NITs, IIITs, GFTIs</small>
+          </label>
+          <label class="exam-adv">
+            <input type="radio" name="exam" value="JEE Advanced">
+            <span class="exam-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v6c0 4.2 3.2 7.4 8 8 4.8-.6 8-3.8 8-8V7l-8-4Z"/></svg></span>
+            <strong>JEE Advanced</strong>
+            <small>IITs</small>
+          </label>
+          <label class="exam-neet">
+            <input type="radio" name="exam" value="NEET">
+            <span class="exam-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg></span>
+            <strong>NEET</strong>
+            <small>MBBS, BDS, Nursing</small>
+          </label>
+        </div>
+      </fieldset>
       <label class="field">
         <span>Rank</span>
         <input id="rank" name="rank" type="number" min="1" inputmode="numeric" required placeholder="15000">
+        <small class="field-hint">A smaller number is a better rank.</small>
       </label>
       <label class="field">
         <span>Category</span>
@@ -80,6 +108,7 @@
       <label class="field wide">
         <span>Home state</span>
         <select id="home_state" name="home_state"></select>
+        <small class="field-hint">This picks home-state and other-state seats.</small>
       </label>
       <label class="field wide" id="course-wrap">
         <span>Course</span>
@@ -89,10 +118,11 @@
           <option>B.Sc Nursing</option>
         </select>
       </label>
-      <button class="button" type="submit">Show chances</button>
+      <button class="button" type="submit">Predict colleges</button>
     </form>
     <p class="status" id="status"></p>
     <div class="summary" id="summary"></div>
+    <div id="choices" hidden></div>
     <div class="list" id="results"></div>
     <button class="ghost full" id="more" type="button" hidden>Show more</button>
   </main>
@@ -102,6 +132,6 @@
     <a href="/browse">Colleges</a>
     <a href="/chances" aria-current="page">Predict</a>
   </nav>
-  <script src="/assets/app.js?v=23"></script>
+  <script src="/assets/app.js?v=38"></script>
 </body>
 </html>
