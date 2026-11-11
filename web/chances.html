@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=43">
+  <link rel="stylesheet" href="/assets/styles.css?v=44">
 </head>
 <body data-page="chances">
   <header class="topbar">
@@ -122,7 +122,10 @@
     </form>
     <dialog class="student-dialog" id="student-dialog">
       <form id="student-form">
-        <h2>See your colleges</h2>
+        <div class="student-head">
+          <h2>See your colleges</h2>
+          <button class="student-close" type="button" data-student-close aria-label="Close">Close</button>
+        </div>
         <p>Your name is shown on the result. Your mobile number is used only to create your ID.</p>
         <label class="field">
           <span>Name</span>
@@ -153,6 +156,6 @@
     <a href="/browse">Colleges</a>
     <a href="/chances" aria-current="page">Predict</a>
   </nav>
-  <script src="/assets/app.js?v=41"></script>
+  <script src="/assets/app.js?v=42"></script>
 </body>
 </html>

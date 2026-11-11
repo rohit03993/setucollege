@@ -1122,6 +1122,17 @@ body[data-page="chances"] .summary:empty { display: none; }
 .student-dialog::backdrop { background: rgba(26, 20, 48, 0.45); }
 .student-dialog form { display: grid; gap: 12px; padding: 20px; }
 .student-dialog h2 { margin: 0; font-size: 24px; }
+.student-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.student-close {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent-dark);
+  font-weight: 800;
+  cursor: pointer;
+}
 .student-dialog p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 600; }
 .student-dialog .button { width: 100%; }
 .student-dialog .button:disabled { opacity: 0.45; cursor: default; }

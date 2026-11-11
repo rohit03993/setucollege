@@ -1012,6 +1012,9 @@ async function initChances() {
     continueButton.disabled = !consentInput.checked;
   }
   consentInput.addEventListener("change", syncConsent);
+  studentForm.querySelector("[data-student-close]").addEventListener("click", () => {
+    studentDialog.close();
+  });
   mobileInput.addEventListener("input", () => {
     let digits = mobileInput.value.replace(/\D/g, "");
     if (digits.startsWith("91") && digits.length > 10) digits = digits.slice(2);

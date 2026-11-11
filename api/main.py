@@ -20,7 +20,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from psycopg.errors import UndefinedColumn, UndefinedTable, UniqueViolation
+from psycopg.errors import UniqueViolation
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 from pydantic import BaseModel, Field
@@ -449,8 +449,56 @@ def new_public_id():
     return "AS-" + "".join(secrets.choice(alphabet) for _ in range(6))
 
 
+_students_ready = False
+
+
+def ensure_students():
+    """Create the student tables on the database this site already uses."""
+    global _students_ready
+    if _students_ready:
+        return
+    statements = (
+        """
+        CREATE TABLE IF NOT EXISTS students (
+            id              bigserial PRIMARY KEY,
+            public_id       text NOT NULL UNIQUE,
+            name            text NOT NULL,
+            mobile          text NOT NULL UNIQUE,
+            consent_at      timestamptz,
+            consent_text    text NOT NULL DEFAULT '',
+            created_at      timestamptz NOT NULL DEFAULT now()
+        )
+        """,
+        "ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_at timestamptz",
+        "ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_text text NOT NULL DEFAULT ''",
+        """
+        CREATE TABLE IF NOT EXISTS predictions (
+            id          bigserial PRIMARY KEY,
+            student_id  bigint NOT NULL REFERENCES students (id) ON DELETE CASCADE,
+            exam        text NOT NULL,
+            rank        integer NOT NULL,
+            category    text NOT NULL,
+            gender      text NOT NULL,
+            home_state  text NOT NULL,
+            course      text NOT NULL DEFAULT '',
+            created_at  timestamptz NOT NULL DEFAULT now()
+        )
+        """,
+        """
+        CREATE INDEX IF NOT EXISTS predictions_student
+            ON predictions (student_id, created_at DESC)
+        """,
+    )
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            for statement in statements:
+                cursor.execute(statement)
+    _students_ready = True
+
+
 def upsert_student(name, mobile):
     """Create an ID, or keep the ID already stored for this mobile number."""
+    ensure_students()
     for _ in range(3):
         try:
             with connection() as conn:
@@ -475,22 +523,18 @@ def upsert_student(name, mobile):
                     return cursor.fetchone()
         except UniqueViolation:
             continue
-        except (UndefinedTable, UndefinedColumn):
-            raise HTTPException(status_code=503, detail="The student list is not ready yet.")
     raise HTTPException(status_code=503, detail="The student ID could not be created. Try again.")
 
 
 def find_student(public_id):
-    try:
-        with connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(
-                    "SELECT id, public_id, name FROM students WHERE public_id = %(public_id)s",
-                    {"public_id": public_id},
-                )
-                return cursor.fetchone()
-    except UndefinedTable:
-        raise HTTPException(status_code=503, detail="The student list is not ready yet.")
+    ensure_students()
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, public_id, name FROM students WHERE public_id = %(public_id)s",
+                {"public_id": public_id},
+            )
+            return cursor.fetchone()
 
 
 @app.post("/students")
@@ -504,16 +548,14 @@ def save_student(body: StudentIn):
 @app.delete("/students/{public_id}")
 def withdraw_student(public_id: str):
     """Delete the name, mobile number, and saved predictions for this ID."""
-    try:
-        with connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute(
-                    "DELETE FROM students WHERE public_id = %(public_id)s RETURNING id",
-                    {"public_id": public_id.strip()},
-                )
-                row = cursor.fetchone()
-    except UndefinedTable:
-        raise HTTPException(status_code=503, detail="The student list is not ready yet.")
+    ensure_students()
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM students WHERE public_id = %(public_id)s RETURNING id",
+                {"public_id": public_id.strip()},
+            )
+            row = cursor.fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="This ID is already removed.")
     return {"deleted": True}
