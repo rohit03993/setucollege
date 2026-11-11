@@ -531,10 +531,125 @@ def find_student(public_id):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                "SELECT id, public_id, name FROM students WHERE public_id = %(public_id)s",
+                "SELECT id, public_id, name, mobile FROM students WHERE public_id = %(public_id)s",
                 {"public_id": public_id},
             )
             return cursor.fetchone()
+
+
+def find_student_mobile(mobile):
+    ensure_students()
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT id, public_id, name, mobile FROM students WHERE mobile = %(mobile)s",
+                {"mobile": mobile},
+            )
+            return cursor.fetchone()
+
+
+def student_public(row):
+    return {"id": row["public_id"], "name": row["name"], "mobile": row["mobile"]}
+
+
+class LoginIn(BaseModel):
+    mobile: str
+    otp: str = ""
+    name: str = ""
+    consent: bool = False
+
+
+WHATSAPP_OTP = "1234"
+
+
+class MobileIn(BaseModel):
+    mobile: str
+
+
+@app.post("/auth/otp")
+def request_otp(body: MobileIn):
+    """Accept a mobile number. WhatsApp delivery is not connected yet."""
+    clean_mobile(body.mobile)
+    return {"sent": True}
+
+
+@app.post("/auth/login")
+def login_student(body: LoginIn):
+    mobile = clean_mobile(body.mobile)
+    if body.otp.strip() != WHATSAPP_OTP:
+        raise HTTPException(status_code=400, detail="That code is not correct.")
+    found = find_student_mobile(mobile)
+    if found:
+        return student_public(found)
+    if not body.name.strip():
+        return {"needs_name": True}
+    if not body.consent:
+        raise HTTPException(status_code=400, detail="Tick the box to agree before we save your name and mobile number.")
+    row = upsert_student(clean_name(body.name), mobile)
+    return student_public(row)
+
+
+def prediction_rows(student_id):
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT exam, rank, category, gender, home_state, course, created_at
+                FROM predictions
+                WHERE student_id = %(student_id)s
+                ORDER BY created_at DESC
+                LIMIT 40
+                """,
+                {"student_id": student_id},
+            )
+            rows = cursor.fetchall()
+    history = []
+    for row in rows:
+        item = dict(row)
+        created = item.get("created_at")
+        item["created_at"] = created.isoformat() if created else ""
+        history.append(item)
+    return history
+
+
+@app.get("/students/{public_id}")
+def student_account(public_id: str):
+    student = find_student(public_id.strip())
+    if student is None:
+        raise HTTPException(status_code=404, detail="This ID was not found.")
+    payload = student_public(student)
+    payload["predictions"] = prediction_rows(student["id"])
+    return payload
+
+
+class ProfileIn(BaseModel):
+    name: str
+    mobile: str
+
+
+@app.patch("/students/{public_id}")
+def update_student(public_id: str, body: ProfileIn):
+    student = find_student(public_id.strip())
+    if student is None:
+        raise HTTPException(status_code=404, detail="This ID was not found.")
+    name = clean_name(body.name)
+    mobile = clean_mobile(body.mobile)
+    try:
+        with connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    """
+                    UPDATE students
+                    SET name = %(name)s, mobile = %(mobile)s
+                    WHERE public_id = %(public_id)s
+                    RETURNING public_id, name, mobile
+                    """,
+                    {"name": name, "mobile": mobile, "public_id": student["public_id"]},
+                )
+                row = cursor.fetchone()
+    except UniqueViolation:
+        raise HTTPException(status_code=400, detail="That mobile number is already used.")
+    return student_public(row)
 
 
 @app.post("/students")

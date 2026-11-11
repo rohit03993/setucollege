@@ -509,6 +509,25 @@ function saveStudent(student) {
   localStorage.setItem(STUDENT_KEY, JSON.stringify(student));
 }
 
+function historyList(rows) {
+  if (!rows || !rows.length) return `<p class="consent-note">No predictions yet.</p>`;
+  return `<ul class="history-list">${rows.map((row) => {
+    const when = new Date(row.created_at);
+    const label = Number.isNaN(when.getTime())
+      ? ""
+      : when.toLocaleString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+    const category = CATEGORY_LABEL[row.category] || row.category;
+    return `<li><strong>${esc(row.exam)}</strong><span>Rank ${num(row.rank)} · ${esc(category)} · ${esc(row.home_state)}</span><small>${esc(label)}</small></li>`;
+  }).join("")}</ul>`;
+}
+
+function digitsOnly(value) {
+  let digits = String(value || "").replace(/\D/g, "");
+  if (digits.startsWith("91") && digits.length > 10) digits = digits.slice(2);
+  if (digits.startsWith("0") && digits.length > 10) digits = digits.slice(1);
+  return digits.slice(0, 10);
+}
+
 function poolText(gender) {
   return String(gender || "").startsWith("Female-only") ? "Female-only" : gender || "";
 }
@@ -700,9 +719,7 @@ async function initChances() {
   const summary = document.querySelector("#summary");
   const status = document.querySelector("#status");
   const more = document.querySelector("#more");
-  const studentDialog = document.querySelector("#student-dialog");
-  const studentForm = document.querySelector("#student-form");
-  const studentError = document.querySelector("#student-error");
+  const historyBox = document.querySelector("#history");
   let page = 1;
   let branch = "";
   let choices = loadChoices();
@@ -810,10 +827,36 @@ async function initChances() {
   });
   showCourse();
 
+  async function paintHistory() {
+    if (!historyBox) return;
+    if (!student || !student.id) {
+      historyBox.hidden = true;
+      historyBox.innerHTML = "";
+      return;
+    }
+    try {
+      const data = await api(`/students/${encodeURIComponent(student.id)}`);
+      historyBox.hidden = false;
+      historyBox.innerHTML = `<section class="choice-board"><div class="choice-head"><div><p class="eyebrow">Your ID ${esc(data.id)}</p><h2>${esc(data.name)}</h2></div></div><div class="history-wrap">${historyList(data.predictions)}</div></section>`;
+    } catch (error) {
+      historyBox.hidden = true;
+    }
+  }
+
+  document.addEventListener("setu-student", (event) => {
+    student = event.detail;
+    if (!student) {
+      results.innerHTML = "";
+      summary.innerHTML = "";
+      more.hidden = true;
+    }
+    paintHistory();
+  });
+  paintHistory();
+
   async function run(nextPage, append, record) {
     if (!student || !student.id) {
-      studentDialog.showModal();
-      studentForm.elements.name.focus();
+      window.setuOpenAccount(() => run(nextPage, append, record));
       return;
     }
     status.textContent = "Checking seats…";
@@ -876,7 +919,7 @@ async function initChances() {
         <div class="result-top">
           <div>
             <div class="result-chips">${chips}</div>
-            <p class="result-who"><strong>${esc(data.student_name || "")}</strong><span>${esc(data.student_id || "")}</span><button type="button" data-not-you>Not you?</button><button type="button" data-withdraw>Withdraw consent</button></p>
+            <p class="result-who"><strong>${esc(data.student_name || student.name)}</strong><span>${esc(data.student_id || student.id)}</span><button type="button" data-edit-profile>Edit profile</button><button type="button" data-logout>Log out</button><button type="button" data-withdraw>Withdraw consent</button></p>
             <p class="result-kicker">Your rank</p>
             <h2>${num(data.rank)}</h2>
           </div>
@@ -982,6 +1025,7 @@ async function initChances() {
       const shown = Math.min(data.total, data.page * data.page_size);
       more.hidden = !data.total || shown >= data.total;
       more.textContent = `Show more · ${num(shown)} of ${num(data.total)}`;
+      if (record) paintHistory();
     } catch (error) {
       status.textContent = error.message;
       status.setAttribute("role", "alert");
@@ -998,80 +1042,25 @@ async function initChances() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!student || !student.id) {
-      studentError.textContent = "";
-      studentDialog.showModal();
-      studentForm.elements.name.focus();
+      window.setuOpenAccount(() => begin());
       return;
     }
     begin();
   });
-  const mobileInput = studentForm.elements.mobile;
-  const consentInput = studentForm.elements.consent;
-  const continueButton = studentForm.querySelector("button[type=submit]");
-  function syncConsent() {
-    continueButton.disabled = !consentInput.checked;
-  }
-  consentInput.addEventListener("change", syncConsent);
-  studentForm.querySelector("[data-student-close]").addEventListener("click", () => {
-    studentDialog.close();
-  });
-  mobileInput.addEventListener("input", () => {
-    let digits = mobileInput.value.replace(/\D/g, "");
-    if (digits.startsWith("91") && digits.length > 10) digits = digits.slice(2);
-    if (digits.startsWith("0") && digits.length > 10) digits = digits.slice(1);
-    mobileInput.value = digits.slice(0, 10);
-  });
-  studentForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    studentError.textContent = "";
-    studentError.removeAttribute("role");
-    const mobile = mobileInput.value;
-    if (!/^[6-9]\d{9}$/.test(mobile)) {
-      studentError.textContent = "Enter a 10-digit Indian mobile number.";
-      studentError.setAttribute("role", "alert");
-      return;
-    }
-    if (!consentInput.checked) {
-      studentError.textContent = "Tick the box to agree before we save your name and mobile number.";
-      studentError.setAttribute("role", "alert");
-      return;
-    }
-    const entered = new FormData(studentForm);
-    try {
-      student = await api("/students", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: entered.get("name"), mobile, consent: true })
-      });
-      saveStudent(student);
-      studentDialog.close();
-      begin();
-    } catch (error) {
-      studentError.textContent = error.message;
-      studentError.setAttribute("role", "alert");
-    }
-  });
   results.addEventListener("click", async (event) => {
-    if (event.target.closest("[data-not-you]")) {
-      localStorage.removeItem(STUDENT_KEY);
-      student = null;
-      studentForm.reset();
-      syncConsent();
-      studentError.textContent = "";
-      studentDialog.showModal();
-      studentForm.elements.name.focus();
+    if (event.target.closest("[data-logout]")) {
+      window.setuLogout();
+      return;
+    }
+    if (event.target.closest("[data-edit-profile]")) {
+      window.setuOpenAccount(null, "edit");
       return;
     }
     if (event.target.closest("[data-withdraw]")) {
       const id = student && student.id;
       try {
-        if (id) {
-          await api(`/students/${encodeURIComponent(id)}`, { method: "DELETE" });
-        }
-        localStorage.removeItem(STUDENT_KEY);
-        student = null;
-        studentForm.reset();
-        syncConsent();
+        if (id) await api(`/students/${encodeURIComponent(id)}`, { method: "DELETE" });
+        window.setuLogout();
         results.innerHTML = "";
         summary.innerHTML = "";
         more.hidden = true;
@@ -1114,7 +1103,246 @@ async function initChances() {
   more.addEventListener("click", () => run(page + 1, true));
 }
 
+function initAccount() {
+  const dialog = document.createElement("dialog");
+  dialog.className = "student-dialog account-dialog";
+  dialog.innerHTML = `<form id="account-form">
+      <div class="student-head">
+        <h2>Log in</h2>
+        <button class="student-close" type="button" data-account-close>Close</button>
+      </div>
+      <div data-step="mobile">
+        <p>Enter your mobile number. The code arrives on WhatsApp.</p>
+        <label class="field"><span>Mobile number</span><input name="mobile" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit Indian number" required></label>
+      </div>
+      <div data-step="otp" hidden>
+        <p>Enter the 4-digit WhatsApp code. Until WhatsApp is connected, the code is 1234.</p>
+        <label class="field"><span>Code</span><input name="otp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="1234" required></label>
+      </div>
+      <div data-step="name" hidden>
+        <p>This number is new. Your name is shown on the result, and the mobile number creates your ID.</p>
+        <label class="field"><span>Name</span><input name="name" maxlength="80" autocomplete="name" placeholder="Your name" required></label>
+        <label class="consent-row"><input type="checkbox" name="consent" value="yes"><span>I agree that Admission Setu can save my name and mobile number to show this result in my name and keep this prediction. I can withdraw this on the result page.</span></label>
+        <p class="consent-note">This number is not used for calls or messages. Withdraw deletes your name, number, and saved predictions. You can also complain to the Data Protection Board of India.</p>
+      </div>
+      <div data-step="home" hidden>
+        <p class="account-id"><strong data-account-name></strong><span data-account-id></span></p>
+        <h3>Your predictions</h3>
+        <div data-account-history></div>
+        <div class="account-actions">
+          <button class="ghost" type="button" data-account-edit>Edit profile</button>
+          <button class="ghost" type="button" data-account-logout>Log out</button>
+        </div>
+      </div>
+      <div data-step="edit" hidden>
+        <p>Your ID stays the same.</p>
+        <label class="field"><span>Name</span><input name="edit_name" maxlength="80" autocomplete="name" required></label>
+        <label class="field"><span>Mobile number</span><input name="edit_mobile" inputmode="numeric" maxlength="10" autocomplete="tel" required></label>
+      </div>
+      <p class="status" data-account-error></p>
+      <button class="button" type="submit" data-account-submit>Continue</button>
+    </form>`;
+  document.body.appendChild(dialog);
+  const form = dialog.querySelector("form");
+  const error = dialog.querySelector("[data-account-error]");
+  const submit = dialog.querySelector("[data-account-submit]");
+  let pending = null;
+  let mobile = "";
+
+  function paintMenu() {
+    const student = loadStudent();
+    document.querySelectorAll("[data-account-open]").forEach((button) => {
+      const label = student && student.name ? student.name.split(" ")[0] : "Log in";
+      button.textContent = label;
+    });
+  }
+
+  function mount(nav) {
+    if (!nav || nav.querySelector("[data-account-open]")) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "account-link";
+    button.dataset.accountOpen = "1";
+    button.textContent = "Log in";
+    nav.appendChild(button);
+  }
+
+  document.querySelectorAll(".desktop-nav, .tabbar").forEach(mount);
+  paintMenu();
+
+  function show(step) {
+    dialog.querySelectorAll("[data-step]").forEach((panel) => {
+      panel.hidden = panel.dataset.step !== step;
+    });
+    const titles = { mobile: "Log in", otp: "WhatsApp code", name: "Create your ID", home: "Your account", edit: "Edit profile" };
+    const buttons = { mobile: "Send code", otp: "Log in", name: "Create my ID", home: "", edit: "Save profile" };
+    dialog.querySelector("h2").textContent = titles[step] || "Log in";
+    submit.hidden = step === "home";
+    submit.textContent = buttons[step] || "Continue";
+    submit.disabled = step === "name" && !form.elements.consent.checked;
+  }
+
+  async function showHome(student) {
+    show("home");
+    dialog.querySelector("[data-account-name]").textContent = student.name;
+    dialog.querySelector("[data-account-id]").textContent = student.id;
+    const list = dialog.querySelector("[data-account-history]");
+    list.innerHTML = `<p class="consent-note">Loading history…</p>`;
+    try {
+      const data = await api(`/students/${encodeURIComponent(student.id)}`);
+      if (data.mobile) student = { ...student, mobile: data.mobile };
+      saveStudent(student);
+      list.innerHTML = historyList(data.predictions);
+    } catch (failure) {
+      list.innerHTML = `<p class="consent-note">${esc(failure.message)}</p>`;
+    }
+  }
+
+  function finish(student) {
+    saveStudent(student);
+    paintMenu();
+    document.dispatchEvent(new CustomEvent("setu-student", { detail: student }));
+    if (pending) {
+      const next = pending;
+      pending = null;
+      dialog.close();
+      next();
+      return;
+    }
+    showHome(student);
+  }
+
+  function fail(message) {
+    error.textContent = message;
+    error.setAttribute("role", "alert");
+  }
+
+  async function open(next, mode) {
+    pending = typeof next === "function" ? next : null;
+    error.textContent = "";
+    error.removeAttribute("role");
+    const student = loadStudent();
+    if (mode === "edit" && student) {
+      if (!student.mobile) {
+        const data = await api(`/students/${encodeURIComponent(student.id)}`);
+        student = { id: data.id, name: data.name, mobile: data.mobile };
+        saveStudent(student);
+      }
+      form.elements.edit_name.value = student.name || "";
+      form.elements.edit_mobile.value = student.mobile || "";
+      show("edit");
+    } else if (student && mode !== "login") {
+      await showHome(student);
+    } else {
+      show("mobile");
+      form.elements.mobile.focus();
+    }
+    if (!dialog.open) dialog.showModal();
+  }
+
+  form.elements.mobile.addEventListener("input", () => {
+    form.elements.mobile.value = digitsOnly(form.elements.mobile.value);
+  });
+  form.elements.edit_mobile.addEventListener("input", () => {
+    form.elements.edit_mobile.value = digitsOnly(form.elements.edit_mobile.value);
+  });
+  form.elements.otp.addEventListener("input", () => {
+    form.elements.otp.value = form.elements.otp.value.replace(/\D/g, "").slice(0, 4);
+  });
+  form.elements.consent.addEventListener("change", () => {
+    if (dialog.querySelector("[data-step='name']").hidden) return;
+    submit.disabled = !form.elements.consent.checked;
+  });
+  dialog.querySelector("[data-account-close]").addEventListener("click", () => dialog.close());
+  dialog.querySelector("[data-account-edit]").addEventListener("click", () => {
+    const student = loadStudent();
+    if (!student) return;
+    form.elements.edit_name.value = student.name || "";
+    form.elements.edit_mobile.value = student.mobile || "";
+    show("edit");
+  });
+  dialog.querySelector("[data-account-logout]").addEventListener("click", () => window.setuLogout());
+  document.addEventListener("click", (event) => {
+    if (event.target.closest("[data-account-open]")) open(null, loadStudent() ? "home" : "login");
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    error.textContent = "";
+    error.removeAttribute("role");
+    const step = dialog.querySelector("[data-step]:not([hidden])").dataset.step;
+    try {
+      if (step === "mobile") {
+        mobile = digitsOnly(form.elements.mobile.value);
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+          fail("Enter a 10-digit Indian mobile number.");
+          return;
+        }
+        await api("/auth/otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mobile })
+        });
+        show("otp");
+        form.elements.otp.focus();
+        return;
+      }
+      if (step === "otp" || step === "name") {
+        const otp = form.elements.otp.value.trim();
+        const payload = { mobile, otp };
+        if (step === "name") {
+          if (!form.elements.consent.checked) {
+            fail("Tick the box to agree before we save your name and mobile number.");
+            return;
+          }
+          payload.name = form.elements.name.value;
+          payload.consent = true;
+        }
+        const result = await api("/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (result.needs_name) {
+          show("name");
+          form.elements.name.focus();
+          return;
+        }
+        finish(result);
+        return;
+      }
+      if (step === "edit") {
+        const student = loadStudent();
+        const nextMobile = digitsOnly(form.elements.edit_mobile.value);
+        if (!/^[6-9]\d{9}$/.test(nextMobile)) {
+          fail("Enter a 10-digit Indian mobile number.");
+          return;
+        }
+        const updated = await api(`/students/${encodeURIComponent(student.id)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: form.elements.edit_name.value, mobile: nextMobile })
+        });
+        finish(updated);
+      }
+    } catch (failure) {
+      fail(failure.message);
+    }
+  });
+
+  window.setuOpenAccount = open;
+  window.setuLogout = () => {
+    localStorage.removeItem(STUDENT_KEY);
+    paintMenu();
+    pending = null;
+    document.dispatchEvent(new CustomEvent("setu-student", { detail: null }));
+    show("mobile");
+    if (dialog.open) dialog.close();
+  };
+}
+
 const page = document.body.dataset.page;
+initAccount();
 if (page === "home") initHome();
 if (page === "browse") initBrowse();
 if (page === "college") initCollege();

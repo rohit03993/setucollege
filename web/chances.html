@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=44">
+  <link rel="stylesheet" href="/assets/styles.css?v=45">
 </head>
 <body data-page="chances">
   <header class="topbar">
@@ -120,32 +120,9 @@
       </label>
       <button class="button" type="submit">Predict colleges</button>
     </form>
-    <dialog class="student-dialog" id="student-dialog">
-      <form id="student-form">
-        <div class="student-head">
-          <h2>See your colleges</h2>
-          <button class="student-close" type="button" data-student-close aria-label="Close">Close</button>
-        </div>
-        <p>Your name is shown on the result. Your mobile number is used only to create your ID.</p>
-        <label class="field">
-          <span>Name</span>
-          <input name="name" required maxlength="80" autocomplete="name" placeholder="Your name">
-        </label>
-        <label class="field">
-          <span>Mobile number</span>
-          <input name="mobile" required inputmode="numeric" autocomplete="tel" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit Indian number">
-        </label>
-        <label class="consent-row">
-          <input type="checkbox" name="consent" value="yes">
-          <span>I agree that Admission Setu can save my name and mobile number to show this result in my name and keep this prediction. I can withdraw this on the result page.</span>
-        </label>
-        <p class="consent-note">This number is not used for calls or messages. Withdraw deletes your name, number, and saved predictions. You can also complain to the Data Protection Board of India.</p>
-        <p class="status" id="student-error"></p>
-        <button class="button" type="submit" disabled>Show my colleges</button>
-      </form>
-    </dialog>
     <p class="status" id="status"></p>
     <div class="summary" id="summary"></div>
+    <div id="history" hidden></div>
     <div id="choices" hidden></div>
     <div class="list" id="results"></div>
     <button class="ghost full" id="more" type="button" hidden>Show more</button>
@@ -156,6 +133,6 @@
     <a href="/browse">Colleges</a>
     <a href="/chances" aria-current="page">Predict</a>
   </nav>
-  <script src="/assets/app.js?v=42"></script>
+  <script src="/assets/app.js?v=43"></script>
 </body>
 </html>

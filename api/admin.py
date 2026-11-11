@@ -64,14 +64,17 @@ def signed_in(request: Request):
     return valid_cookie(request.cookies.get(COOKIE, ""))
 
 
-def page(title, body, shell=True):
+def page(title, body, shell=True, current="colleges"):
+    colleges = ' aria-current="page"' if current == "colleges" else ""
+    students = ' aria-current="page"' if current == "students" else ""
     if shell:
         frame = f"""<div class="shell">
           <aside class="side">
             <a class="side-brand" href="/admin"><img src="/assets/logo.jpg?v=2" alt="Admission Setu"></a>
             <p class="side-label">Dashboard</p>
             <nav>
-              <a href="/admin" aria-current="page">Colleges</a>
+              <a href="/admin"{colleges}>Colleges</a>
+              <a href="/admin/students"{students}>Students</a>
               <a href="/">Public site</a>
             </nav>
             <form method="post" action="/admin/logout"><button class="side-logout" type="submit">Log out</button></form>
@@ -718,3 +721,89 @@ def admin_restore(request: Request, slug: str, token: str = Form("")):
         conn.commit()
     app().saved_pages.cache_clear()
     return RedirectResponse(f"/admin/colleges/{slug}", status_code=303)
+
+
+def stamp(value):
+    if not value:
+        return ""
+    return value.strftime("%d %b %Y, %H:%M")
+
+
+@router.get("/admin/students", response_class=HTMLResponse)
+def admin_students(request: Request):
+    blocked = guard(request)
+    if blocked:
+        return blocked
+    app().ensure_students()
+    with app().connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT s.public_id, s.name, s.mobile, s.consent_at, s.created_at,
+                       count(p.id) AS predictions
+                FROM students s
+                LEFT JOIN predictions p ON p.student_id = s.id
+                GROUP BY s.id
+                ORDER BY s.created_at DESC
+                LIMIT 200
+                """
+            )
+            rows = cursor.fetchall()
+    body = "".join(
+        f"""<tr>
+          <td><a href="/admin/students/{escape(row["public_id"])}">{escape(row["name"])}</a></td>
+          <td>{escape(row["mobile"])}</td>
+          <td>{escape(row["public_id"])}</td>
+          <td>{row["predictions"]}</td>
+          <td>{escape(stamp(row["consent_at"]))}</td>
+          <td>{escape(stamp(row["created_at"]))}</td>
+        </tr>"""
+        for row in rows
+    ) or '<tr><td colspan="6">No students yet.</td></tr>'
+    return page(
+        "Students",
+        f"""<h1>Students</h1>
+        <p class="lede">Name, mobile number, ID, and how many predictions each student has saved.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Mobile</th><th>ID</th><th>Predictions</th><th>Consent</th><th>Created</th></tr></thead>
+          <tbody>{body}</tbody>
+        </table></div>""",
+        current="students",
+    )
+
+
+@router.get("/admin/students/{public_id}", response_class=HTMLResponse)
+def admin_student(request: Request, public_id: str):
+    blocked = guard(request)
+    if blocked:
+        return blocked
+    student = app().find_student(public_id)
+    if student is None:
+        return page("Student", "<h1>Student</h1><p>This ID was not found.</p>", current="students")
+    history = app().prediction_rows(student["id"])
+    lines = []
+    for row in history:
+        when = str(row["created_at"]).replace("T", " ")[:16]
+        lines.append(
+            f"""<tr>
+              <td>{escape(when)}</td>
+              <td>{escape(row["exam"])}</td>
+              <td>{row["rank"]}</td>
+              <td>{escape(row["category"])}</td>
+              <td>{escape(row["gender"])}</td>
+              <td>{escape(row["home_state"])}</td>
+              <td>{escape(row["course"])}</td>
+            </tr>"""
+        )
+    body = "".join(lines) or '<tr><td colspan="7">No predictions yet.</td></tr>'
+    return page(
+        student["name"],
+        f"""<p><a href="/admin/students">All students</a></p>
+        <h1>{escape(student["name"])}</h1>
+        <p class="lede">{escape(student["public_id"])} · {escape(student["mobile"])}</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>When</th><th>Exam</th><th>Rank</th><th>Category</th><th>Gender</th><th>Home state</th><th>Course</th></tr></thead>
+          <tbody>{body}</tbody>
+        </table></div>""",
+        current="students",
+    )
