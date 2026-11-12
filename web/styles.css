@@ -179,8 +179,8 @@ img { max-width: 100%; }
   font-weight: 800;
 }
 .tabbar a[aria-current="page"] {
-  color: #163e86;
-  box-shadow: inset 0 3px 0 #e39b12;
+  color: var(--accent-dark);
+  box-shadow: inset 0 3px 0 var(--accent);
 }
 
 .home-hero {
@@ -269,7 +269,19 @@ img { max-width: 100%; }
 }
 .stats dt { color: var(--muted); font-size: 12px; font-weight: 800; }
 .stats dd { margin: 4px 0 0; font-weight: 800; letter-spacing: -0.03em; }
-.home-block { margin-top: 36px; }
+.site-foot {
+  margin-top: 48px;
+  padding: 28px 0 calc(36px + var(--nav));
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.foot-inner { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.foot-inner strong { letter-spacing: -0.03em; }
+.foot-inner nav { display: flex; gap: 14px; }
+.foot-inner a { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
+.foot-inner p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; }
+body[data-page="chances"] .predict-layout { display: grid; gap: 18px; align-items: start; }
+body[data-page="chances"] .predict-stage { min-width: 0; }
 .home-grid { display: grid; gap: 10px; }
 .text-link { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
 .steps {
@@ -1655,6 +1667,15 @@ body[data-page="chances"] .summary:empty { display: none; }
   .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   body[data-page="browse"] .list { grid-template-columns: 1fr 1fr; }
   .steps { grid-template-columns: repeat(3, 1fr); }
+  body[data-page="chances"] .predict-layout { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
+  body[data-page="chances"] .predict-form {
+    position: sticky;
+    top: 96px;
+    grid-template-columns: 1fr;
+  }
+  body[data-page="chances"] .predict-form .wide,
+  body[data-page="chances"] .predict-form .button { grid-column: auto; }
+  .site-foot { padding-bottom: 36px; }
   .streams { grid-template-columns: repeat(3, 1fr); }
   .actions { grid-template-columns: 1.4fr 1fr; }
   .rail { grid-auto-columns: minmax(280px, 32%); }

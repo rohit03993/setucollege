@@ -35,6 +35,16 @@ export default function Shell({ children }) {
         </div>
       </header>
       <main className="wrap">{children}</main>
+      <footer className="site-foot">
+        <div className="wrap foot-inner">
+          <strong>Admission Setu</strong>
+          <nav aria-label="Footer">
+            <a href="/browse">Colleges</a>
+            <a href="/chances">Predict</a>
+          </nav>
+          <p>Fees, NIRF rank, and last year's official closing ranks.</p>
+        </div>
+      </footer>
       <nav className="tabbar" aria-label="Primary">
         <a href="/">Home</a>
         <a href="/browse" aria-current={colleges ? "page" : undefined}>Colleges</a>

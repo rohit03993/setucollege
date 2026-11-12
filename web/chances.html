@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=51">
+  <link rel="stylesheet" href="/assets/styles.css?v=52">
 </head>
 <body data-page="chances">
   <header class="topbar">
@@ -52,6 +52,7 @@
         <li><span class="point-icon tone-c" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><span><strong>Probability</strong><small>Very high to very low</small></span></li>
       </ul>
     </section>
+    <div class="predict-layout">
     <form class="panel form predict-form" id="predict">
       <div class="form-head">
         <span class="point-icon tone-a" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v6c0 4.2 3.2 7.4 8 8 4.8-.6 8-3.8 8-8V7l-8-4Z"/></svg></span>
@@ -120,12 +121,25 @@
       </label>
       <button class="button" type="submit">Predict colleges</button>
     </form>
-    <p class="status" id="status"></p>
-    <div class="summary" id="summary"></div>
-    <div id="choices" hidden></div>
-    <div class="list" id="results"></div>
-    <button class="ghost full" id="more" type="button" hidden>Show more</button>
+    <div class="predict-stage">
+      <p class="status" id="status"></p>
+      <div class="summary" id="summary"></div>
+      <div id="choices" hidden></div>
+      <div class="list" id="results"></div>
+      <button class="ghost full" id="more" type="button" hidden>Show more</button>
+    </div>
+    </div>
   </main>
+  <footer class="site-foot">
+    <div class="wrap foot-inner">
+      <strong>Admission Setu</strong>
+      <nav aria-label="Footer">
+        <a href="/browse">Colleges</a>
+        <a href="/chances">Predict</a>
+      </nav>
+      <p>JoSAA round 5 for JEE. MCC 2026 for NEET. A smaller rank is a better rank.</p>
+    </div>
+  </footer>
 
   <nav class="tabbar" aria-label="Primary">
     <a href="/">Home</a>

@@ -287,10 +287,22 @@ summary { font-weight: 800; cursor: pointer; }
   .list, .metrics, .degree-list { grid-template-columns: 1fr 1fr; }
   .banner .campus, .initials { height: 280px; }
 }
+.site-foot {
+  margin-top: 48px;
+  padding: 28px 0 calc(36px + var(--nav));
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.foot-inner { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.foot-inner strong { letter-spacing: -0.03em; }
+.foot-inner nav { display: flex; gap: 14px; }
+.foot-inner a { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
+.foot-inner p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; }
 @media (min-width: 900px) {
   body { padding-bottom: 32px; }
   .desktop-nav { display: flex; }
   .tabbar { display: none; }
+  .site-foot { padding-bottom: 36px; }
   .directory-layout { grid-template-columns: 240px minmax(0, 1fr); align-items: start; }
   .directory-filters { position: sticky; top: 96px; }
   .directory-filters .chips { display: grid; overflow: visible; }
