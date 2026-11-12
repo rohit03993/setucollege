@@ -33,6 +33,12 @@ function place(college) {
   return [college.city, college.state].filter(Boolean).join(", ");
 }
 
+function menuLabel(name) {
+  const first = String(name || "").trim().split(/\s+/)[0];
+  if (!first) return "Log in";
+  return first.length > 12 ? `${first.slice(0, 11)}…` : first;
+}
+
 function lettersOf(name) {
   return String(name || "")
     .split(/\s+/)
@@ -53,46 +59,36 @@ function packageText(college) {
 
 function collegeCard(college) {
   const letters = lettersOf(college.name) || "•";
-  const logo = college.logo ? `<img src="${esc(college.logo)}" alt="" onerror="this.remove()">` : "";
-  const badge = college.nirf_rank ? `<span class="rank-badge" title="NIRF rank">#${num(college.nirf_rank)}</span>` : "";
-  const rating = /^\d/.test(String(college.rating || "").trim()) ? String(college.rating).trim() : "";
+  const logo = college.logo
+    ? `<img class="card-logo" src="${esc(college.logo)}" alt="" loading="lazy" decoding="async" data-letters="${esc(letters)}" onerror="this.outerHTML='<span class=&quot;card-logo initials-logo&quot;>'+this.dataset.letters+'</span>'">`
+    : `<span class="card-logo initials-logo">${esc(letters)}</span>`;
+  const photo = college.image
+    ? `<img src="${esc(college.image)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`
+    : "";
+  const badge = college.nirf_rank ? `<span class="rank-badge" title="NIRF rank">NIRF #${num(college.nirf_rank)}</span>` : "";
+  const fee = shownFee(college.fee_label);
   const highest = packageText(college);
   const facts = [
-    rating ? `<span class="card-rating">★ ${esc(rating)}</span>` : "",
-    highest !== "—" ? `<span>Highest ${esc(highest)}</span>` : ""
+    fee ? `<span><small>Yearly fee</small>${esc(fee)}</span>` : "",
+    highest !== "—" ? `<span><small>Highest</small>${esc(highest)}</span>` : ""
   ].filter(Boolean).join("");
-  const streams = (college.streams || []).filter(Boolean);
-  const shown = streams.slice(0, 3);
-  const extra = streams.length - shown.length;
-  const tags = shown.length
-    ? `<div class="card-tags">${shown.map((stream) => `<span>${esc(stream)}</span>`).join("")}${extra ? `<span>+${extra}</span>` : ""}</div>`
+  const streams = (college.streams || []).filter(Boolean).slice(0, 2);
+  const tags = streams.length
+    ? `<span class="card-tags">${streams.map((stream) => `<span>${esc(stream)}</span>`).join("")}</span>`
     : "";
-  return `<a class="college${badge ? " has-rank" : ""}" href="/college/${encodeURIComponent(college.slug)}">
-    ${badge}
-    <span class="mark">${logo}${esc(letters)}</span>
-    <span class="college-id">
-      <h3>${esc(college.name)}</h3>
-      <p class="place">${esc(place(college))}</p>
+  const where = [place(college), college.ownership].filter(Boolean).join(" · ");
+  return `<a class="college directory-card" href="/college/${encodeURIComponent(college.slug)}">
+    <span class="directory-cover">${photo}${badge}</span>
+    <span class="directory-body">
+      <span class="card-title">${logo}<span class="college-id"><h3>${esc(college.name)}</h3><p class="place">${esc(where)}</p></span></span>
+      ${facts ? `<span class="directory-facts">${facts}</span>` : ""}
+      ${tags}
     </span>
-    ${facts ? `<p class="card-line">${facts}</p>` : ""}
-    ${tags}
-    <span class="explore">Explore college</span>
   </a>`;
 }
 
 function quotaText(quota) {
   return QUOTA[quota] || quota;
-}
-
-function homePick(college) {
-  const fee = shownFee(college.fee_label) || "—";
-  const nirf = college.nirf_rank ? `#${num(college.nirf_rank)}` : "—";
-  const where = [place(college), college.ownership].filter(Boolean).join(" · ");
-  return `<a class="pick" href="/college/${encodeURIComponent(college.slug)}">
-    <span class="pick-rank">${esc(nirf)}</span>
-    <span class="pick-id"><strong>${esc(college.name)}</strong><span>${esc(where)}</span></span>
-    <span class="pick-fee"><small>Yearly fee</small>${esc(fee)}</span>
-  </a>`;
 }
 
 async function initHome() {
@@ -101,7 +97,7 @@ async function initHome() {
   try {
     const data = await api("/colleges?sort=nirf&page_size=6");
     count.textContent = num(data.total);
-    featured.innerHTML = data.colleges.map(homePick).join("");
+    featured.innerHTML = data.colleges.map(collegeCard).join("");
   } catch (error) {
     featured.innerHTML = `<p class="status" role="alert">${esc(error.message)}</p>`;
   }
@@ -134,9 +130,7 @@ async function initBrowse() {
   const chips = document.querySelector("#chips");
   const list = document.querySelector("#list");
   const status = document.querySelector("#status");
-  const pageLabel = document.querySelector("#page-label");
-  const prev = document.querySelector("#prev");
-  const next = document.querySelector("#next");
+  const more = document.querySelector("#more-colleges");
   let state = readBrowse();
 
   function paintControls() {
@@ -147,10 +141,16 @@ async function initBrowse() {
     });
   }
 
-  async function load() {
+  async function load(append) {
     paintControls();
-    status.textContent = "Loading colleges…";
-    list.innerHTML = "";
+    if (append) {
+      more.disabled = true;
+      more.textContent = "Loading more colleges…";
+    } else {
+      status.textContent = "Loading colleges…";
+      list.innerHTML = "";
+      more.hidden = true;
+    }
     const params = new URLSearchParams({
       q: state.q,
       stream: state.stream,
@@ -161,15 +161,23 @@ async function initBrowse() {
     try {
       const data = await api(`/colleges?${params}`);
       const pages = Math.max(1, Math.ceil(data.total / data.page_size));
-      status.textContent = data.total === 1 ? "1 college" : `${num(data.total)} colleges`;
-      list.innerHTML = data.colleges.length
-        ? data.colleges.map(collegeCard).join("")
-        : `<p class="empty">Nothing matches that search.</p>`;
-      pageLabel.textContent = `Page ${data.page} of ${pages}`;
-      prev.disabled = data.page <= 1;
-      next.disabled = data.page >= pages;
+      const cards = data.colleges.map(collegeCard).join("");
+      if (!append) {
+        list.innerHTML = cards || `<p class="empty">Nothing matches that search.</p>`;
+      } else if (cards) {
+        list.insertAdjacentHTML("beforeend", cards);
+      }
+      const shown = Math.min(data.total, data.page * data.page_size);
+      status.textContent = data.total
+        ? `${num(shown)} of ${num(data.total)} colleges`
+        : "No colleges";
+      more.hidden = !data.total || data.page >= pages;
+      more.disabled = false;
+      more.textContent = "Show more colleges";
     } catch (error) {
       status.innerHTML = `<span role="alert">${esc(error.message)}</span>`;
+      more.disabled = false;
+      more.textContent = "Show more colleges";
     }
   }
 
@@ -177,35 +185,30 @@ async function initBrowse() {
     event.preventDefault();
     state = { ...state, q: input.value.trim(), page: 1 };
     writeBrowse(state);
-    load();
+    load(false);
   });
   sort.addEventListener("change", () => {
     state = { ...state, sort: sort.value, page: 1 };
     writeBrowse(state);
-    load();
+    load(false);
   });
   chips.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button) return;
     state = { ...state, stream: button.dataset.stream, page: 1 };
     writeBrowse(state);
-    load();
+    load(false);
   });
-  prev.addEventListener("click", () => {
-    state = { ...state, page: state.page - 1 };
-    writeBrowse(state);
-    load();
-  });
-  next.addEventListener("click", () => {
+  more.addEventListener("click", () => {
     state = { ...state, page: state.page + 1 };
     writeBrowse(state);
-    load();
+    load(true);
   });
   window.addEventListener("popstate", () => {
     state = readBrowse();
-    load();
+    load(false);
   });
-  load();
+  load(false);
 }
 
 const LEVELS = "B\\.Tech\\+M\\.Tech|Integrated M\\.Tech|B\\.Tech|M\\.Tech|B\\.Arch|M\\.Arch|B\\.Sc|M\\.Sc|MBA|MCA|PG Diploma|PhD|M\\.Plan|B\\.Plan|M\\.Des|B\\.Des|Doctor of Philosophy|BS|MS";
@@ -719,7 +722,6 @@ async function initChances() {
   const summary = document.querySelector("#summary");
   const status = document.querySelector("#status");
   const more = document.querySelector("#more");
-  const historyBox = document.querySelector("#history");
   let page = 1;
   let branch = "";
   let choices = loadChoices();
@@ -827,22 +829,6 @@ async function initChances() {
   });
   showCourse();
 
-  async function paintHistory() {
-    if (!historyBox) return;
-    if (!student || !student.id) {
-      historyBox.hidden = true;
-      historyBox.innerHTML = "";
-      return;
-    }
-    try {
-      const data = await api(`/students/${encodeURIComponent(student.id)}`);
-      historyBox.hidden = false;
-      historyBox.innerHTML = `<section class="choice-board"><div class="choice-head"><div><p class="eyebrow">Your ID ${esc(data.id)}</p><h2>${esc(data.name)}</h2></div></div><div class="history-wrap">${historyList(data.predictions)}</div></section>`;
-    } catch (error) {
-      historyBox.hidden = true;
-    }
-  }
-
   document.addEventListener("setu-student", (event) => {
     student = event.detail;
     if (!student) {
@@ -850,9 +836,7 @@ async function initChances() {
       summary.innerHTML = "";
       more.hidden = true;
     }
-    paintHistory();
   });
-  paintHistory();
 
   async function run(nextPage, append, record) {
     if (!student || !student.id) {
@@ -919,7 +903,6 @@ async function initChances() {
         <div class="result-top">
           <div>
             <div class="result-chips">${chips}</div>
-            <p class="result-who"><strong>${esc(data.student_name || student.name)}</strong><span>${esc(data.student_id || student.id)}</span><button type="button" data-edit-profile>Edit profile</button><button type="button" data-logout>Log out</button><button type="button" data-withdraw>Withdraw consent</button></p>
             <p class="result-kicker">Your rank</p>
             <h2>${num(data.rank)}</h2>
           </div>
@@ -1025,7 +1008,6 @@ async function initChances() {
       const shown = Math.min(data.total, data.page * data.page_size);
       more.hidden = !data.total || shown >= data.total;
       more.textContent = `Show more · ${num(shown)} of ${num(data.total)}`;
-      if (record) paintHistory();
     } catch (error) {
       status.textContent = error.message;
       status.setAttribute("role", "alert");
@@ -1048,29 +1030,6 @@ async function initChances() {
     begin();
   });
   results.addEventListener("click", async (event) => {
-    if (event.target.closest("[data-logout]")) {
-      window.setuLogout();
-      return;
-    }
-    if (event.target.closest("[data-edit-profile]")) {
-      window.setuOpenAccount(null, "edit");
-      return;
-    }
-    if (event.target.closest("[data-withdraw]")) {
-      const id = student && student.id;
-      try {
-        if (id) await api(`/students/${encodeURIComponent(id)}`, { method: "DELETE" });
-        window.setuLogout();
-        results.innerHTML = "";
-        summary.innerHTML = "";
-        more.hidden = true;
-        status.textContent = "Your name, mobile number, and saved predictions have been deleted.";
-      } catch (error) {
-        status.textContent = error.message;
-        status.setAttribute("role", "alert");
-      }
-      return;
-    }
     const add = event.target.closest(".choice-add");
     if (add) {
       toggleChoice(add.dataset.choice);
@@ -1112,7 +1071,7 @@ function initAccount() {
         <button class="student-close" type="button" data-account-close>Close</button>
       </div>
       <div data-step="mobile">
-        <p>Enter your mobile number. The code arrives on WhatsApp.</p>
+        <p>Enter your mobile number. The code arrives on WhatsApp. A new number then asks for your name and consent before the account is saved.</p>
         <label class="field"><span>Mobile number</span><input name="mobile" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit Indian number"></label>
       </div>
       <div data-step="otp" hidden>
@@ -1120,24 +1079,30 @@ function initAccount() {
         <label class="field"><span>Code</span><input name="otp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="1234"></label>
       </div>
       <div data-step="name" hidden>
-        <p>This number is new. Your name is shown on the result, and the mobile number creates your ID.</p>
+        <p>This number is new. Your name and mobile number create your account, and this prediction is saved there.</p>
         <label class="field"><span>Name</span><input name="name" maxlength="80" autocomplete="name" placeholder="Your name"></label>
-        <label class="consent-row"><input type="checkbox" name="consent" value="yes"><span>I agree that Admission Setu can save my name and mobile number to show this result in my name and keep this prediction. I can withdraw this on the result page.</span></label>
+        <label class="consent-row"><input type="checkbox" name="consent" value="yes"><span>I agree that Admission Setu can save my name and mobile number with this prediction in my account. I can withdraw this from my account.</span></label>
         <p class="consent-note">This number is not used for calls or messages. Withdraw deletes your name, number, and saved predictions. You can also complain to the Data Protection Board of India.</p>
       </div>
       <div data-step="home" hidden>
-        <p class="account-id"><strong data-account-name></strong><span class="role-badge" data-account-role data-role="student">Student</span><span data-account-id></span></p>
+        <div class="who">
+          <span class="who-mark" data-account-mark>AS</span>
+          <div>
+            <p class="account-id"><strong data-account-name></strong><span class="role-badge" data-account-role data-role="student">Student</span></p>
+            <p class="who-id" data-account-id></p>
+          </div>
+        </div>
         <p data-admin-desk hidden><a class="button" href="/admin">Open college desk</a></p>
-        <section data-team hidden>
-          <h3>Staff</h3>
-          <p class="consent-note">Add a staff number. That person logs in with their mobile and the WhatsApp code. Only this admin number can add or remove staff.</p>
-          <label class="field"><span>Staff name</span><input name="staff_name" maxlength="80" placeholder="Name"></label>
-          <label class="field"><span>Staff mobile</span><input name="staff_mobile" inputmode="numeric" maxlength="10" placeholder="10-digit number"></label>
-          <button class="button" type="button" data-add-staff>Make staff</button>
-          <div data-staff-list></div>
+        <section class="account-block">
+          <h3>This account</h3>
+          <p>Mobile <strong data-account-mobile></strong></p>
+          <p>Consent was saved when this account was created. <span data-account-consent></span></p>
+          <button class="ghost" type="button" data-account-withdraw>Withdraw consent</button>
         </section>
-        <h3>Your predictions</h3>
-        <div data-account-history></div>
+        <section class="account-block">
+          <h3>Your predictions</h3>
+          <div data-account-history></div>
+        </section>
         <div class="account-actions">
           <button class="ghost" type="button" data-account-edit>Edit profile</button>
           <button class="ghost" type="button" data-account-logout>Log out</button>
@@ -1161,8 +1126,9 @@ function initAccount() {
   function paintMenu() {
     const student = loadStudent();
     document.querySelectorAll("[data-account-open]").forEach((button) => {
-      const label = student && student.name ? student.name.split(" ")[0] : "Log in";
-      button.textContent = label;
+      const full = student && student.name ? student.name : "";
+      button.textContent = menuLabel(full);
+      button.title = full || "Log in";
     });
   }
 
@@ -1196,31 +1162,17 @@ function initAccount() {
     const labels = { admin: "Admin", staff: "Staff", student: "Student" };
     dialog.querySelector("[data-account-name]").textContent = student.name;
     dialog.querySelector("[data-account-id]").textContent = student.id;
+    dialog.querySelector("[data-account-mark]").textContent = lettersOf(student.name) || "AS";
+    dialog.querySelector("[data-account-mobile]").textContent = student.mobile || "";
+    const consent = dialog.querySelector("[data-account-consent]");
+    if (student.consent_at) {
+      const when = new Date(student.consent_at);
+      consent.textContent = Number.isNaN(when.getTime()) ? "" : when.toLocaleString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    }
     const badge = dialog.querySelector("[data-account-role]");
     badge.textContent = labels[role];
     badge.dataset.role = role;
     dialog.querySelector("[data-admin-desk]").hidden = role !== "admin";
-    dialog.querySelector("[data-team]").hidden = role !== "admin";
-  }
-
-  function staffList(rows) {
-    if (!rows.length) return `<p class="consent-note">No staff yet.</p>`;
-    return `<ul class="staff-list">${rows.map((row) => `
-      <li>
-        <span><strong>${esc(row.name)}</strong><small>${esc(row.mobile)}</small></span>
-        <button class="ghost" type="button" data-drop-staff="${esc(row.mobile)}">Remove</button>
-      </li>`).join("")}</ul>`;
-  }
-
-  async function loadStaff() {
-    const list = dialog.querySelector("[data-staff-list]");
-    list.innerHTML = `<p class="consent-note">Loading staff…</p>`;
-    try {
-      const data = await api("/team");
-      list.innerHTML = staffList(data.staff || []);
-    } catch (failure) {
-      list.innerHTML = `<p class="consent-note">${esc(failure.message)} Log out and log in again with the admin number.</p>`;
-    }
   }
 
   async function showHome(student) {
@@ -1234,15 +1186,14 @@ function initAccount() {
         id: data.id,
         name: data.name,
         mobile: data.mobile,
-        role: data.role || student.role || "student"
+        role: data.role || student.role || "student",
+        consent_at: data.consent_at || ""
       };
       saveStudent(student);
       paintAccount(student);
       paintMenu();
-      if (student.role === "admin") loadStaff();
       list.innerHTML = historyList(data.predictions);
     } catch (failure) {
-      if ((student.role || "") === "admin") loadStaff();
       list.innerHTML = `<p class="consent-note">${esc(failure.message)}</p>`;
     }
   }
@@ -1296,9 +1247,6 @@ function initAccount() {
   form.elements.edit_mobile.addEventListener("input", () => {
     form.elements.edit_mobile.value = digitsOnly(form.elements.edit_mobile.value);
   });
-  form.elements.staff_mobile.addEventListener("input", () => {
-    form.elements.staff_mobile.value = digitsOnly(form.elements.staff_mobile.value);
-  });
   form.elements.otp.addEventListener("input", () => {
     form.elements.otp.value = form.elements.otp.value.replace(/\D/g, "").slice(0, 4);
   });
@@ -1315,37 +1263,13 @@ function initAccount() {
     show("edit");
   });
   dialog.querySelector("[data-account-logout]").addEventListener("click", () => window.setuLogout());
-  dialog.querySelector("[data-add-staff]").addEventListener("click", async () => {
-    error.textContent = "";
-    const staffMobile = digitsOnly(form.elements.staff_mobile.value);
-    if (!form.elements.staff_name.value.trim() || !/^[6-9]\d{9}$/.test(staffMobile)) {
-      fail("Enter the staff name and a 10-digit Indian mobile number.");
-      return;
-    }
-    try {
-      await api("/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.elements.staff_name.value, mobile: staffMobile, role: "staff" })
-      });
-      form.elements.staff_name.value = "";
-      form.elements.staff_mobile.value = "";
-      await loadStaff();
-    } catch (failure) {
-      fail(failure.message);
-    }
-  });
-  dialog.querySelector("[data-staff-list]").addEventListener("click", async (event) => {
-    const button = event.target.closest("[data-drop-staff]");
-    if (!button) return;
+  dialog.querySelector("[data-account-withdraw]").addEventListener("click", async () => {
+    const current = loadStudent();
+    if (!current) return;
     error.textContent = "";
     try {
-      await api("/team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mobile: button.dataset.dropStaff, role: "student" })
-      });
-      await loadStaff();
+      await api(`/students/${encodeURIComponent(current.id)}`, { method: "DELETE" });
+      window.setuLogout();
     } catch (failure) {
       fail(failure.message);
     }

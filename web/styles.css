@@ -57,6 +57,7 @@ img { max-width: 100%; }
 }
 .topbar-inner {
   width: min(1080px, calc(100% - 32px));
+  min-width: 0;
   margin: 0 auto;
   min-height: 72px;
   display: flex;
@@ -78,7 +79,7 @@ img { max-width: 100%; }
   object-fit: contain;
   object-position: left center;
 }
-.desktop-nav { display: none; margin-left: auto; gap: 4px; flex: 0 0 auto; }
+.desktop-nav { display: none; margin-left: auto; gap: 4px; min-width: 0; flex: 0 1 auto; align-items: center; }
 .desktop-nav a {
   text-decoration: none;
   font-weight: 800;
@@ -110,30 +111,32 @@ img { max-width: 100%; }
   font-weight: 800;
 }
 .desktop-nav .account-link {
+  display: inline-flex;
+  align-items: center;
+  max-width: 148px;
+  margin-left: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 14px;
   padding: 8px 14px;
   border-radius: 999px;
-  color: #3d3558;
+  background: var(--soft);
+  color: var(--accent-dark);
 }
 .tabbar .account-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  max-width: 100%;
   min-height: var(--nav);
   width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #5c6578;
   font-size: 13px;
 }
 .account-id strong { color: var(--ink); }
 .account-id { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
-.account-id span {
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: var(--soft);
-  color: var(--accent-dark);
-  font-size: 12px;
-  font-weight: 800;
-}
 .account-actions { display: flex; gap: 8px; }
 .account-actions .ghost { flex: 1; }
 .role-badge {
@@ -227,10 +230,11 @@ img { max-width: 100%; }
 .proof { margin: 14px 0 0; color: var(--muted); font-weight: 700; }
 .proof strong { color: var(--ink); }
 .rank-list {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  overflow: hidden;
+  display: grid;
+  gap: 14px;
+  background: transparent;
+  border: 0;
+  overflow: visible;
 }
 .rank-list > .muted, .rank-list > .status { display: block; margin: 0; padding: 16px; }
 .pick {
@@ -497,6 +501,89 @@ body[data-page="browse"] .list { align-items: stretch; gap: 14px; }
   font-weight: 800;
 }
 .college:hover .explore { background: var(--soft); }
+.directory-head { padding: 18px 0 4px; }
+.directory-head h1 { font-size: clamp(32px, 6vw, 46px); }
+.directory-layout { display: grid; gap: 18px; margin-top: 8px; }
+.directory-filters {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+}
+.directory-filters h2 { margin: 0; font-size: 16px; }
+.filter-block { display: grid; gap: 8px; margin-top: 14px; font-weight: 800; }
+.filter-block p { margin: 0; }
+.directory .pager { justify-content: center; }
+.directory .pager .ghost { min-width: min(100%, 280px); }
+.directory-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.directory-cover {
+  position: relative;
+  display: block;
+  height: 148px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #efeaff, #d9d0ff);
+}
+.directory-cover img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.card-logo {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 4px;
+}
+.card-logo.initials-logo {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--accent-dark);
+  font-size: 14px;
+  font-weight: 800;
+}
+.directory-card .rank-badge { top: 12px; right: 12px; z-index: 2; border-radius: 999px; }
+.directory-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px 14px 16px;
+}
+.directory-card .college-id { align-self: stretch; }
+.directory-card h3 { padding-right: 0; }
+.directory-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.directory-facts span {
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #f6f5fb;
+  font-size: 13px;
+  font-weight: 800;
+}
+.directory-facts small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.directory-card .card-tags { margin-top: 0; }
 .college-metrics {
   display: grid;
   grid-column: 1 / -1;
@@ -777,11 +864,15 @@ body[data-page="browse"] .list { align-items: stretch; gap: 14px; }
   font-weight: 800;
 }
 .section-nav {
+  position: sticky;
+  top: 72px;
+  z-index: 4;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin: 16px 0 4px;
   padding: 10px;
+  overflow-x: auto;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -1175,10 +1266,11 @@ body[data-page="chances"] .summary:empty { display: none; }
   text-decoration: underline;
 }
 .student-dialog {
-  width: min(420px, calc(100% - 32px));
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100vh - 48px);
   padding: 0;
   border: 0;
-  border-radius: 22px;
+  border-radius: 24px;
   background: #fff;
   box-shadow: 0 24px 60px rgba(48, 32, 110, 0.2);
 }
@@ -1199,6 +1291,39 @@ body[data-page="chances"] .summary:empty { display: none; }
 .student-dialog p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 600; }
 .student-dialog .button { width: 100%; }
 .student-dialog .button:disabled { opacity: 0.45; cursor: default; }
+.student-dialog form { max-height: calc(100vh - 48px); overflow: auto; }
+.who { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: #f6f5fb; }
+.who-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+.who-id { margin: 2px 0 0; color: var(--muted); font-size: 13px; font-weight: 700; }
+.account-block { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; }
+.account-block h3 { margin: 0; font-size: 15px; }
+.staff-add { display: grid; gap: 10px; }
+.account-dialog .staff-add .button { width: 100%; }
+.account-dialog .history-list { padding: 0; }
+.account-dialog .link-danger {
+  justify-self: center;
+  border: 0;
+  background: transparent;
+  color: #9d1230;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+@media (min-width: 560px) {
+  .staff-add { grid-template-columns: 1fr 1fr auto; align-items: end; }
+  .account-dialog .staff-add .button { width: auto; min-height: 48px; }
+}
 .consent-row {
   display: flex;
   align-items: flex-start;
@@ -1521,11 +1646,13 @@ body[data-page="chances"] .summary:empty { display: none; }
 
 @media (min-width: 720px) {
   .home-hero { grid-template-columns: 1.35fr 0.85fr; align-items: stretch; gap: 20px; padding-top: 28px; }
+  .rank-list { grid-template-columns: 1fr 1fr; }
   .pick { grid-template-columns: 72px 1fr auto; }
   .pick-fee { grid-column: auto; text-align: right; }
-  .profile { grid-template-columns: 1.15fr 0.85fr; align-items: stretch; padding: 22px; }
-  .banner { order: 2; }
-  .banner img.campus, .banner .initials { height: 100%; min-height: 280px; }
+  .profile { grid-template-columns: 1fr; padding: 22px; }
+  .banner { order: -1; }
+  .banner img.campus, .banner .initials { height: 280px; min-height: 0; }
+  .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   body[data-page="browse"] .list { grid-template-columns: 1fr 1fr; }
   .steps { grid-template-columns: repeat(3, 1fr); }
   .streams { grid-template-columns: repeat(3, 1fr); }
@@ -1536,7 +1663,7 @@ body[data-page="chances"] .summary:empty { display: none; }
   .form .wide, .form .button { grid-column: 1 / -1; }
 }
 @media (min-width: 1040px) {
-  body[data-page="browse"] .list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  body[data-page="browse"] .list { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 900px) {
   body { padding-bottom: 32px; }
@@ -1545,4 +1672,8 @@ body[data-page="chances"] .summary:empty { display: none; }
   .desktop-nav { display: flex; }
   .tabbar { display: none; }
   .list { gap: 12px; }
+  .directory-layout { grid-template-columns: 240px minmax(0, 1fr); align-items: start; }
+  .directory-filters { position: sticky; top: 96px; }
+  .directory-filters .chips { display: grid; overflow: visible; }
+  .section-nav { top: 84px; }
 }

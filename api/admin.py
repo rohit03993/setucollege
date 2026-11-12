@@ -14,8 +14,9 @@ import secrets
 import time
 from html import escape
 from pathlib import Path
+from urllib.parse import quote
 
-from fastapi import APIRouter, File, Form, Request, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from psycopg.types.json import Json
 
@@ -90,8 +91,11 @@ def page(title, body, shell=True, current="colleges"):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{escape(title)}</title>
-  <link rel="stylesheet" href="/assets/styles.css?v=20">
-  <link rel="stylesheet" href="/assets/admin.css?v=4">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css?v=50">
+  <link rel="stylesheet" href="/assets/admin.css?v=8">
 </head>
 <body class="dash">{frame}</body>
 </html>"""
@@ -150,8 +154,26 @@ def guard(request: Request):
     return RedirectResponse("/admin/login", status_code=303)
 
 
+def list_href(query, rank, state, page_no=1):
+    parts = []
+    if query:
+        parts.append("q=" + quote(query))
+    if rank:
+        parts.append("rank=" + quote(rank))
+    if state:
+        parts.append("state=" + quote(state))
+    if page_no > 1:
+        parts.append(f"page_no={page_no}")
+    return "/admin" + (("?" + "&".join(parts)) if parts else "")
+
+
+def choice(value, label, current):
+    selected = " selected" if value == current else ""
+    return f'<option value="{escape(value)}"{selected}>{escape(label)}</option>'
+
+
 @router.get("/admin", response_class=HTMLResponse)
-def admin_list(request: Request, q: str = "", page_no: int = 1):
+def admin_list(request: Request, q: str = "", state: str = "", rank: str = "", page_no: int = 1):
     blocked = guard(request)
     if blocked:
         return blocked
@@ -160,29 +182,58 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
     page_no = max(1, page_no)
     size = 30
     query = q.strip()
+    state = state.strip()
+    rank = rank if rank in ("ranked", "unranked") else ""
+    shown_state = "CASE WHEN o.source_slug IS NULL THEN c.state ELSE o.state END"
+    shown_rank = "CASE WHEN o.source_slug IS NULL THEN c.nirf_rank ELSE o.nirf_rank END"
     with app().connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                """
+                f"""
                 SELECT c.source_slug,
                        CASE WHEN o.source_slug IS NULL THEN c.name ELSE COALESCE(NULLIF(o.name, ''), c.name) END AS name,
                        CASE WHEN o.source_slug IS NULL THEN c.city ELSE o.city END AS city,
-                       CASE WHEN o.source_slug IS NULL THEN c.state ELSE o.state END AS state,
+                       {shown_state} AS state,
                        CASE WHEN o.source_slug IS NULL THEN c.fee_label ELSE o.fee_label END AS fee_label,
-                       CASE WHEN o.source_slug IS NULL THEN c.nirf_rank ELSE o.nirf_rank END AS nirf_rank,
+                       {shown_rank} AS nirf_rank,
+                       COALESCE(o.logo, '') AS logo,
                        o.source_slug IS NOT NULL AS edited,
                        COALESCE(o.hidden, false) AS hidden,
                        count(*) OVER() AS total
                 FROM colleges c
                 LEFT JOIN college_overrides o ON o.source_slug = c.source_slug
-                WHERE (%(q)s = '' OR c.name ILIKE %(like)s OR c.city ILIKE %(like)s
-                       OR c.state ILIKE %(like)s OR o.name ILIKE %(like)s)
-                ORDER BY lower(c.name)
+                WHERE (%(q)s = '' OR c.name ILIKE %(like)s OR o.name ILIKE %(like)s)
+                  AND (%(state)s = '' OR {shown_state} = %(state)s)
+                  AND (
+                        %(rank)s = ''
+                        OR (%(rank)s = 'ranked' AND COALESCE({shown_rank}, 0) > 0)
+                        OR (%(rank)s = 'unranked' AND COALESCE({shown_rank}, 0) = 0)
+                      )
+                ORDER BY
+                  CASE WHEN %(rank)s = 'ranked' THEN {shown_rank} END NULLS LAST,
+                  lower(CASE WHEN o.source_slug IS NULL THEN c.name ELSE COALESCE(NULLIF(o.name, ''), c.name) END)
                 LIMIT %(limit)s OFFSET %(offset)s
                 """,
-                {"q": query, "like": f"%{query}%", "limit": size, "offset": (page_no - 1) * size},
+                {
+                    "q": query,
+                    "like": f"%{query}%",
+                    "state": state,
+                    "rank": rank,
+                    "limit": size,
+                    "offset": (page_no - 1) * size,
+                },
             )
             rows = cursor.fetchall()
+            cursor.execute(
+                f"""
+                SELECT DISTINCT {shown_state} AS state
+                FROM colleges c
+                LEFT JOIN college_overrides o ON o.source_slug = c.source_slug
+                WHERE {shown_state} <> ''
+                ORDER BY 1
+                """
+            )
+            states = [row["state"] for row in cursor.fetchall()]
             cursor.execute(
                 """
                 SELECT count(*) AS colleges,
@@ -198,8 +249,8 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
     body_rows = []
     for row in rows:
         marks = []
-        fee = escape(row["fee_label"] or "—")
-        nirf = escape(str(row["nirf_rank"])) if row["nirf_rank"] else "—"
+        fee = escape(row["fee_label"]) if row["fee_label"] else '<span class="muted">—</span>'
+        nirf = escape(str(row["nirf_rank"])) if row["nirf_rank"] else '<span class="muted">—</span>'
         place = escape(", ".join(part for part in (row["city"], row["state"]) if part))
         slug = escape(row["source_slug"])
         if row["hidden"]:
@@ -207,15 +258,20 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
         elif row["edited"]:
             marks.append('<span class="badge">Edited</span>')
         else:
-            marks.append('<span class="badge quiet">Live</span>')
+            marks.append('<span class="badge live">Live</span>')
         words = [word for word in re.split(r"[^A-Za-z0-9]+", row["name"] or "") if word]
         letters = escape("".join(word[0] for word in words[:2]).upper() or "AS")
+        logo = (row.get("logo") or "").strip()
+        if not logo:
+            found, _highest, _nirf, _image = app().card_facts(row["source_slug"])
+            logo = found or ""
+        mark = f'<img src="{escape(logo)}" alt="" onerror="this.remove()">' if logo else ""
         body_rows.append(
             "<tr>"
             f"<td><a class=\"college-line\" href=\"/admin/colleges/{slug}\">"
-            f"<span class=\"mark\">{letters}</span><span><strong>{escape(row['name'])}</strong>"
+            f"<span class=\"mark\">{mark}{letters}</span><span><strong>{escape(row['name'])}</strong>"
             f"<span class=\"muted\">{place}</span></span></a></td>"
-            f"<td>{fee}</td><td>{nirf}</td><td>{''.join(marks)}</td>"
+            f"<td class=\"num\">{fee}</td><td class=\"num\">{nirf}</td><td>{''.join(marks)}</td>"
             "</tr>"
         )
     empty = '<tr><td colspan="4">No college matches that search.</td></tr>'
@@ -223,8 +279,10 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
         "<table><thead><tr><th>College</th><th>Yearly fee</th><th>NIRF</th><th>Status</th></tr></thead>"
         f"<tbody>{''.join(body_rows) or empty}</tbody></table>"
     )
-    prev_link = f'<a class="ghost" href="/admin?q={escape(query)}&page_no={page_no - 1}">Previous</a>' if page_no > 1 else ""
-    next_link = f'<a class="ghost" href="/admin?q={escape(query)}&page_no={page_no + 1}">Next</a>' if page_no < pages else ""
+    prev_link = f'<a class="ghost" href="{list_href(query, rank, state, page_no - 1)}">Previous</a>' if page_no > 1 else ""
+    next_link = f'<a class="ghost" href="{list_href(query, rank, state, page_no + 1)}">Next</a>' if page_no < pages else ""
+    state_options = "".join(choice(name, name, state) for name in states)
+    clear = '<a class="ghost" href="/admin">Clear</a>' if query or rank or state else ""
     return page(
         "Colleges",
         f"""<header class="workspace-head">
@@ -238,9 +296,25 @@ def admin_list(request: Request, q: str = "", page_no: int = 1):
         </section>
         <section class="board">
           <div class="board-head">
-            <form class="search" method="get" action="/admin">
-              <input name="q" value="{escape(query)}" placeholder="Search college, city, or state">
-              <button class="button" type="submit">Search</button>
+            <form class="filters" method="get" action="/admin">
+              <label class="field"><span>Name</span>
+                <input name="q" value="{escape(query)}" placeholder="College name">
+              </label>
+              <label class="field"><span>Rank</span>
+                <select name="rank">
+                  {choice("", "All ranks", rank)}
+                  {choice("ranked", "Has NIRF rank", rank)}
+                  {choice("unranked", "No NIRF rank", rank)}
+                </select>
+              </label>
+              <label class="field"><span>State</span>
+                <select name="state">
+                  {choice("", "All states", state)}
+                  {state_options}
+                </select>
+              </label>
+              <button class="button" type="submit">Apply</button>
+              {clear}
             </form>
             <p>{total:,} shown · page {page_no} of {pages}</p>
           </div>
@@ -730,7 +804,7 @@ def stamp(value):
 
 
 @router.get("/admin/students", response_class=HTMLResponse)
-def admin_students(request: Request):
+def admin_students(request: Request, error: str = ""):
     blocked = guard(request)
     if blocked:
         return blocked
@@ -759,15 +833,15 @@ def admin_students(request: Request):
     def role_action(row):
         label = role_name(row)
         if label == "Admin":
-            return "Admin"
+            return '<span class="badge">Admin</span>'
         next_role = "student" if label == "Staff" else "staff"
         verb = "Make student" if label == "Staff" else "Make staff"
         return (
-            f"{escape(label)} "
-            f"<form method=\"post\" action=\"/admin/students/role\" style=\"display:inline\">"
-            f"<input type=\"hidden\" name=\"mobile\" value=\"{escape(row['mobile'])}\">"
-            f"<input type=\"hidden\" name=\"role\" value=\"{next_role}\">"
-            f"<button type=\"submit\">{verb}</button></form>"
+            f'<span class="role-cell"><span class="badge">{escape(label)}</span>'
+            f'<form class="inline-form" method="post" action="/admin/students/role">'
+            f'<input type="hidden" name="mobile" value="{escape(row["mobile"])}">'
+            f'<input type="hidden" name="role" value="{next_role}">'
+            f'<button class="ghost" type="submit">{verb}</button></form></span>'
         )
 
     body = "".join(
@@ -782,24 +856,41 @@ def admin_students(request: Request):
         </tr>"""
         for row in rows
     ) or '<tr><td colspan="7">No students yet.</td></tr>'
+    note = f'<p class="status" role="alert">{escape(error)}</p>' if error else ""
     return page(
         "Students",
-        f"""<h1>Students</h1>
-        <p class="lede">8320936486 is the admin. The admin can make any other number staff.</p>
+        f"""<header class="workspace-head">
+          <div><p class="eyebrow">Accounts</p><h1>Students</h1></div>
+        </header>
+        {note}
+        <section class="board">
+          <form class="filters" method="post" action="/admin/students/role">
+            <label class="field"><span>Staff name</span><input name="name" maxlength="80" placeholder="Name" required></label>
+            <label class="field"><span>Staff mobile</span><input name="mobile" inputmode="numeric" maxlength="10" placeholder="10-digit number" required></label>
+            <input type="hidden" name="role" value="staff">
+            <button class="button" type="submit">Make staff</button>
+          </form>
+        </section>
+        <section class="board">
         <div class="table-wrap"><table>
           <thead><tr><th>Name</th><th>Mobile</th><th>ID</th><th>Role</th><th>Predictions</th><th>Consent</th><th>Created</th></tr></thead>
           <tbody>{body}</tbody>
-        </table></div>""",
+        </table></div>
+        </section>""",
         current="students",
     )
 
 
 @router.post("/admin/students/role")
-def admin_set_role(request: Request, mobile: str = Form(""), role: str = Form("")):
+def admin_set_role(request: Request, mobile: str = Form(""), role: str = Form(""), name: str = Form("")):
     blocked = guard(request)
     if blocked:
         return blocked
-    app().set_member_role(mobile, role)
+    try:
+        app().set_member_role(mobile, role, name)
+    except HTTPException as exc:
+        detail = exc.detail if isinstance(exc.detail, str) else "That number could not be updated."
+        return RedirectResponse(f"/admin/students?error={quote(detail)}", status_code=303)
     return RedirectResponse("/admin/students", status_code=303)
 
 
@@ -827,14 +918,26 @@ def admin_student(request: Request, public_id: str):
             </tr>"""
         )
     body = "".join(lines) or '<tr><td colspan="7">No predictions yet.</td></tr>'
+    role = "Admin" if student["mobile"] == "8320936486" else ("Staff" if student.get("role") == "staff" else "Student")
+    agreed = stamp(student.get("consent_at")) or "Saved"
     return page(
         student["name"],
-        f"""<p><a href="/admin/students">All students</a></p>
-        <h1>{escape(student["name"])}</h1>
-        <p class="lede">{escape(student["public_id"])} · {escape(student["mobile"])} · {escape(student.get("role") or "student")}</p>
+        f"""<header class="workspace-head">
+          <div>
+            <a class="crumb" href="/admin/students">Students</a>
+            <h1>{escape(student["name"])}</h1>
+          </div>
+        </header>
+        <section class="board profile-sheet">
+          <p><strong>{escape(role)}</strong> · {escape(student["public_id"])}</p>
+          <p>Mobile {escape(student["mobile"])}</p>
+          <p>Consent {escape(agreed)}</p>
+        </section>
+        <section class="board">
         <div class="table-wrap"><table>
           <thead><tr><th>When</th><th>Exam</th><th>Rank</th><th>Category</th><th>Gender</th><th>Home state</th><th>Course</th></tr></thead>
           <tbody>{body}</tbody>
-        </table></div>""",
+        </table></div>
+        </section>""",
         current="students",
     )

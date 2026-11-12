@@ -32,6 +32,8 @@ NOISE = (
     ' or contains(@class,"exploreCollege") or contains(@class,"preferredCollege")'
     ' or contains(@class,"exploreSimilar")]'
 )
+_SCRIPT = re.compile(r"<script\b[^>]*>.*?</script>", re.I | re.S)
+_STYLE = re.compile(r"<style\b[^>]*>.*?</style>", re.I | re.S)
 MAX_CELL = 500
 MAX_SECTION = 2500
 MAX_ROWS = 120
@@ -206,6 +208,21 @@ def usable_image(url):
     if not image or "/None/" in image:
         return ""
     return image
+
+
+def banner_image(text, block):
+    """Campus photo from the college header, then the page preview image."""
+    banner = block.get("banner") if isinstance(block.get("banner"), dict) else {}
+    image = usable_image(banner.get("url"))
+    if image or not text:
+        return image
+    match = re.search(r'(?:property="og:image"|name="twitter:image") content="(https:[^"]+)"', text)
+    return usable_image(match.group(1) if match else "")
+
+
+def visible_html(text):
+    """Drop scripts before parsing. The college files keep a large data script the page does not show."""
+    return _STYLE.sub(" ", _SCRIPT.sub(" ", text))
 
 
 def header_block(text):
@@ -438,9 +455,9 @@ def html_media(slug):
 
 @lru_cache(maxsize=2048)
 def card_facts(slug: str):
-    """Logo, highest package, and NIRF from one saved page. Used by the college list."""
+    """Logo, highest package, NIRF, and campus photo from one saved page. Used by the college list."""
     if not re.fullmatch(r"[a-z0-9-]+", slug or ""):
-        return "", "", None
+        return "", "", None, ""
     folder = COLLEGE_DIR / slug
     path = None
     for page in ("placement", "courses", "admission"):
@@ -449,7 +466,7 @@ def card_facts(slug: str):
             path = candidate
             break
     if path is None:
-        return "", "", None
+        return "", "", None, ""
     text = path.read_text(encoding="utf-8", errors="ignore")
     logo = ""
     spot = text.find("logoBlock")
@@ -463,7 +480,39 @@ def card_facts(slug: str):
     placement = block.get("placement") if isinstance(block.get("placement"), dict) else {}
     highest = money_label(placement.get("highest_package"))
     nirf = rank_value(block, "engineering") or rank_value(block, "overall")
-    return logo, highest, nirf
+    return logo, highest, nirf, banner_image(text, block)
+
+
+def card_profile(slug: str):
+    """Name, photo, and fees from the header text. This does not parse the whole page."""
+    text = ""
+    if re.fullmatch(r"[a-z0-9-]+", slug or ""):
+        folder = COLLEGE_DIR / slug
+        for page in ("courses", "admission", "placement"):
+            path = folder / f"{page}.html"
+            if path.exists() and path.stat().st_size:
+                text = path.read_text(encoding="utf-8", errors="ignore")
+                break
+    block = header_block(text) if text else {}
+    placement = block.get("placement") if isinstance(block.get("placement"), dict) else {}
+    institute = block.get("institute_type") if isinstance(block.get("institute_type"), dict) else {}
+    year = block.get("established_year")
+    image = banner_image(text, block)
+    video = ""
+    found = re.search(r"(?:youtu\.be/|youtube\.com/(?:embed/|watch\?v=|shorts/))([\w-]{11})", text or "")
+    if found and "placeholder" not in found.group(0):
+        video = found.group(1)
+    return {
+        "overview": plain_overview(block.get("overview") or ""),
+        "established_year": str(year) if isinstance(year, int) and year > 1800 else "",
+        "highest_package": money_label(placement.get("highest_package")),
+        "average_package": money_label(placement.get("average_package")),
+        "nirf_overall": rank_value(block, "overall"),
+        "nirf_engineering": rank_value(block, "engineering"),
+        "ownership": clean(institute.get("name") or ""),
+        "image": image,
+        "video_id": video,
+    }
 
 
 @lru_cache(maxsize=512)
@@ -494,13 +543,18 @@ def saved_pages(slug: str):
     faqs = []
     seen = set()
     highlight = blank_highlight()
+    video = ""
     for page in PAGES:
         path = folder / f"{page}.html"
         if not path.exists() or path.stat().st_size == 0:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
+        if not video:
+            found = re.search(r"(?:youtu\.be/|youtube\.com/(?:embed/|watch\?v=|shorts/))([\w-]{11})", text)
+            if found and "placeholder" not in found.group(0):
+                video = found.group(1)
         parser = html.HTMLParser(recover=True, huge_tree=True)
-        document = html.fromstring(text.encode("utf-8"), parser=parser)
+        document = html.fromstring(visible_html(text).encode("utf-8"), parser=parser)
         root = page_root(document)
         merge_highlight(highlight, text, root)
         prepare(root)
@@ -520,4 +574,5 @@ def saved_pages(slug: str):
     pages["highlight"] = highlight
     pages["course_groups"] = groups
     pages["faqs"] = faqs[:24]
+    pages["video_id"] = video
     return pages

@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=46">
+  <link rel="stylesheet" href="/assets/styles.css?v=51">
 </head>
 <body data-page="browse">
   <header class="topbar">
@@ -41,36 +41,44 @@
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
+  <main class="wrap directory">
+    <header class="directory-head">
       <p class="eyebrow">Colleges</p>
-      <h1>Browse the catalogue.</h1>
+      <h1>Top colleges in India</h1>
+      <p class="lede">NIRF rank, yearly fee, and courses. The first colleges load with the page, and more load only when you ask.</p>
       <form class="search" id="find" role="search">
         <label class="sr" for="q">Search colleges</label>
-        <input id="q" type="search" placeholder="College, city, or state" autocomplete="off">
+        <input id="q" type="search" placeholder="Search by college, city, or state" autocomplete="off">
         <button class="button" type="submit">Search</button>
       </form>
-    </section>
-    <div class="filters">
-      <div class="chips" id="chips" role="group" aria-label="Stream">
-        <button class="chip" type="button" data-stream="" aria-pressed="true">All</button>
-        <button class="chip" type="button" data-stream="Engineering">Engineering</button>
-        <button class="chip" type="button" data-stream="Medical">Medical</button>
-        <button class="chip" type="button" data-stream="Management">Management</button>
+    </header>
+    <div class="directory-layout">
+      <aside class="directory-filters" aria-label="Filter colleges">
+        <h2>Filter</h2>
+        <div class="filter-block">
+          <p>Stream</p>
+          <div class="chips" id="chips" role="group" aria-label="Stream">
+            <button class="chip" type="button" data-stream="" aria-pressed="true">All</button>
+            <button class="chip" type="button" data-stream="Engineering">Engineering</button>
+            <button class="chip" type="button" data-stream="Medical">Medical</button>
+            <button class="chip" type="button" data-stream="Management">Management</button>
+          </div>
+        </div>
+        <label class="filter-block" for="sort">Sort
+          <select class="select" id="sort">
+            <option value="name">Name</option>
+            <option value="nirf">NIRF rank</option>
+            <option value="fee">Yearly fee</option>
+          </select>
+        </label>
+      </aside>
+      <div>
+        <p class="status" id="status">Loading colleges…</p>
+        <div class="list" id="list"></div>
+        <div class="pager">
+          <button class="ghost" id="more-colleges" type="button" hidden>Show more colleges</button>
+        </div>
       </div>
-      <label class="sr" for="sort">Sort</label>
-      <select class="select" id="sort">
-        <option value="name">Name</option>
-        <option value="nirf">NIRF rank</option>
-        <option value="fee">Yearly fee</option>
-      </select>
-    </div>
-    <p class="status" id="status">Loading colleges…</p>
-    <div class="list" id="list"></div>
-    <div class="pager">
-      <button class="ghost" id="prev" type="button">Previous</button>
-      <p id="page-label"></p>
-      <button class="ghost" id="next" type="button">Next</button>
     </div>
   </main>
 
@@ -79,6 +87,6 @@
     <a href="/browse" aria-current="page">Colleges</a>
     <a href="/chances">Predict</a>
   </nav>
-  <script src="/assets/app.js?v=44"></script>
+  <script src="/assets/app.js?v=50"></script>
 </body>
 </html>

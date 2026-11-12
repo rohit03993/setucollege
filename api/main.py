@@ -30,9 +30,10 @@ from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
+UI_DIST = ROOT / "frontend" / "dist"
 sys.path.insert(0, str(ROOT / "prediction"))
 
-from dekho_pages import card_facts, college_media, saved_pages  # noqa: E402
+from dekho_pages import card_facts, card_profile, college_media, saved_pages  # noqa: E402
 from institutes import HOME_STATES  # noqa: E402
 from match import family_counts, predict, shortlist  # noqa: E402
 from predict import CATEGORIES  # noqa: E402
@@ -173,15 +174,17 @@ def lpa_text(value):
 
 def attach_card(item):
     has_package = bool(str(item.get("highest_package") or "").strip())
-    if item.get("logo") and has_package and item.get("nirf_rank"):
+    if item.get("logo") and has_package and item.get("nirf_rank") and item.get("image"):
         return
-    logo, highest, nirf = card_facts(item["slug"])
+    logo, highest, nirf, image = card_facts(item["slug"])
     if not item.get("logo"):
         item["logo"] = logo
     if not has_package:
         item["highest_package"] = highest or lpa_text(item.get("highest_package_lpa"))
     if not item.get("nirf_rank") and nirf:
         item["nirf_rank"] = nirf
+    if not item.get("image"):
+        item["image"] = image or ""
 
 
 def college_out(row):
@@ -248,6 +251,14 @@ def site_page(name: str):
     return FileResponse(WEB / name)
 
 
+def ui_page():
+    """Serve the React build when it exists. The old page stays until that build is made."""
+    index = UI_DIST / "index.html"
+    if index.is_file():
+        return FileResponse(index, headers={"Cache-Control": "no-cache"})
+    return None
+
+
 @app.get("/", include_in_schema=False)
 def home_page():
     return site_page("index.html")
@@ -255,12 +266,12 @@ def home_page():
 
 @app.get("/browse", include_in_schema=False)
 def browse_page():
-    return site_page("browse.html")
+    return ui_page() or site_page("browse.html")
 
 
 @app.get("/college/{slug}", include_in_schema=False)
 def college_site(slug: str):
-    return site_page("college.html")
+    return ui_page() or site_page("college.html")
 
 
 @app.get("/chances", include_in_schema=False)
@@ -348,7 +359,7 @@ def list_colleges(
     }
 
 
-def load_college(slug, include_hidden=False):
+def load_college(slug, include_hidden=False, with_pages=True):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
@@ -369,13 +380,34 @@ def load_college(slug, include_hidden=False):
     college["approval"] = profile.get("approval") or ""
     college["rating"] = profile.get("rating") or ""
     college["course_count"] = profile.get("course_count_on_card") or ""
-    media = college_media(slug, college["name"])
+    logo, listed_highest, listed_nirf, _listed_image = card_facts(slug)
+    college["logo"] = logo or ""
+    if not with_pages:
+        quick = card_profile(slug)
+        college["image"] = quick["image"]
+        college["overview"] = quick["overview"] or college["overview"]
+        college["established_year"] = quick["established_year"]
+        college["video_id"] = quick.get("video_id") or ""
+        if quick["ownership"]:
+            college["ownership"] = quick["ownership"]
+        college["average_package"] = str(profile.get("average_package") or "").strip() or quick["average_package"]
+        college["highest_package"] = quick["highest_package"] or listed_highest or lpa_text(college.get("highest_package_lpa"))
+        college["nirf_overall"] = quick["nirf_overall"] or ""
+        if not college["nirf_rank"]:
+            college["nirf_rank"] = quick["nirf_engineering"] or listed_nirf or ""
+        override = fetch_overrides([slug]).get(slug)
+        if override and override["hidden"] and not include_hidden:
+            return None
+        return apply_override(college, override, include_page=False)
     pages = saved_pages(slug)
     highlight = pages.get("highlight") or {}
-    college["logo"] = highlight.get("logo") or ""
-    college["image"] = highlight.get("image") or media["image"]
-    college["video_id"] = media["video_id"]
-    college["overview"] = highlight.get("overview") or ""
+    media = {}
+    if not highlight.get("image") or not highlight.get("highest_package"):
+        media = college_media(slug, college["name"])
+    college["logo"] = highlight.get("logo") or college["logo"]
+    college["image"] = highlight.get("image") or media.get("image") or ""
+    college["video_id"] = pages.get("video_id") or media.get("video_id") or ""
+    college["overview"] = highlight.get("overview") or college["overview"]
     college["established_year"] = highlight.get("established_year") or ""
     college["reviews"] = highlight.get("reviews") or ""
     college["nirf_overall"] = highlight.get("nirf_overall") or ""
@@ -384,11 +416,11 @@ def load_college(slug, include_hidden=False):
     if highlight.get("ownership"):
         college["ownership"] = highlight["ownership"]
     listed_package = str(profile.get("average_package") or "").strip()
-    college["average_package"] = listed_package or highlight.get("average_package") or media["average_package"]
-    college["highest_package"] = highlight.get("highest_package") or media["highest_package"]
+    college["average_package"] = listed_package or highlight.get("average_package") or media.get("average_package") or ""
+    college["highest_package"] = highlight.get("highest_package") or listed_highest or media.get("highest_package") or ""
     if not college["nirf_rank"]:
-        college["nirf_rank"] = highlight.get("nirf_engineering") or media["nirf_rank"] or ""
-        college["nirf_year"] = media["nirf_year"]
+        college["nirf_rank"] = highlight.get("nirf_engineering") or media.get("nirf_rank") or listed_nirf or ""
+        college["nirf_year"] = media.get("nirf_year") or college.get("nirf_year")
     college["pages"] = pages
     override = fetch_overrides([slug]).get(slug)
     if override and override["hidden"] and not include_hidden:
@@ -397,8 +429,8 @@ def load_college(slug, include_hidden=False):
 
 
 @app.get("/colleges/{slug}")
-def college_page(slug: str):
-    college = load_college(slug)
+def college_page(slug: str, view: str = ""):
+    college = load_college(slug, with_pages=view != "card")
     if college is None:
         raise HTTPException(status_code=404, detail="College not found.")
     return college
@@ -426,8 +458,8 @@ class StudentIn(BaseModel):
 
 CONSENT_TEXT = (
     "I agree that Admission Setu can save my name and mobile number "
-    "to show this result in my name and keep this prediction. "
-    "I can withdraw this on the result page."
+    "with this prediction in my account. "
+    "I can withdraw this from my account."
 )
 
 
@@ -542,7 +574,7 @@ def find_student(public_id):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                "SELECT id, public_id, name, mobile, role FROM students WHERE public_id = %(public_id)s",
+                "SELECT id, public_id, name, mobile, role, consent_at FROM students WHERE public_id = %(public_id)s",
                 {"public_id": public_id},
             )
             return cursor.fetchone()
@@ -777,6 +809,8 @@ def student_account(public_id: str):
     if student is None:
         raise HTTPException(status_code=404, detail="This ID was not found.")
     payload = student_public(student)
+    when = student.get("consent_at")
+    payload["consent_at"] = when.isoformat() if when else ""
     payload["predictions"] = prediction_rows(student["id"])
     return payload
 
@@ -1020,7 +1054,7 @@ def predict_colleges(body: PredictIn):
         slug = row["slug"]
         if slug not in facts:
             if slug:
-                logo, highest, nirf = card_facts(slug)
+                logo, highest, nirf, _image = card_facts(slug)
                 facts[slug] = (logo or "", highest or "", nirf)
             else:
                 facts[slug] = ("", "", None)
@@ -1051,3 +1085,12 @@ from admin import router as admin_router  # noqa: E402
 
 app.include_router(admin_router)
 app.mount("/assets", StaticFiles(directory=WEB), name="assets")
+
+
+@app.get("/ui/{file_path:path}", include_in_schema=False)
+def ui_file(file_path: str):
+    root = UI_DIST.resolve()
+    file = (root / file_path).resolve()
+    if not file.is_relative_to(root) or not file.is_file():
+        raise HTTPException(status_code=404, detail="Not found.")
+    return FileResponse(file)
