@@ -136,6 +136,30 @@ img { max-width: 100%; }
 }
 .account-actions { display: flex; gap: 8px; }
 .account-actions .ghost { flex: 1; }
+.role-badge {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e8eef8;
+  color: #1d4e89;
+}
+.role-badge[data-role="admin"] { background: #10243f; color: #fff; }
+.role-badge[data-role="staff"] { background: #e7f6ee; color: #0d6b3a; }
+.staff-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.staff-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.staff-list small { display: block; color: var(--muted); }
+.staff-list .ghost { flex: 0 0 auto; }
 .history-list { list-style: none; margin: 0; padding: 0 16px 8px; }
 .history-list li { padding: 12px 0; border-top: 1px solid var(--line); }
 .history-list strong, .history-list span, .history-list small { display: block; }

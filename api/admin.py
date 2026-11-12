@@ -739,7 +739,7 @@ def admin_students(request: Request):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT s.public_id, s.name, s.mobile, s.consent_at, s.created_at,
+                SELECT s.public_id, s.name, s.mobile, s.role, s.consent_at, s.created_at,
                        count(p.id) AS predictions
                 FROM students s
                 LEFT JOIN predictions p ON p.student_id = s.id
@@ -749,27 +749,58 @@ def admin_students(request: Request):
                 """
             )
             rows = cursor.fetchall()
+    def role_name(row):
+        if row["mobile"] == "8320936486":
+            return "Admin"
+        if row.get("role") == "staff":
+            return "Staff"
+        return "Student"
+
+    def role_action(row):
+        label = role_name(row)
+        if label == "Admin":
+            return "Admin"
+        next_role = "student" if label == "Staff" else "staff"
+        verb = "Make student" if label == "Staff" else "Make staff"
+        return (
+            f"{escape(label)} "
+            f"<form method=\"post\" action=\"/admin/students/role\" style=\"display:inline\">"
+            f"<input type=\"hidden\" name=\"mobile\" value=\"{escape(row['mobile'])}\">"
+            f"<input type=\"hidden\" name=\"role\" value=\"{next_role}\">"
+            f"<button type=\"submit\">{verb}</button></form>"
+        )
+
     body = "".join(
         f"""<tr>
           <td><a href="/admin/students/{escape(row["public_id"])}">{escape(row["name"])}</a></td>
           <td>{escape(row["mobile"])}</td>
           <td>{escape(row["public_id"])}</td>
+          <td>{role_action(row)}</td>
           <td>{row["predictions"]}</td>
           <td>{escape(stamp(row["consent_at"]))}</td>
           <td>{escape(stamp(row["created_at"]))}</td>
         </tr>"""
         for row in rows
-    ) or '<tr><td colspan="6">No students yet.</td></tr>'
+    ) or '<tr><td colspan="7">No students yet.</td></tr>'
     return page(
         "Students",
         f"""<h1>Students</h1>
-        <p class="lede">Name, mobile number, ID, and how many predictions each student has saved.</p>
+        <p class="lede">8320936486 is the admin. The admin can make any other number staff.</p>
         <div class="table-wrap"><table>
-          <thead><tr><th>Name</th><th>Mobile</th><th>ID</th><th>Predictions</th><th>Consent</th><th>Created</th></tr></thead>
+          <thead><tr><th>Name</th><th>Mobile</th><th>ID</th><th>Role</th><th>Predictions</th><th>Consent</th><th>Created</th></tr></thead>
           <tbody>{body}</tbody>
         </table></div>""",
         current="students",
     )
+
+
+@router.post("/admin/students/role")
+def admin_set_role(request: Request, mobile: str = Form(""), role: str = Form("")):
+    blocked = guard(request)
+    if blocked:
+        return blocked
+    app().set_member_role(mobile, role)
+    return RedirectResponse("/admin/students", status_code=303)
 
 
 @router.get("/admin/students/{public_id}", response_class=HTMLResponse)
@@ -800,7 +831,7 @@ def admin_student(request: Request, public_id: str):
         student["name"],
         f"""<p><a href="/admin/students">All students</a></p>
         <h1>{escape(student["name"])}</h1>
-        <p class="lede">{escape(student["public_id"])} · {escape(student["mobile"])}</p>
+        <p class="lede">{escape(student["public_id"])} · {escape(student["mobile"])} · {escape(student.get("role") or "student")}</p>
         <div class="table-wrap"><table>
           <thead><tr><th>When</th><th>Exam</th><th>Rank</th><th>Category</th><th>Gender</th><th>Home state</th><th>Course</th></tr></thead>
           <tbody>{body}</tbody>

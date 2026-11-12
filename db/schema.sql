@@ -95,11 +95,13 @@ CREATE TABLE IF NOT EXISTS students (
     mobile          text NOT NULL UNIQUE,
     consent_at      timestamptz,
     consent_text    text NOT NULL DEFAULT '',
+    role            text NOT NULL DEFAULT 'student',
     created_at      timestamptz NOT NULL DEFAULT now()
 );
 
 ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_at timestamptz;
 ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_text text NOT NULL DEFAULT '';
+ALTER TABLE students ADD COLUMN IF NOT EXISTS role text NOT NULL DEFAULT 'student';
 
 -- One row is one click on Predict colleges.
 CREATE TABLE IF NOT EXISTS predictions (

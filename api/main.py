@@ -9,14 +9,17 @@ From the project folder:
     python -m uvicorn main:app --app-dir api --host 127.0.0.1 --port 8000
 """
 
+import hashlib
+import hmac
 import os
 import re
 import secrets
 import sys
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -471,6 +474,8 @@ def ensure_students():
         """,
         "ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_at timestamptz",
         "ALTER TABLE students ADD COLUMN IF NOT EXISTS consent_text text NOT NULL DEFAULT ''",
+        "ALTER TABLE students ADD COLUMN IF NOT EXISTS role text NOT NULL DEFAULT 'student'",
+        "UPDATE students SET role = 'admin' WHERE mobile = '8320936486'",
         """
         CREATE TABLE IF NOT EXISTS predictions (
             id          bigserial PRIMARY KEY,
@@ -505,19 +510,25 @@ def upsert_student(name, mobile):
                 with conn.cursor() as cursor:
                     cursor.execute(
                         """
-                        INSERT INTO students (public_id, name, mobile, consent_at, consent_text)
-                        VALUES (%(public_id)s, %(name)s, %(mobile)s, now(), %(consent_text)s)
+                        INSERT INTO students (public_id, name, mobile, consent_at, consent_text, role)
+                        VALUES (%(public_id)s, %(name)s, %(mobile)s, now(), %(consent_text)s, %(role)s)
                         ON CONFLICT (mobile) DO UPDATE
                         SET name = EXCLUDED.name,
                             consent_at = now(),
-                            consent_text = EXCLUDED.consent_text
-                        RETURNING public_id, name, mobile
+                            consent_text = EXCLUDED.consent_text,
+                            role = CASE
+                                WHEN EXCLUDED.role = 'admin' THEN 'admin'
+                                WHEN students.role = 'staff' THEN 'staff'
+                                ELSE students.role
+                            END
+                        RETURNING public_id, name, mobile, role
                         """,
                         {
                             "public_id": new_public_id(),
                             "name": name,
                             "mobile": mobile,
                             "consent_text": CONSENT_TEXT,
+                            "role": "admin" if mobile == ADMIN_MOBILE else "student",
                         },
                     )
                     return cursor.fetchone()
@@ -531,7 +542,7 @@ def find_student(public_id):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                "SELECT id, public_id, name, mobile FROM students WHERE public_id = %(public_id)s",
+                "SELECT id, public_id, name, mobile, role FROM students WHERE public_id = %(public_id)s",
                 {"public_id": public_id},
             )
             return cursor.fetchone()
@@ -542,14 +553,86 @@ def find_student_mobile(mobile):
     with connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
-                "SELECT id, public_id, name, mobile FROM students WHERE mobile = %(mobile)s",
+                "SELECT id, public_id, name, mobile, role FROM students WHERE mobile = %(mobile)s",
                 {"mobile": mobile},
             )
             return cursor.fetchone()
 
 
+ADMIN_MOBILE = "8320936486"
+STUDENT_COOKIE = "setu_session"
+
+
+def session_secret():
+    return os.environ.get("ADMIN_PASSWORD", "").strip() or "admission-setu-session"
+
+
+def sign_session(public_id):
+    mac = hmac.new(session_secret().encode(), public_id.encode(), hashlib.sha256).hexdigest()
+    return f"{public_id}.{mac}"
+
+
+def account_role(row):
+    if not row:
+        return "student"
+    if row.get("mobile") == ADMIN_MOBILE:
+        return "admin"
+    if row.get("role") == "staff":
+        return "staff"
+    return "student"
+
+
 def student_public(row):
-    return {"id": row["public_id"], "name": row["name"], "mobile": row["mobile"]}
+    return {
+        "id": row["public_id"],
+        "name": row["name"],
+        "mobile": row["mobile"],
+        "role": account_role(row),
+    }
+
+
+def write_session(response, row):
+    response.set_cookie(
+        STUDENT_COOKIE,
+        sign_session(row["public_id"]),
+        max_age=60 * 60 * 24 * 30,
+        httponly=True,
+        samesite="lax",
+        path="/",
+    )
+    if account_role(row) != "admin":
+        return
+    import admin as admin_mod
+
+    if not admin_mod.password():
+        return
+    issued = str(int(time.time()))
+    response.set_cookie(
+        admin_mod.COOKIE,
+        admin_mod.sign(issued),
+        max_age=admin_mod.MAX_AGE,
+        httponly=True,
+        samesite="lax",
+        path="/",
+    )
+
+
+def current_account(request: Request):
+    raw = request.cookies.get(STUDENT_COOKIE, "")
+    if not raw or "." not in raw:
+        return None
+    public_id, mac = raw.rsplit(".", 1)
+    expected = sign_session(public_id).rsplit(".", 1)[1]
+    if not hmac.compare_digest(expected, mac):
+        return None
+    return find_student(public_id)
+
+
+def require_admin(request: Request):
+    student = current_account(request)
+    if student is None or account_role(student) != "admin":
+        raise HTTPException(status_code=401, detail="Only the admin can do this.")
+    return student
 
 
 class LoginIn(BaseModel):
@@ -574,19 +657,95 @@ def request_otp(body: MobileIn):
 
 
 @app.post("/auth/login")
-def login_student(body: LoginIn):
+def login_student(body: LoginIn, response: Response):
     mobile = clean_mobile(body.mobile)
     if body.otp.strip() != WHATSAPP_OTP:
         raise HTTPException(status_code=400, detail="That code is not correct.")
     found = find_student_mobile(mobile)
     if found:
+        write_session(response, found)
         return student_public(found)
     if not body.name.strip():
         return {"needs_name": True}
     if not body.consent:
         raise HTTPException(status_code=400, detail="Tick the box to agree before we save your name and mobile number.")
     row = upsert_student(clean_name(body.name), mobile)
+    write_session(response, row)
     return student_public(row)
+
+
+@app.post("/auth/logout")
+def logout_student(response: Response):
+    response.delete_cookie(STUDENT_COOKIE, path="/")
+    response.delete_cookie("setu_admin", path="/")
+    return {"ok": True}
+
+
+class StaffIn(BaseModel):
+    name: str = ""
+    mobile: str
+    role: str = "staff"
+
+
+def set_member_role(mobile, role, name=""):
+    ensure_students()
+    mobile = clean_mobile(mobile)
+    if mobile == ADMIN_MOBILE:
+        raise HTTPException(status_code=400, detail="That number is the admin.")
+    if role not in ("staff", "student"):
+        raise HTTPException(status_code=400, detail="Choose staff or student.")
+    found = find_student_mobile(mobile)
+    if found is None:
+        if role != "staff":
+            raise HTTPException(status_code=404, detail="That number is not a student yet.")
+        if not str(name).strip():
+            raise HTTPException(status_code=400, detail="Enter the staff name.")
+        upsert_student(clean_name(name), mobile)
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                UPDATE students
+                SET role = %(role)s,
+                    name = CASE WHEN %(name)s = '' THEN name ELSE %(name)s END
+                WHERE mobile = %(mobile)s AND mobile <> %(admin)s
+                RETURNING public_id, name, mobile, role
+                """,
+                {
+                    "role": role,
+                    "name": str(name).strip(),
+                    "mobile": mobile,
+                    "admin": ADMIN_MOBILE,
+                },
+            )
+            row = cursor.fetchone()
+    if row is None:
+        raise HTTPException(status_code=400, detail="That number could not be updated.")
+    return row
+
+
+@app.get("/team")
+def list_staff(request: Request):
+    require_admin(request)
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT public_id, name, mobile, role
+                FROM students
+                WHERE role = 'staff'
+                ORDER BY lower(name)
+                """
+            )
+            rows = cursor.fetchall()
+    return {"staff": [student_public(row) for row in rows]}
+
+
+@app.post("/team")
+def save_staff(body: StaffIn, request: Request):
+    require_admin(request)
+    role = "staff" if body.role != "student" else "student"
+    return student_public(set_member_role(body.mobile, role, body.name))
 
 
 def prediction_rows(student_id):
@@ -634,6 +793,10 @@ def update_student(public_id: str, body: ProfileIn):
         raise HTTPException(status_code=404, detail="This ID was not found.")
     name = clean_name(body.name)
     mobile = clean_mobile(body.mobile)
+    if mobile == ADMIN_MOBILE and student["mobile"] != ADMIN_MOBILE:
+        raise HTTPException(status_code=400, detail="That number is the admin.")
+    if student["mobile"] == ADMIN_MOBILE and mobile != ADMIN_MOBILE:
+        raise HTTPException(status_code=400, detail="The admin number stays on this account.")
     try:
         with connection() as conn:
             with conn.cursor() as cursor:
@@ -642,7 +805,7 @@ def update_student(public_id: str, body: ProfileIn):
                     UPDATE students
                     SET name = %(name)s, mobile = %(mobile)s
                     WHERE public_id = %(public_id)s
-                    RETURNING public_id, name, mobile
+                    RETURNING public_id, name, mobile, role
                     """,
                     {"name": name, "mobile": mobile, "public_id": student["public_id"]},
                 )

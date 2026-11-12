@@ -1106,27 +1106,36 @@ async function initChances() {
 function initAccount() {
   const dialog = document.createElement("dialog");
   dialog.className = "student-dialog account-dialog";
-  dialog.innerHTML = `<form id="account-form">
+  dialog.innerHTML = `<form id="account-form" novalidate>
       <div class="student-head">
         <h2>Log in</h2>
         <button class="student-close" type="button" data-account-close>Close</button>
       </div>
       <div data-step="mobile">
         <p>Enter your mobile number. The code arrives on WhatsApp.</p>
-        <label class="field"><span>Mobile number</span><input name="mobile" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit Indian number" required></label>
+        <label class="field"><span>Mobile number</span><input name="mobile" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit Indian number"></label>
       </div>
       <div data-step="otp" hidden>
         <p>Enter the 4-digit WhatsApp code. Until WhatsApp is connected, the code is 1234.</p>
-        <label class="field"><span>Code</span><input name="otp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="1234" required></label>
+        <label class="field"><span>Code</span><input name="otp" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="1234"></label>
       </div>
       <div data-step="name" hidden>
         <p>This number is new. Your name is shown on the result, and the mobile number creates your ID.</p>
-        <label class="field"><span>Name</span><input name="name" maxlength="80" autocomplete="name" placeholder="Your name" required></label>
+        <label class="field"><span>Name</span><input name="name" maxlength="80" autocomplete="name" placeholder="Your name"></label>
         <label class="consent-row"><input type="checkbox" name="consent" value="yes"><span>I agree that Admission Setu can save my name and mobile number to show this result in my name and keep this prediction. I can withdraw this on the result page.</span></label>
         <p class="consent-note">This number is not used for calls or messages. Withdraw deletes your name, number, and saved predictions. You can also complain to the Data Protection Board of India.</p>
       </div>
       <div data-step="home" hidden>
-        <p class="account-id"><strong data-account-name></strong><span data-account-id></span></p>
+        <p class="account-id"><strong data-account-name></strong><span class="role-badge" data-account-role data-role="student">Student</span><span data-account-id></span></p>
+        <p data-admin-desk hidden><a class="button" href="/admin">Open college desk</a></p>
+        <section data-team hidden>
+          <h3>Staff</h3>
+          <p class="consent-note">Add a staff number. That person logs in with their mobile and the WhatsApp code. Only this admin number can add or remove staff.</p>
+          <label class="field"><span>Staff name</span><input name="staff_name" maxlength="80" placeholder="Name"></label>
+          <label class="field"><span>Staff mobile</span><input name="staff_mobile" inputmode="numeric" maxlength="10" placeholder="10-digit number"></label>
+          <button class="button" type="button" data-add-staff>Make staff</button>
+          <div data-staff-list></div>
+        </section>
         <h3>Your predictions</h3>
         <div data-account-history></div>
         <div class="account-actions">
@@ -1136,8 +1145,8 @@ function initAccount() {
       </div>
       <div data-step="edit" hidden>
         <p>Your ID stays the same.</p>
-        <label class="field"><span>Name</span><input name="edit_name" maxlength="80" autocomplete="name" required></label>
-        <label class="field"><span>Mobile number</span><input name="edit_mobile" inputmode="numeric" maxlength="10" autocomplete="tel" required></label>
+        <label class="field"><span>Name</span><input name="edit_name" maxlength="80" autocomplete="name"></label>
+        <label class="field"><span>Mobile number</span><input name="edit_mobile" inputmode="numeric" maxlength="10" autocomplete="tel"></label>
       </div>
       <p class="status" data-account-error></p>
       <button class="button" type="submit" data-account-submit>Continue</button>
@@ -1182,18 +1191,58 @@ function initAccount() {
     submit.disabled = step === "name" && !form.elements.consent.checked;
   }
 
-  async function showHome(student) {
-    show("home");
+  function paintAccount(student) {
+    const role = student.role === "admin" || student.role === "staff" ? student.role : "student";
+    const labels = { admin: "Admin", staff: "Staff", student: "Student" };
     dialog.querySelector("[data-account-name]").textContent = student.name;
     dialog.querySelector("[data-account-id]").textContent = student.id;
+    const badge = dialog.querySelector("[data-account-role]");
+    badge.textContent = labels[role];
+    badge.dataset.role = role;
+    dialog.querySelector("[data-admin-desk]").hidden = role !== "admin";
+    dialog.querySelector("[data-team]").hidden = role !== "admin";
+  }
+
+  function staffList(rows) {
+    if (!rows.length) return `<p class="consent-note">No staff yet.</p>`;
+    return `<ul class="staff-list">${rows.map((row) => `
+      <li>
+        <span><strong>${esc(row.name)}</strong><small>${esc(row.mobile)}</small></span>
+        <button class="ghost" type="button" data-drop-staff="${esc(row.mobile)}">Remove</button>
+      </li>`).join("")}</ul>`;
+  }
+
+  async function loadStaff() {
+    const list = dialog.querySelector("[data-staff-list]");
+    list.innerHTML = `<p class="consent-note">Loading staff…</p>`;
+    try {
+      const data = await api("/team");
+      list.innerHTML = staffList(data.staff || []);
+    } catch (failure) {
+      list.innerHTML = `<p class="consent-note">${esc(failure.message)} Log out and log in again with the admin number.</p>`;
+    }
+  }
+
+  async function showHome(student) {
+    show("home");
+    paintAccount(student);
     const list = dialog.querySelector("[data-account-history]");
     list.innerHTML = `<p class="consent-note">Loading history…</p>`;
     try {
       const data = await api(`/students/${encodeURIComponent(student.id)}`);
-      if (data.mobile) student = { ...student, mobile: data.mobile };
+      student = {
+        id: data.id,
+        name: data.name,
+        mobile: data.mobile,
+        role: data.role || student.role || "student"
+      };
       saveStudent(student);
+      paintAccount(student);
+      paintMenu();
+      if (student.role === "admin") loadStaff();
       list.innerHTML = historyList(data.predictions);
     } catch (failure) {
+      if ((student.role || "") === "admin") loadStaff();
       list.innerHTML = `<p class="consent-note">${esc(failure.message)}</p>`;
     }
   }
@@ -1223,13 +1272,14 @@ function initAccount() {
     error.removeAttribute("role");
     const student = loadStudent();
     if (mode === "edit" && student) {
-      if (!student.mobile) {
-        const data = await api(`/students/${encodeURIComponent(student.id)}`);
-        student = { id: data.id, name: data.name, mobile: data.mobile };
-        saveStudent(student);
+      let current = student;
+      if (!current.mobile) {
+        const data = await api(`/students/${encodeURIComponent(current.id)}`);
+        current = { id: data.id, name: data.name, mobile: data.mobile, role: data.role || "student" };
+        saveStudent(current);
       }
-      form.elements.edit_name.value = student.name || "";
-      form.elements.edit_mobile.value = student.mobile || "";
+      form.elements.edit_name.value = current.name || "";
+      form.elements.edit_mobile.value = current.mobile || "";
       show("edit");
     } else if (student && mode !== "login") {
       await showHome(student);
@@ -1245,6 +1295,9 @@ function initAccount() {
   });
   form.elements.edit_mobile.addEventListener("input", () => {
     form.elements.edit_mobile.value = digitsOnly(form.elements.edit_mobile.value);
+  });
+  form.elements.staff_mobile.addEventListener("input", () => {
+    form.elements.staff_mobile.value = digitsOnly(form.elements.staff_mobile.value);
   });
   form.elements.otp.addEventListener("input", () => {
     form.elements.otp.value = form.elements.otp.value.replace(/\D/g, "").slice(0, 4);
@@ -1262,6 +1315,41 @@ function initAccount() {
     show("edit");
   });
   dialog.querySelector("[data-account-logout]").addEventListener("click", () => window.setuLogout());
+  dialog.querySelector("[data-add-staff]").addEventListener("click", async () => {
+    error.textContent = "";
+    const staffMobile = digitsOnly(form.elements.staff_mobile.value);
+    if (!form.elements.staff_name.value.trim() || !/^[6-9]\d{9}$/.test(staffMobile)) {
+      fail("Enter the staff name and a 10-digit Indian mobile number.");
+      return;
+    }
+    try {
+      await api("/team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: form.elements.staff_name.value, mobile: staffMobile, role: "staff" })
+      });
+      form.elements.staff_name.value = "";
+      form.elements.staff_mobile.value = "";
+      await loadStaff();
+    } catch (failure) {
+      fail(failure.message);
+    }
+  });
+  dialog.querySelector("[data-staff-list]").addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-drop-staff]");
+    if (!button) return;
+    error.textContent = "";
+    try {
+      await api("/team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mobile: button.dataset.dropStaff, role: "student" })
+      });
+      await loadStaff();
+    } catch (failure) {
+      fail(failure.message);
+    }
+  });
   document.addEventListener("click", (event) => {
     if (event.target.closest("[data-account-open]")) open(null, loadStudent() ? "home" : "login");
   });
@@ -1271,6 +1359,7 @@ function initAccount() {
     error.textContent = "";
     error.removeAttribute("role");
     const step = dialog.querySelector("[data-step]:not([hidden])").dataset.step;
+    if (step === "home") return;
     try {
       if (step === "mobile") {
         mobile = digitsOnly(form.elements.mobile.value);
@@ -1332,6 +1421,7 @@ function initAccount() {
 
   window.setuOpenAccount = open;
   window.setuLogout = () => {
+    api("/auth/logout", { method: "POST" }).catch(() => {});
     localStorage.removeItem(STUDENT_KEY);
     paintMenu();
     pending = null;
