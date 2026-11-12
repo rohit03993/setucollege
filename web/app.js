@@ -715,6 +715,12 @@ async function initCollege() {
 
 async function initChances() {
   const form = document.querySelector("#predict");
+  const wanted = new URLSearchParams(location.search).get("exam");
+  if (wanted && form) {
+    form.querySelectorAll('input[name="exam"]').forEach((input) => {
+      if (input.value === wanted) input.checked = true;
+    });
+  }
   const courseWrap = document.querySelector("#course-wrap");
   const stateSelect = document.querySelector("#home_state");
   const results = document.querySelector("#results");
@@ -1355,8 +1361,48 @@ function initAccount() {
   };
 }
 
+const SOCIAL_ICONS = {
+  Instagram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 4.5A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5zm5.25-.95a1.05 1.05 0 1 0 1.05 1.05 1.05 1.05 0 0 0-1.05-1.05zM12 9.2A2.8 2.8 0 1 1 9.2 12 2.8 2.8 0 0 1 12 9.2z"/></svg>',
+  YouTube: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 12.2s0-3.2-.4-4.6a3 3 0 0 0-2.1-2.1C18.9 5 12 5 12 5s-6.9 0-8.5.5a3 3 0 0 0-2.1 2.1C1 9 1 12.2 1 12.2s0 3.2.4 4.6a3 3 0 0 0 2.1 2.1C5.1 19.4 12 19.4 12 19.4s6.9 0 8.5-.5a3 3 0 0 0 2.1-2.1c.4-1.4.4-4.6.4-4.6zM9.8 15.5v-6.6l6.2 3.3z"/></svg>',
+  Facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z"/></svg>',
+  LinkedIn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3a2 2 0 1 0 .01 4.01A2 2 0 0 0 5 3zM3 8h4v13H3zm6 0h3.8v1.8h.1A4.2 4.2 0 0 1 17 8c4 0 4.7 2.6 4.7 6v7H18v-6.2c0-1.5 0-3.4-2.1-3.4s-2.4 1.6-2.4 3.3V21H9z"/></svg>'
+};
+
+function initFooter() {
+  const foot = document.querySelector(".site-foot");
+  if (!foot) return;
+  api("/site").then((site) => {
+    const about = foot.querySelector("[data-foot-about]");
+    if (about && site.about) about.textContent = site.about;
+    const contact = foot.querySelector("[data-foot-contact]");
+    if (contact) {
+      const bits = [];
+      if (site.email) bits.push(`<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>`);
+      if (site.phone) bits.push(`<a href="tel:${esc(String(site.phone).replace(/[^\d+]/g, ""))}">${esc(site.phone)}</a>`);
+      if (site.whatsapp) bits.push(`<a href="https://wa.me/91${esc(site.whatsapp)}" target="_blank" rel="noopener">WhatsApp</a>`);
+      if (site.address) bits.push(`<p>${esc(site.address)}</p>`);
+      if (bits.length) {
+        contact.innerHTML = `<h2>Contact</h2>${bits.join("")}`;
+        contact.hidden = false;
+      }
+    }
+    const social = foot.querySelector("[data-foot-social]");
+    if (!social) return;
+    const links = [
+      ["Instagram", site.instagram],
+      ["YouTube", site.youtube],
+      ["Facebook", site.facebook],
+      ["LinkedIn", site.linkedin]
+    ].filter((item) => item[1]);
+    social.innerHTML = links.map(([label, href]) => (
+      `<a href="${esc(href)}" aria-label="${label}" target="_blank" rel="noopener">${SOCIAL_ICONS[label]}</a>`
+    )).join("");
+  }).catch(() => {});
+}
+
 const page = document.body.dataset.page;
 initAccount();
+initFooter();
 if (page === "home") initHome();
 if (page === "browse") initBrowse();
 if (page === "college") initCollege();

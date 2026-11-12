@@ -122,3 +122,19 @@ CREATE INDEX IF NOT EXISTS courses_college ON courses (college_id);
 CREATE INDEX IF NOT EXISTS seats_lookup ON seats (exam, category, preparatory, closing_rank);
 CREATE INDEX IF NOT EXISTS seats_institute ON seats (institute);
 CREATE INDEX IF NOT EXISTS predictions_student ON predictions (student_id, created_at DESC);
+
+-- One row for the public footer. Empty contact fields stay off the site.
+CREATE TABLE IF NOT EXISTS site_settings (
+    id         smallint PRIMARY KEY DEFAULT 1,
+    about      text NOT NULL DEFAULT '',
+    note       text NOT NULL DEFAULT '',
+    email      text NOT NULL DEFAULT '',
+    phone      text NOT NULL DEFAULT '',
+    whatsapp   text NOT NULL DEFAULT '',
+    address    text NOT NULL DEFAULT '',
+    instagram  text NOT NULL DEFAULT '',
+    youtube    text NOT NULL DEFAULT '',
+    facebook   text NOT NULL DEFAULT '',
+    linkedin   text NOT NULL DEFAULT '',
+    updated_at timestamptz NOT NULL DEFAULT now()
+);

@@ -231,10 +231,20 @@ body.dash {
   .grid-2 { grid-template-columns: 1fr 1fr; }
   .field.wide { grid-column: 1 / -1; }
 }
+.site-form { display: grid; gap: 22px; padding: 20px; }
+.site-form section { display: grid; gap: 12px; }
+.site-form h2 { margin: 0; font-size: 18px; }
+.site-form .lede { margin: 0; }
+.site-form .pair { display: grid; gap: 12px; }
+.site-form textarea { min-height: 88px; }
+@media (min-width: 800px) {
+  .site-form .pair { grid-template-columns: 1fr 1fr; }
+  .site-form .field.wide { grid-column: 1 / -1; }
+}
 @media (max-width: 899px) {
   .side { flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; }
   .side-label { display: none; }
-  .side nav { display: flex; flex: 1; }
+  .side nav { display: flex; flex: 1; flex-wrap: wrap; }
   .side-logout { margin-top: 0; }
 }
 @media (max-width: 720px) {

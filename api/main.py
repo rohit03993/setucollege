@@ -485,6 +485,138 @@ def new_public_id():
 
 
 _students_ready = False
+_site_ready = False
+
+DEFAULT_ABOUT = (
+    "Right College. Right Course. Right Future. "
+    "Compare fees, NIRF rank, and last year's official JEE and NEET closing ranks."
+)
+def ensure_site():
+    """Create the footer settings row on the database this site already uses."""
+    global _site_ready
+    if _site_ready:
+        return
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS site_settings (
+                    id         smallint PRIMARY KEY DEFAULT 1,
+                    about      text NOT NULL DEFAULT '',
+                    note       text NOT NULL DEFAULT '',
+                    email      text NOT NULL DEFAULT '',
+                    phone      text NOT NULL DEFAULT '',
+                    whatsapp   text NOT NULL DEFAULT '',
+                    address    text NOT NULL DEFAULT '',
+                    instagram  text NOT NULL DEFAULT '',
+                    youtube    text NOT NULL DEFAULT '',
+                    facebook   text NOT NULL DEFAULT '',
+                    linkedin   text NOT NULL DEFAULT '',
+                    updated_at timestamptz NOT NULL DEFAULT now()
+                )
+                """
+            )
+    _site_ready = True
+
+
+def site_row():
+    ensure_site()
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM site_settings WHERE id = 1")
+            return cursor.fetchone() or {}
+
+
+def public_site():
+    row = site_row()
+
+    def text(key, default=""):
+        value = str(row.get(key) or "").strip()
+        return value or default
+
+    return {
+        "about": text("about", DEFAULT_ABOUT),
+        "note": text("note"),
+        "email": text("email"),
+        "phone": text("phone"),
+        "whatsapp": text("whatsapp"),
+        "address": str(row.get("address") or "").strip(),
+        "instagram": text("instagram"),
+        "youtube": text("youtube"),
+        "facebook": text("facebook"),
+        "linkedin": text("linkedin"),
+    }
+
+
+def _site_link(value, label):
+    value = " ".join(str(value or "").split())
+    if not value:
+        return ""
+    if not value.startswith(("http://", "https://")):
+        value = "https://" + value
+    if not re.fullmatch(r"https?://[^\s]{3,190}", value):
+        raise HTTPException(status_code=400, detail=f"Enter a {label} link, or leave it blank.")
+    return value
+
+
+def save_site(form):
+    about = " ".join(str(form.get("about") or "").split())[:400]
+    note = " ".join(str(form.get("note") or "").split())[:240]
+    email = " ".join(str(form.get("email") or "").split())[:120]
+    phone = " ".join(str(form.get("phone") or "").split())[:24]
+    address = str(form.get("address") or "").replace("\r\n", "\n").strip()[:200]
+    if email and not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        raise HTTPException(status_code=400, detail="Enter a valid email, or leave it blank.")
+    if phone and not re.fullmatch(r"[0-9+\-() ]{6,24}", phone):
+        raise HTTPException(status_code=400, detail="Enter a phone number, or leave it blank.")
+    digits = re.sub(r"\D", "", str(form.get("whatsapp") or ""))
+    if digits.startswith("91") and len(digits) == 12:
+        digits = digits[2:]
+    if digits.startswith("0") and len(digits) == 11:
+        digits = digits[1:]
+    if digits and not re.fullmatch(r"[6-9]\d{9}", digits):
+        raise HTTPException(status_code=400, detail="Enter a 10-digit WhatsApp number, or leave it blank.")
+    saved = {
+        "about": about,
+        "note": note,
+        "email": email,
+        "phone": phone,
+        "whatsapp": digits,
+        "address": address,
+        "instagram": _site_link(form.get("instagram"), "Instagram"),
+        "youtube": _site_link(form.get("youtube"), "YouTube"),
+        "facebook": _site_link(form.get("facebook"), "Facebook"),
+        "linkedin": _site_link(form.get("linkedin"), "LinkedIn"),
+    }
+    ensure_site()
+    with connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO site_settings (
+                    id, about, note, email, phone, whatsapp, address,
+                    instagram, youtube, facebook, linkedin, updated_at
+                )
+                VALUES (
+                    1, %(about)s, %(note)s, %(email)s, %(phone)s, %(whatsapp)s, %(address)s,
+                    %(instagram)s, %(youtube)s, %(facebook)s, %(linkedin)s, now()
+                )
+                ON CONFLICT (id) DO UPDATE SET
+                    about = EXCLUDED.about,
+                    note = EXCLUDED.note,
+                    email = EXCLUDED.email,
+                    phone = EXCLUDED.phone,
+                    whatsapp = EXCLUDED.whatsapp,
+                    address = EXCLUDED.address,
+                    instagram = EXCLUDED.instagram,
+                    youtube = EXCLUDED.youtube,
+                    facebook = EXCLUDED.facebook,
+                    linkedin = EXCLUDED.linkedin,
+                    updated_at = now()
+                """,
+                saved,
+            )
+    return saved
 
 
 def ensure_students():
@@ -1079,6 +1211,11 @@ def predict_colleges(body: PredictIn):
         "page_size": body.page_size,
         "results": page_rows,
     }
+
+
+@app.get("/site")
+def site_settings():
+    return public_site()
 
 
 from admin import router as admin_router  # noqa: E402

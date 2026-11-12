@@ -5,8 +5,9 @@ import { api, lettersOf, num, packageText, place, shownFee } from "./api.js";
 function Table({ table }) {
   const columns = table.columns || [];
   return (
-    <div className="table-wrap">
+    <section className="table-card">
       {table.title ? <h3>{table.title}</h3> : null}
+      <div className="table-wrap">
       <table>
         {columns.length ? (
           <thead>
@@ -19,7 +20,8 @@ function Table({ table }) {
           ))}
         </tbody>
       </table>
-    </div>
+      </div>
+    </section>
   );
 }
 

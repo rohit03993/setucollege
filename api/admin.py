@@ -68,6 +68,7 @@ def signed_in(request: Request):
 def page(title, body, shell=True, current="colleges"):
     colleges = ' aria-current="page"' if current == "colleges" else ""
     students = ' aria-current="page"' if current == "students" else ""
+    site = ' aria-current="page"' if current == "site" else ""
     if shell:
         frame = f"""<div class="shell">
           <aside class="side">
@@ -76,6 +77,7 @@ def page(title, body, shell=True, current="colleges"):
             <nav>
               <a href="/admin"{colleges}>Colleges</a>
               <a href="/admin/students"{students}>Students</a>
+              <a href="/admin/site"{site}>Site</a>
               <a href="/">Public site</a>
             </nav>
             <form method="post" action="/admin/logout"><button class="side-logout" type="submit">Log out</button></form>
@@ -94,8 +96,8 @@ def page(title, body, shell=True, current="colleges"):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css?v=50">
-  <link rel="stylesheet" href="/assets/admin.css?v=8">
+  <link rel="stylesheet" href="/assets/styles.css?v=53">
+  <link rel="stylesheet" href="/assets/admin.css?v=9">
 </head>
 <body class="dash">{frame}</body>
 </html>"""
@@ -941,3 +943,72 @@ def admin_student(request: Request, public_id: str):
         </section>""",
         current="students",
     )
+
+
+def field_value(row, key):
+    return escape(str(row.get(key) or ""))
+
+
+@router.get("/admin/site", response_class=HTMLResponse)
+def admin_site(request: Request, error: str = "", saved: str = ""):
+    blocked = guard(request)
+    if blocked:
+        return blocked
+    row = app().site_row()
+    note = f'<p class="status" role="alert">{escape(error)}</p>' if error else ""
+    done = '<p class="status">Saved. The public footer uses this now.</p>' if saved else ""
+    return page(
+        "Site",
+        f"""<header class="workspace-head">
+          <div>
+            <p class="eyebrow">Footer</p>
+            <h1>Site</h1>
+          </div>
+        </header>
+        {note}{done}
+        <form class="board site-form" method="post" action="/admin/site">
+          <section>
+            <h2>About</h2>
+            <p class="lede">Leave a box empty to keep the line that is already on the site.</p>
+            <label class="field wide"><span>Short description</span>
+              <textarea name="about" maxlength="400" placeholder="Right College. Right Course. Right Future.">{field_value(row, "about")}</textarea>
+            </label>
+          </section>
+          <section>
+            <h2>Contact</h2>
+            <p class="lede">A blank field stays off the public footer.</p>
+            <div class="pair">
+              <label class="field"><span>Email</span><input name="email" type="email" maxlength="120" value="{field_value(row, "email")}" placeholder="hello@admissionsetu.co.in"></label>
+              <label class="field"><span>Phone</span><input name="phone" maxlength="24" value="{field_value(row, "phone")}" placeholder="+91 98765 43210"></label>
+              <label class="field"><span>WhatsApp</span><input name="whatsapp" inputmode="numeric" maxlength="13" value="{field_value(row, "whatsapp")}" placeholder="10-digit number"></label>
+              <label class="field wide"><span>Address</span><textarea name="address" maxlength="200" placeholder="City, state">{field_value(row, "address")}</textarea></label>
+            </div>
+          </section>
+          <section>
+            <h2>Social</h2>
+            <p class="lede">Paste the full page link. A blank icon stays off the footer.</p>
+            <div class="pair">
+              <label class="field"><span>Instagram</span><input name="instagram" maxlength="200" value="{field_value(row, "instagram")}" placeholder="https://instagram.com/"></label>
+              <label class="field"><span>YouTube</span><input name="youtube" maxlength="200" value="{field_value(row, "youtube")}" placeholder="https://youtube.com/"></label>
+              <label class="field"><span>Facebook</span><input name="facebook" maxlength="200" value="{field_value(row, "facebook")}" placeholder="https://facebook.com/"></label>
+              <label class="field"><span>LinkedIn</span><input name="linkedin" maxlength="200" value="{field_value(row, "linkedin")}" placeholder="https://linkedin.com/"></label>
+            </div>
+          </section>
+          <button class="button" type="submit">Save footer</button>
+        </form>""",
+        current="site",
+    )
+
+
+@router.post("/admin/site")
+async def admin_site_save(request: Request):
+    blocked = guard(request)
+    if blocked:
+        return blocked
+    form = await request.form()
+    try:
+        app().save_site(form)
+    except HTTPException as exc:
+        detail = exc.detail if isinstance(exc.detail, str) else "That could not be saved."
+        return RedirectResponse(f"/admin/site?error={quote(detail)}", status_code=303)
+    return RedirectResponse("/admin/site?saved=1", status_code=303)
